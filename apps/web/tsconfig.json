@@ -6,7 +6,8 @@
     "jsx": "preserve",
     "noEmit": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@convex/*": ["../../convex/*"]
     },
     "plugins": [
       {

@@ -704,7 +704,10 @@ export const fail = internalMutation({
       updatedAt: args.now,
     });
     await ctx.db.patch(lease._id, { releasedAt: args.now });
-    return { state, nextAttemptAt };
+    return {
+      state,
+      ...(nextAttemptAt === undefined ? {} : { nextAttemptAt }),
+    };
   },
 });
 
@@ -756,12 +759,19 @@ export const cleanupExpiredProtocolRecords = internalMutation({
       .query("workerRequests")
       .withIndex("by_expires_at", (indexQuery) => indexQuery.lte("expiresAt", now))
       .take(500);
+    const rateLimits = await ctx.db
+      .query("rateLimits")
+      .withIndex("by_expires_at", (indexQuery) => indexQuery.lte("expiresAt", now))
+      .take(500);
     for (const nonce of nonces) {
       await ctx.db.delete(nonce._id);
     }
     for (const request of requests) {
       await ctx.db.delete(request._id);
     }
-    return nonces.length + requests.length;
+    for (const rateLimit of rateLimits) {
+      await ctx.db.delete(rateLimit._id);
+    }
+    return nonces.length + requests.length + rateLimits.length;
   },
 });

@@ -14,6 +14,7 @@ import type * as http from "../http.js";
 import type * as lib_audit from "../lib/audit.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as organizations from "../organizations.js";
+import type * as public_ from "../public.js";
 import type * as research from "../research.js";
 import type * as users from "../users.js";
 import type * as worker from "../worker.js";
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   "lib/audit": typeof lib_audit;
   "lib/auth": typeof lib_auth;
   organizations: typeof organizations;
+  public: typeof public_;
   research: typeof research;
   users: typeof users;
   worker: typeof worker;

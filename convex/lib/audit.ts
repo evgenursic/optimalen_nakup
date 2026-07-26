@@ -15,7 +15,7 @@ export async function writeAuditEvent(
 ): Promise<void> {
   await ctx.db.insert("auditEvents", {
     organizationId: input.organizationId,
-    actorUserId: input.actorUserId,
+    ...(input.actorUserId ? { actorUserId: input.actorUserId } : {}),
     actorType: input.actorType,
     action: input.action,
     targetType: input.targetType,

@@ -47,12 +47,10 @@ describe("tenant isolation and authorization", () => {
     });
 
     await alice.mutation(api.users.syncCurrentUser, {
-      primaryEmail: "alice@example.test",
       displayName: "Alice",
       locale: "sl",
     });
     await bob.mutation(api.users.syncCurrentUser, {
-      primaryEmail: "bob@example.test",
       displayName: "Bob",
       locale: "sl",
     });

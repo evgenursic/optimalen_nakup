@@ -426,19 +426,22 @@ http.route({
         }
         return parsed;
       };
+      const renewsAt = parseOptionalDate("renews_at");
+      const endsAt = parseOptionalDate("ends_at");
       const result = await ctx.runMutation(internal.billing.processSubscriptionEvent, {
         externalEventId,
         eventType,
         payloadHash,
-        organizationId,
-        externalCustomerId:
-          attributes.customer_id === undefined ? undefined : String(attributes.customer_id),
+        ...(organizationId ? { organizationId } : {}),
+        ...(attributes.customer_id === undefined
+          ? {}
+          : { externalCustomerId: String(attributes.customer_id) }),
         externalSubscriptionId,
         externalVariantId,
         plan: mappedPlan,
         status: requiredString(attributes, "status"),
-        renewsAt: parseOptionalDate("renews_at"),
-        endsAt: parseOptionalDate("ends_at"),
+        ...(renewsAt === undefined ? {} : { renewsAt }),
+        ...(endsAt === undefined ? {} : { endsAt }),
         receivedAt: Date.now(),
       });
       return jsonResponse({ ok: true, ...result });

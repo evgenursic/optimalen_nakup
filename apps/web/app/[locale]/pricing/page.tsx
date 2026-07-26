@@ -1,7 +1,7 @@
 import { CheckCircle2 } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Link } from "@/i18n/navigation";
+import { WaitlistForm } from "@/components/waitlist-form";
 
 export default async function PricingPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -37,12 +37,24 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
                 </li>
               ))}
             </ul>
-            <Link href="/sign-in" className="button button-primary mt-auto">
+            <a href="#waitlist" className="button button-primary mt-auto">
               {t("cta")}
-            </Link>
+            </a>
           </article>
         ))}
       </div>
+      <WaitlistForm
+        locale={locale === "en" ? "en" : "sl"}
+        labels={{
+          title: t("waitlistTitle"),
+          email: t("email"),
+          submit: t("submit"),
+          privacy: t("privacy"),
+          success: t("success"),
+          duplicate: t("duplicate"),
+          error: t("error"),
+        }}
+      />
     </main>
   );
 }

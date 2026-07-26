@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     "@optimalen-nakup/config",
     "@optimalen-nakup/design-tokens",
     "@optimalen-nakup/domain",
+    "@optimalen-nakup/providers",
     "@optimalen-nakup/security",
   ],
   async headers() {

@@ -62,7 +62,14 @@
     "business": "Business",
     "businessText": "Skupni delovni prostori, sodelovanje in višje omejitve.",
     "cta": "Pridruži se čakalni listi",
-    "configuredLater": "Cena bo objavljena po validaciji ekonomike."
+    "configuredLater": "Cena bo objavljena po validaciji ekonomike.",
+    "waitlistTitle": "Pridružite se zaprti beti",
+    "email": "E-poštni naslov",
+    "submit": "Prijavi me",
+    "privacy": "Naslov bomo uporabili samo za obvestila o zaprti beti. Odjavite se lahko kadar koli.",
+    "success": "Hvala — vaše mesto na čakalni listi je zabeleženo.",
+    "duplicate": "Ta naslov je že na čakalni listi.",
+    "error": "Prijave trenutno ni bilo mogoče shraniti. Poskusite znova pozneje."
   },
   "auth": {
     "title": "Vstop v Optimalen Nakup",

@@ -157,7 +157,7 @@ export default defineSchema({
     createdAt: v.number(),
   })
     .index("by_organization", ["organizationId"])
-    .index("by_organization_and_email_hash", ["organizationId", "emailHash"])
+    .index("by_organization_and_email", ["organizationId", "email"])
     .index("by_token_hash", ["tokenHash"]),
 
   researchRequests: defineTable({
@@ -545,7 +545,16 @@ export default defineSchema({
     consentVersion: v.string(),
     source: v.string(),
     createdAt: v.number(),
-  }).index("by_email_hash", ["emailHash"]),
+  }).index("by_normalized_email", ["normalizedEmail"]),
+
+  rateLimits: defineTable({
+    key: v.string(),
+    count: v.number(),
+    windowStartedAt: v.number(),
+    expiresAt: v.number(),
+  })
+    .index("by_key", ["key"])
+    .index("by_expires_at", ["expiresAt"]),
 
   applicationSettings: defineTable({
     key: v.string(),

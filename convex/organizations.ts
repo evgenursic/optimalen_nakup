@@ -147,8 +147,8 @@ export const listMembers = query({
         results.push({
           membershipId: membership._id,
           userId: user._id,
-          displayName: user.displayName,
-          primaryEmail: user.primaryEmail,
+          ...(user.displayName ? { displayName: user.displayName } : {}),
+          ...(user.primaryEmail ? { primaryEmail: user.primaryEmail } : {}),
           role: membership.role,
           status: membership.status,
         });
@@ -207,5 +207,286 @@ export const updateMemberRole = mutation({
       metadata: { role: args.role },
     });
     return null;
+  },
+});
+
+export const createInvitation = mutation({
+  args: {
+    organizationId: v.id("organizations"),
+    email: v.string(),
+    emailHash: v.string(),
+    tokenHash: v.string(),
+    role: roleValidator,
+    expiresAt: v.number(),
+  },
+  returns: v.id("invitations"),
+  handler: async (ctx, args) => {
+    const { user, membership } = await requireMembership(ctx, args.organizationId, "admin");
+    assertCanManageRole(membership.role, args.role);
+    const normalizedEmail = args.email.trim().toLowerCase();
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail) ||
+      !/^[a-f0-9]{64}$/.test(args.emailHash) ||
+      !/^[a-f0-9]{64}$/.test(args.tokenHash)
+    ) {
+      throw new ConvexError({ code: "INVALID_INVITATION", message: "Invitation data is invalid" });
+    }
+    const now = Date.now();
+    if (args.expiresAt < now + 60_000 || args.expiresAt > now + 30 * 24 * 60 * 60 * 1_000) {
+      throw new ConvexError({
+        code: "INVALID_EXPIRY",
+        message: "Invitation expiry must be between one minute and thirty days",
+      });
+    }
+
+    const memberLimit = await ctx.db
+      .query("entitlements")
+      .withIndex("by_organization_and_key", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId).eq("key", "members.maximum"),
+      )
+      .unique();
+    const memberships = await ctx.db
+      .query("memberships")
+      .withIndex("by_organization", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId),
+      )
+      .take(100);
+    const pendingInvitations = await ctx.db
+      .query("invitations")
+      .withIndex("by_organization", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId),
+      )
+      .take(100);
+    const occupiedSeats =
+      memberships.filter((candidate) => candidate.status === "active").length +
+      pendingInvitations.filter(
+        (candidate) =>
+          candidate.acceptedAt === undefined &&
+          candidate.revokedAt === undefined &&
+          candidate.expiresAt > now,
+      ).length;
+    if (memberLimit?.limit !== undefined && occupiedSeats >= memberLimit.limit) {
+      throw new ConvexError({
+        code: "MEMBER_LIMIT_EXCEEDED",
+        message: "The workspace member limit has been reached",
+      });
+    }
+
+    const existing = await ctx.db
+      .query("invitations")
+      .withIndex("by_organization_and_email", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId).eq("email", normalizedEmail),
+      )
+      .order("desc")
+      .first();
+    if (
+      existing &&
+      existing.acceptedAt === undefined &&
+      existing.revokedAt === undefined &&
+      existing.expiresAt > now
+    ) {
+      throw new ConvexError({
+        code: "INVITATION_EXISTS",
+        message: "An active invitation already exists for this email",
+      });
+    }
+
+    const invitationId = await ctx.db.insert("invitations", {
+      organizationId: args.organizationId,
+      email: normalizedEmail,
+      emailHash: args.emailHash,
+      role: args.role,
+      tokenHash: args.tokenHash,
+      invitedByUserId: user._id,
+      expiresAt: args.expiresAt,
+      createdAt: now,
+    });
+    await writeAuditEvent(ctx, {
+      organizationId: args.organizationId,
+      actorUserId: user._id,
+      actorType: "user",
+      action: "invitation.created",
+      targetType: "invitation",
+      targetId: invitationId,
+      metadata: { role: args.role },
+    });
+    return invitationId;
+  },
+});
+
+export const listInvitations = query({
+  args: { organizationId: v.id("organizations") },
+  returns: v.array(
+    v.object({
+      id: v.id("invitations"),
+      email: v.string(),
+      role: roleValidator,
+      expiresAt: v.number(),
+      acceptedAt: v.optional(v.number()),
+      revokedAt: v.optional(v.number()),
+      createdAt: v.number(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    await requireMembership(ctx, args.organizationId, "admin");
+    const invitations = await ctx.db
+      .query("invitations")
+      .withIndex("by_organization", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId),
+      )
+      .order("desc")
+      .take(100);
+    return invitations.map((invitation) => ({
+      id: invitation._id,
+      email: invitation.email,
+      role: invitation.role,
+      expiresAt: invitation.expiresAt,
+      ...(invitation.acceptedAt === undefined ? {} : { acceptedAt: invitation.acceptedAt }),
+      ...(invitation.revokedAt === undefined ? {} : { revokedAt: invitation.revokedAt }),
+      createdAt: invitation.createdAt,
+    }));
+  },
+});
+
+export const revokeInvitation = mutation({
+  args: {
+    organizationId: v.id("organizations"),
+    invitationId: v.id("invitations"),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "admin");
+    const invitation = await ctx.db.get(args.invitationId);
+    if (!invitation || invitation.organizationId !== args.organizationId) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Invitation not found" });
+    }
+    if (invitation.acceptedAt === undefined) {
+      await ctx.db.patch(invitation._id, { revokedAt: Date.now() });
+    }
+    await writeAuditEvent(ctx, {
+      organizationId: args.organizationId,
+      actorUserId: user._id,
+      actorType: "user",
+      action: "invitation.revoked",
+      targetType: "invitation",
+      targetId: invitation._id,
+    });
+    return null;
+  },
+});
+
+export const acceptInvitation = mutation({
+  args: { tokenHash: v.string() },
+  returns: v.id("organizations"),
+  handler: async (ctx, args) => {
+    if (!/^[a-f0-9]{64}$/.test(args.tokenHash)) {
+      throw new ConvexError({ code: "INVALID_TOKEN", message: "Invitation token is invalid" });
+    }
+    const user = await requireCurrentUser(ctx);
+    const identity = await ctx.auth.getUserIdentity();
+    const verifiedEmail =
+      typeof identity?.email === "string" ? identity.email.trim().toLowerCase() : undefined;
+    if (!verifiedEmail) {
+      throw new ConvexError({
+        code: "VERIFIED_EMAIL_REQUIRED",
+        message: "A verified Clerk email is required to accept an invitation",
+      });
+    }
+    const invitation = await ctx.db
+      .query("invitations")
+      .withIndex("by_token_hash", (indexQuery) => indexQuery.eq("tokenHash", args.tokenHash))
+      .unique();
+    const now = Date.now();
+    if (
+      !invitation ||
+      invitation.revokedAt !== undefined ||
+      invitation.acceptedAt !== undefined ||
+      invitation.expiresAt <= now
+    ) {
+      throw new ConvexError({
+        code: "INVITATION_UNAVAILABLE",
+        message: "Invitation is invalid, expired, or already used",
+      });
+    }
+    if (invitation.email !== verifiedEmail) {
+      throw new ConvexError({
+        code: "EMAIL_MISMATCH",
+        message: "Sign in with the email address that received the invitation",
+      });
+    }
+
+    const existingMembership = await ctx.db
+      .query("memberships")
+      .withIndex("by_organization_and_user", (indexQuery) =>
+        indexQuery.eq("organizationId", invitation.organizationId).eq("userId", user._id),
+      )
+      .unique();
+    if (existingMembership) {
+      await ctx.db.patch(existingMembership._id, {
+        role: invitation.role,
+        status: "active",
+        updatedAt: now,
+      });
+    } else {
+      await ctx.db.insert("memberships", {
+        organizationId: invitation.organizationId,
+        userId: user._id,
+        role: invitation.role,
+        status: "active",
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+    await ctx.db.patch(invitation._id, { acceptedAt: now });
+    await writeAuditEvent(ctx, {
+      organizationId: invitation.organizationId,
+      actorUserId: user._id,
+      actorType: "user",
+      action: "invitation.accepted",
+      targetType: "invitation",
+      targetId: invitation._id,
+      metadata: { role: invitation.role },
+    });
+    return invitation.organizationId;
+  },
+});
+
+export const billingContext = query({
+  args: { organizationId: v.id("organizations") },
+  returns: v.object({
+    userId: v.id("users"),
+    organizationName: v.string(),
+    plan: v.union(
+      v.literal("closed_beta"),
+      v.literal("starter"),
+      v.literal("pro"),
+      v.literal("business"),
+    ),
+    externalCustomerId: v.optional(v.string()),
+  }),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "admin");
+    const organization = await ctx.db.get(args.organizationId);
+    if (!organization) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Organization not found" });
+    }
+    const subscriptions = await ctx.db
+      .query("subscriptions")
+      .withIndex("by_organization", (indexQuery) =>
+        indexQuery.eq("organizationId", organization._id),
+      )
+      .order("desc")
+      .take(10);
+    const subscription = subscriptions.find(
+      (candidate) => candidate.externalCustomerId !== undefined,
+    );
+    return {
+      userId: user._id,
+      organizationName: organization.name,
+      plan: organization.plan,
+      ...(subscription?.externalCustomerId
+        ? { externalCustomerId: subscription.externalCustomerId }
+        : {}),
+    };
   },
 });

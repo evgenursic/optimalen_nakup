@@ -67,7 +67,7 @@ export const processSubscriptionEvent = internalMutation({
     }
 
     const deliveryId = await ctx.db.insert("webhookDeliveries", {
-      organizationId: args.organizationId,
+      ...(args.organizationId ? { organizationId: args.organizationId } : {}),
       provider: "lemon_squeezy",
       externalEventId: args.externalEventId,
       eventType: args.eventType,
@@ -121,7 +121,16 @@ export const processSubscriptionEvent = internalMutation({
       await ctx.db.insert("subscriptions", {
         organizationId: organization._id,
         provider: "lemon_squeezy",
-        ...subscriptionPatch,
+        ...(args.externalCustomerId ? { externalCustomerId: args.externalCustomerId } : {}),
+        ...(args.externalSubscriptionId
+          ? { externalSubscriptionId: args.externalSubscriptionId }
+          : {}),
+        ...(args.externalVariantId ? { externalVariantId: args.externalVariantId } : {}),
+        plan: args.plan,
+        status: args.status,
+        ...(args.renewsAt === undefined ? {} : { renewsAt: args.renewsAt }),
+        ...(args.endsAt === undefined ? {} : { endsAt: args.endsAt }),
+        updatedAt: now,
         createdAt: now,
       });
     }

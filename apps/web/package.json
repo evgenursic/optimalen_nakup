@@ -16,6 +16,7 @@
     "@optimalen-nakup/config": "workspace:*",
     "@optimalen-nakup/design-tokens": "workspace:*",
     "@optimalen-nakup/domain": "workspace:*",
+    "@optimalen-nakup/providers": "workspace:*",
     "@optimalen-nakup/security": "workspace:*",
     "@tanstack/react-table": "8.21.3",
     "@tanstack/react-virtual": "3.14.8",

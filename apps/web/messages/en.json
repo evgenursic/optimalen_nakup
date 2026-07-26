@@ -62,7 +62,14 @@
     "business": "Business",
     "businessText": "Shared workspaces, collaboration, and higher limits.",
     "cta": "Join the waitlist",
-    "configuredLater": "Pricing will follow unit-economics validation."
+    "configuredLater": "Pricing will follow unit-economics validation.",
+    "waitlistTitle": "Join the closed beta",
+    "email": "Email address",
+    "submit": "Join waitlist",
+    "privacy": "We will only use this address for closed-beta updates. You can unsubscribe at any time.",
+    "success": "Thank you — your waitlist place has been recorded.",
+    "duplicate": "This address is already on the waitlist.",
+    "error": "We could not save your signup right now. Please try again later."
   },
   "auth": {
     "title": "Enter Optimalen Nakup",

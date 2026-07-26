@@ -14,7 +14,6 @@ const userResult = v.object({
 
 export const syncCurrentUser = mutation({
   args: {
-    primaryEmail: v.optional(v.string()),
     displayName: v.optional(v.string()),
     locale: localeValidator,
   },
@@ -26,6 +25,8 @@ export const syncCurrentUser = mutation({
     }
 
     const now = Date.now();
+    const verifiedEmail =
+      typeof identity.email === "string" ? identity.email.toLowerCase() : undefined;
     const existing = await ctx.db
       .query("users")
       .withIndex("by_clerk_user_id", (indexQuery) => indexQuery.eq("clerkUserId", identity.subject))
@@ -39,8 +40,8 @@ export const syncCurrentUser = mutation({
         });
       }
       await ctx.db.patch(existing._id, {
-        primaryEmail: args.primaryEmail,
-        displayName: args.displayName,
+        ...(verifiedEmail ? { primaryEmail: verifiedEmail } : {}),
+        ...(args.displayName ? { displayName: args.displayName } : {}),
         locale: args.locale,
         updatedAt: now,
       });
@@ -49,8 +50,8 @@ export const syncCurrentUser = mutation({
 
     return await ctx.db.insert("users", {
       clerkUserId: identity.subject,
-      primaryEmail: args.primaryEmail,
-      displayName: args.displayName,
+      ...(verifiedEmail ? { primaryEmail: verifiedEmail } : {}),
+      ...(args.displayName ? { displayName: args.displayName } : {}),
       locale: args.locale,
       status: "active",
       createdAt: now,
@@ -77,8 +78,8 @@ export const me = query({
     return {
       id: user._id,
       clerkUserId: user.clerkUserId,
-      primaryEmail: user.primaryEmail,
-      displayName: user.displayName,
+      ...(user.primaryEmail ? { primaryEmail: user.primaryEmail } : {}),
+      ...(user.displayName ? { displayName: user.displayName } : {}),
       locale: user.locale,
       status: user.status,
     };

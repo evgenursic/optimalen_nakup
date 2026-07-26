@@ -412,8 +412,8 @@ export const getJob = query({
       aiCostEur: job.aiCostEur,
       maxAiCostEur: job.maxAiCostEur,
       coverageJson: job.coverageJson,
-      failureCode: job.failureCode,
-      failureMessage: job.failureMessage,
+      ...(job.failureCode ? { failureCode: job.failureCode } : {}),
+      ...(job.failureMessage ? { failureMessage: job.failureMessage } : {}),
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,
     };
