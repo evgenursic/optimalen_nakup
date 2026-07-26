@@ -19,9 +19,21 @@ export const workerEnvironmentSchema = z.object({
   WORKER_MAX_PAGES_PER_JOB: z.coerce.number().int().min(1).max(10_000).default(200),
   WORKER_MAX_RUNTIME_SECONDS: z.coerce.number().int().min(30).max(86_400).default(3_600),
   OPENAI_API_KEY: z.string().optional(),
-  OPENAI_MODEL_ROUTER: z.string().default("gpt-5.6-luna"),
-  OPENAI_MODEL_EXTRACTOR: z.string().default("gpt-5.6-terra"),
-  OPENAI_MODEL_SYNTHESIZER: z.string().default("gpt-5.6-sol"),
+  OPENAI_MODEL_ROUTER: z
+    .enum(["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"])
+    .default("gpt-5.6-luna"),
+  OPENAI_MODEL_EXTRACTOR: z
+    .enum(["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"])
+    .default("gpt-5.6-terra"),
+  OPENAI_MODEL_SYNTHESIZER: z
+    .enum(["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"])
+    .default("gpt-5.6-sol"),
+  OPENAI_USD_TO_EUR_RATE: z.coerce.number().positive().optional(),
+  WORKER_APPROVED_SOURCE_IDS: z.string().default(""),
+  WORKER_ENABLE_PLAYWRIGHT_VERIFICATION: z
+    .enum(["true", "false"])
+    .default("true")
+    .transform((value) => value === "true"),
 });
 
 export type PublicEnvironment = z.infer<typeof publicEnvironmentSchema>;

@@ -32,7 +32,13 @@ describe("network and export controls", () => {
   it("recognizes private network ranges", () => {
     expect(isPrivateIpAddress("127.0.0.1")).toBe(true);
     expect(isPrivateIpAddress("169.254.169.254")).toBe(true);
+    expect(isPrivateIpAddress("10.1.2.3")).toBe(true);
+    expect(isPrivateIpAddress("100.64.1.2")).toBe(true);
+    expect(isPrivateIpAddress("198.51.100.1")).toBe(true);
+    expect(isPrivateIpAddress("::ffff:127.0.0.1")).toBe(true);
+    expect(isPrivateIpAddress("2001:db8::1")).toBe(true);
     expect(isPrivateIpAddress("8.8.8.8")).toBe(false);
+    expect(isPrivateIpAddress("2606:4700:4700::1111")).toBe(false);
   });
 
   it("rejects stale timestamps and escapes spreadsheet formulas", () => {

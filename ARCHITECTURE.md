@@ -18,9 +18,13 @@
 3. Convex creates an entitlement-checked job and emits realtime progress.
 4. The worker claims a lease through an HMAC-authenticated endpoint and sends heartbeats.
 5. Approved adapters discover and verify pages while enforcing source and job budgets.
-6. Extracted claims become normalized offers and per-field evidence records.
-7. Deterministic scoring produces a versioned breakdown; AI may explain but cannot create facts.
-8. Results, coverage, warnings, exports, saved searches, and alerts read from Convex.
+6. Deterministic JSON-LD/DOM extraction runs first. Only ambiguous captures may be rendered in an
+   offline, JavaScript-disabled, network-blocked Playwright context and sent as bounded untrusted
+   data to Terra.
+7. Extracted claims become normalized offers and per-field evidence records; non-EUR monetary fields
+   use dated ECB reference rates.
+8. Deterministic scoring produces a versioned breakdown; Sol may explain only evidence-bound facts.
+9. Results, coverage, warnings, exports, saved searches, and alerts read from Convex.
 
 ## Invariants
 

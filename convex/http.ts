@@ -312,6 +312,52 @@ http.route({
 });
 
 http.route({
+  path: "/worker/jobs/model-costs",
+  method: "POST",
+  handler: httpAction(async (ctx, request) =>
+    handleWorkerRequest(ctx, request, "/worker/jobs/model-costs", async (body, auth) => {
+      const requestId = optionalString(body, "requestId");
+      return await ctx.runMutation(internal.worker.recordModelCost, {
+        jobId: requiredString(body, "jobId") as Id<"researchJobs">,
+        workerId: auth.workerId,
+        leaseTokenHash: await hexDigest(requiredString(body, "leaseToken", 32)),
+        now: auth.now,
+        model: requiredString(body, "model"),
+        purpose: requiredString(body, "purpose") as never,
+        inputTokens: requiredNumber(body, "inputTokens"),
+        cachedInputTokens: requiredNumber(body, "cachedInputTokens"),
+        cacheWriteTokens: requiredNumber(body, "cacheWriteTokens"),
+        outputTokens: requiredNumber(body, "outputTokens"),
+        reasoningTokens: requiredNumber(body, "reasoningTokens"),
+        estimatedCostUsd: requiredNumber(body, "estimatedCostUsd"),
+        estimatedCostEur: requiredNumber(body, "estimatedCostEur"),
+        usdToEurRate: requiredNumber(body, "usdToEurRate"),
+        pricingVersion: requiredString(body, "pricingVersion"),
+        ...(requestId ? { requestId } : {}),
+      });
+    }),
+  ),
+});
+
+http.route({
+  path: "/worker/source-health",
+  method: "POST",
+  handler: httpAction(async (ctx, request) =>
+    handleWorkerRequest(ctx, request, "/worker/source-health", async (body, auth) => {
+      return await ctx.runMutation(internal.worker.updateSourceHealth, {
+        sourceId: requiredString(body, "sourceId"),
+        status: requiredString(body, "status") as never,
+        robotsReviewedAt: requiredNumber(body, "robotsReviewedAt"),
+        termsReviewedAt: requiredNumber(body, "termsReviewedAt"),
+        ...(body.latencyMs === undefined ? {} : { latencyMs: requiredNumber(body, "latencyMs") }),
+        detail: requiredString(body, "detail"),
+        now: auth.now,
+      });
+    }),
+  ),
+});
+
+http.route({
   path: "/worker/jobs/complete",
   method: "POST",
   handler: httpAction(async (ctx, request) =>

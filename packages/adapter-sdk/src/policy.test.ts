@@ -14,6 +14,8 @@ const manifest: SourceManifest = {
   termsUrl: null,
   policyStatus: "approved",
   policyReviewedAt: "2026-07-26T00:00:00.000Z",
+  policyReviewExpiresAt: "2026-08-25T00:00:00.000Z",
+  policyNotes: "Fixture policy",
   allowedPathPrefixes: ["/products/"],
   forbiddenPathPrefixes: ["/api/"],
   minimumDelayMs: 2_000,
@@ -25,6 +27,16 @@ describe("assertSourceUrlAllowed", () => {
     expect(() =>
       assertSourceUrlAllowed(manifest, new URL("https://example.com/products/laptop")),
     ).not.toThrow();
+  });
+
+  it("rejects an expired policy review", () => {
+    expect(() =>
+      assertSourceUrlAllowed(
+        manifest,
+        new URL("https://example.com/products/laptop"),
+        new Date("2026-08-25T00:00:00.000Z"),
+      ),
+    ).toThrow("new policy review");
   });
 
   it("rejects a different origin and forbidden path", () => {

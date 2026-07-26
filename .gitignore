@@ -8,6 +8,7 @@ dist/
 coverage/
 .turbo/
 .cache/
+.tmp-trace-nav-*/
 *.tsbuildinfo
 playwright-report/
 test-results/

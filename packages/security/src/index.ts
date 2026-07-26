@@ -71,15 +71,24 @@ export function isPrivateIpAddress(address: string): boolean {
     return (
       first === 0 ||
       first === 10 ||
+      (first === 100 && second >= 64 && second <= 127) ||
       first === 127 ||
       (first === 169 && second === 254) ||
       (first === 172 && second >= 16 && second <= 31) ||
+      (first === 192 && second === 0) ||
       (first === 192 && second === 168) ||
+      (first === 198 && (second === 18 || second === 19)) ||
+      (first === 198 && second === 51) ||
+      (first === 203 && second === 0) ||
       first >= 224
     );
   }
   if (version === 6) {
     const normalized = address.toLowerCase();
+    const ipv4Mapped = normalized.match(/^(?:::ffff:)(\d{1,3}(?:\.\d{1,3}){3})$/);
+    if (ipv4Mapped?.[1]) {
+      return isPrivateIpAddress(ipv4Mapped[1]);
+    }
     return (
       normalized === "::" ||
       normalized === "::1" ||
@@ -89,7 +98,9 @@ export function isPrivateIpAddress(address: string): boolean {
       normalized.startsWith("fe9") ||
       normalized.startsWith("fea") ||
       normalized.startsWith("feb") ||
-      normalized.startsWith("ff")
+      normalized.startsWith("ff") ||
+      normalized.startsWith("2001:db8:") ||
+      (!normalized.startsWith("2") && !normalized.startsWith("3"))
     );
   }
   return true;

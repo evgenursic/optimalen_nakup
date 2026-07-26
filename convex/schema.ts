@@ -475,13 +475,20 @@ export default defineSchema({
       v.literal("synthesis"),
     ),
     inputTokens: v.number(),
+    cachedInputTokens: v.number(),
+    cacheWriteTokens: v.number(),
     outputTokens: v.number(),
+    reasoningTokens: v.number(),
+    estimatedCostUsd: v.number(),
     estimatedCostEur: v.number(),
+    usdToEurRate: v.number(),
+    pricingVersion: v.string(),
     requestId: v.optional(v.string()),
     createdAt: v.number(),
   })
     .index("by_organization", ["organizationId"])
-    .index("by_job", ["researchJobId"]),
+    .index("by_job", ["researchJobId"])
+    .index("by_job_and_request_id", ["researchJobId", "requestId"]),
 
   sourceHealth: defineTable({
     sourceId: v.string(),

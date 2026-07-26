@@ -278,3 +278,5 @@ export function makeOfferIdentity(offer: OfferV1): string {
   const normalizedTitle = offer.title.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-");
   return `${offer.category}:${sku || normalizedTitle}:${offer.providerName ?? offer.sellerName ?? ""}`;
 }
+
+export * from "./research.js";

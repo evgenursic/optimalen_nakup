@@ -222,6 +222,7 @@ export const claimJob = internalMutation({
       jobId: v.id("researchJobs"),
       organizationId: v.id("organizations"),
       researchRequestId: v.id("researchRequests"),
+      locale: v.union(v.literal("sl"), v.literal("en")),
       filterSpec: filterSpecV1Validator,
       attempt: v.number(),
       maxPages: v.number(),
@@ -269,7 +270,13 @@ export const claimJob = internalMutation({
       }
 
       const filter = await ctx.db.get(job.filterId);
-      if (!filter || filter.organizationId !== job.organizationId) {
+      const researchRequest = await ctx.db.get(job.researchRequestId);
+      if (
+        !filter ||
+        filter.organizationId !== job.organizationId ||
+        !researchRequest ||
+        researchRequest.organizationId !== job.organizationId
+      ) {
         await ctx.db.patch(job._id, {
           state: "dead_letter",
           failureCode: "INVALID_FILTER_REFERENCE",
@@ -309,6 +316,7 @@ export const claimJob = internalMutation({
         jobId: job._id,
         organizationId: job.organizationId,
         researchRequestId: job.researchRequestId,
+        locale: researchRequest.locale,
         filterSpec: filter.spec,
         attempt: job.attempt + 1,
         maxPages: job.maxPages,
@@ -623,6 +631,130 @@ export const replaceRecommendations = internalMutation({
       });
     }
     return args.recommendations.length;
+  },
+});
+
+export const recordModelCost = internalMutation({
+  args: {
+    jobId: v.id("researchJobs"),
+    workerId: v.string(),
+    leaseTokenHash: v.string(),
+    now: v.number(),
+    model: v.string(),
+    purpose: v.union(
+      v.literal("filter_structuring"),
+      v.literal("extraction"),
+      v.literal("normalization"),
+      v.literal("dispute"),
+      v.literal("synthesis"),
+    ),
+    inputTokens: v.number(),
+    cachedInputTokens: v.number(),
+    cacheWriteTokens: v.number(),
+    outputTokens: v.number(),
+    reasoningTokens: v.number(),
+    estimatedCostUsd: v.number(),
+    estimatedCostEur: v.number(),
+    usdToEurRate: v.number(),
+    pricingVersion: v.string(),
+    requestId: v.optional(v.string()),
+  },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    await requireActiveLease(ctx, args);
+    const job = await ctx.db.get(args.jobId);
+    if (!job) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Research job not found" });
+    }
+    if (
+      [
+        args.inputTokens,
+        args.cachedInputTokens,
+        args.cacheWriteTokens,
+        args.outputTokens,
+        args.reasoningTokens,
+        args.estimatedCostUsd,
+        args.estimatedCostEur,
+      ].some((value) => !Number.isFinite(value) || value < 0) ||
+      !Number.isFinite(args.usdToEurRate) ||
+      args.usdToEurRate <= 0
+    ) {
+      throw new ConvexError({ code: "INVALID_MODEL_COST", message: "Model cost is invalid" });
+    }
+    if (args.requestId) {
+      const existing = await ctx.db
+        .query("modelCosts")
+        .withIndex("by_job_and_request_id", (indexQuery) =>
+          indexQuery.eq("researchJobId", job._id).eq("requestId", args.requestId),
+        )
+        .unique();
+      if (existing) {
+        return false;
+      }
+    }
+    await ctx.db.insert("modelCosts", {
+      organizationId: job.organizationId,
+      researchJobId: job._id,
+      model: args.model,
+      purpose: args.purpose,
+      inputTokens: args.inputTokens,
+      cachedInputTokens: args.cachedInputTokens,
+      cacheWriteTokens: args.cacheWriteTokens,
+      outputTokens: args.outputTokens,
+      reasoningTokens: args.reasoningTokens,
+      estimatedCostUsd: args.estimatedCostUsd,
+      estimatedCostEur: args.estimatedCostEur,
+      usdToEurRate: args.usdToEurRate,
+      pricingVersion: args.pricingVersion,
+      ...(args.requestId ? { requestId: args.requestId } : {}),
+      createdAt: args.now,
+    });
+    return true;
+  },
+});
+
+export const updateSourceHealth = internalMutation({
+  args: {
+    sourceId: v.string(),
+    status: v.union(
+      v.literal("healthy"),
+      v.literal("degraded"),
+      v.literal("blocked"),
+      v.literal("disabled"),
+      v.literal("legal_review_required"),
+    ),
+    robotsReviewedAt: v.number(),
+    termsReviewedAt: v.number(),
+    latencyMs: v.optional(v.number()),
+    detail: v.string(),
+    now: v.number(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query("sourceHealth")
+      .withIndex("by_source_id", (indexQuery) => indexQuery.eq("sourceId", args.sourceId))
+      .unique();
+    const successful = args.status === "healthy";
+    const value = {
+      status: args.status,
+      robotsReviewedAt: args.robotsReviewedAt,
+      termsReviewedAt: args.termsReviewedAt,
+      lastCheckedAt: args.now,
+      ...(successful ? { lastSuccessAt: args.now } : {}),
+      consecutiveFailures: successful ? 0 : (existing?.consecutiveFailures ?? 0) + 1,
+      ...(args.latencyMs === undefined ? {} : { latencyMs: args.latencyMs }),
+      detail: args.detail.slice(0, 2_000),
+    };
+    if (existing) {
+      await ctx.db.patch(existing._id, value);
+    } else {
+      await ctx.db.insert("sourceHealth", {
+        sourceId: args.sourceId,
+        ...value,
+      });
+    }
+    return null;
   },
 });
 

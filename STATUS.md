@@ -18,16 +18,29 @@ Updated: 2026-07-26
 - Clerk/Convex client composition, verified-email invitations, closed-beta waitlist, Lemon Squeezy
   checkout/customer portal providers, signed idempotent subscription processing, and Resend/local
   email transports are implemented.
+- The signed worker protocol now implements claim, heartbeat, events, offer/recommendation writes,
+  completion, failure, model-cost accounting, and source-health reporting with retry-safe
+  idempotency.
+- The isolated research runner enforces runtime, page, and AI-cost budgets; cancellation; partial
+  coverage; expired source-policy gates; DNS-pinned SSRF protection; robots rules; source pacing;
+  circuit breakers; deterministic extraction; conflict analysis; scoring; and evidence-bound AI
+  synthesis.
+- Sanitized fixtures cover the BMW M Sport evidence case, ENAA computers, and Big Bang white goods.
+  Foreign currencies are normalized from the ECB daily reference-rate feed. Ambiguous pages can be
+  rendered only after active content and network surfaces are removed, in a JavaScript-disabled
+  Playwright context with all requests blocked.
+- Official OpenAI documentation was reviewed for the Responses API and the configured
+  `gpt-5.6-luna`, `gpt-5.6-terra`, and `gpt-5.6-sol` routing. Live API calls remain unverified until
+  a project key and budget are configured.
 - GitHub Actions quality, Playwright, dependency audit, and CodeQL workflows are present with action
   revisions pinned to commit SHAs.
 
 ## In progress
 
-- Authenticated application UI plus user data export/deletion.
-- Research worker orchestration, allowed-source adapters, deterministic extraction, and model
-  routing.
+- Authenticated application UI, results/monitoring/admin surfaces, and user data export/deletion.
+- Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action
 
-Connect the isolated worker to the signed Convex protocol and implement the evidence-first
-collection pipeline.
+Implement the authenticated intake, confirmation, progress, results, evidence, billing, monitoring,
+and administration experience against the completed Convex and worker contracts.

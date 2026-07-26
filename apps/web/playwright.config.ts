@@ -5,6 +5,10 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
+  timeout: 60_000,
+  expect: {
+    timeout: 15_000,
+  },
   reporter: [["html", { open: "never" }], ["list"]],
   use: {
     baseURL: "http://127.0.0.1:3000",

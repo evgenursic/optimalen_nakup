@@ -12,8 +12,11 @@ oversized payloads, runaway crawling/AI cost, dependency compromise, and privile
   cloud metadata ranges before every request and redirect.
 - Per-source allowlists, robots/terms gates, maximum redirects, response-size limits, timeouts,
   content-type checks, concurrency limits, and circuit breakers.
-- No scripts execute during deterministic parsing. Playwright uses isolated contexts and a network
-  interceptor that blocks disallowed destinations.
+- No scripts execute during deterministic parsing. Before selective Playwright verification,
+  scripts, frames, forms, styles, handlers, and URL-bearing attributes are removed. Chromium runs
+  with JavaScript and service workers disabled, and every network request is aborted.
+- HTTP collection validates every DNS result, pins one validated public address into the socket
+  lookup, and repeats URL/DNS validation for each redirect to prevent DNS rebinding.
 - Page content is placed only in bounded data fields; extraction models have no tools and are
   instructed to ignore embedded instructions.
 - Server-side authorization for every public Convex function, least-privilege roles, secure

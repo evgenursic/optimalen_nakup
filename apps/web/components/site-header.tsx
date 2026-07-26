@@ -9,7 +9,7 @@ export async function SiteHeader({ locale }: Readonly<{ locale: "sl" | "en" }>) 
 
   return (
     <header className="border-b border-slate-200 bg-white/95">
-      <div className="container flex min-h-18 items-center justify-between gap-4 py-3">
+      <div className="container flex min-h-18 flex-wrap items-center justify-between gap-4 py-3">
         <Link href="/" className="flex items-center gap-2 font-extrabold text-[#0b1f33]">
           <span className="grid size-9 place-items-center rounded-xl bg-[#0f766e] text-white">
             <ShieldCheck aria-hidden="true" size={21} strokeWidth={2.2} />
@@ -18,7 +18,7 @@ export async function SiteHeader({ locale }: Readonly<{ locale: "sl" | "en" }>) 
         </Link>
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-6 text-sm font-semibold md:flex"
+          className="order-3 flex w-full items-center gap-6 border-t border-slate-100 pt-3 text-sm font-semibold md:order-none md:w-auto md:border-0 md:pt-0"
         >
           <Link href="/how-it-works" className="text-slate-700 hover:text-[#0f766e]">
             {t("howItWorks")}

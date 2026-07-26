@@ -286,5 +286,63 @@ describe("worker protocol safeguards", () => {
     const status = await testBackend.query(internal.worker.jobStatus, { jobId });
     expect(status?.state).toBe("running");
     expect(status?.cancelRequested).toBe(true);
+
+    const modelCost = {
+      jobId,
+      workerId: "worker-lease-test",
+      leaseTokenHash,
+      now: now + 2_000,
+      model: "gpt-5.6-terra",
+      purpose: "extraction" as const,
+      inputTokens: 1_000,
+      cachedInputTokens: 200,
+      cacheWriteTokens: 0,
+      outputTokens: 100,
+      reasoningTokens: 20,
+      estimatedCostUsd: 0.002,
+      estimatedCostEur: 0.0017,
+      usdToEurRate: 0.85,
+      pricingVersion: "openai-public-2026-07-26",
+      requestId: "resp-model-cost-1",
+    };
+    await expect(testBackend.mutation(internal.worker.recordModelCost, modelCost)).resolves.toBe(
+      true,
+    );
+    await expect(
+      testBackend.mutation(internal.worker.recordModelCost, {
+        ...modelCost,
+        now: now + 2_100,
+      }),
+    ).resolves.toBe(false);
+
+    await testBackend.mutation(internal.worker.updateSourceHealth, {
+      sourceId: "fixture-source",
+      status: "blocked",
+      robotsReviewedAt: now,
+      termsReviewedAt: now,
+      detail: "captcha",
+      now: now + 3_000,
+    });
+    await testBackend.mutation(internal.worker.updateSourceHealth, {
+      sourceId: "fixture-source",
+      status: "healthy",
+      robotsReviewedAt: now,
+      termsReviewedAt: now,
+      latencyMs: 120,
+      detail: "recovered",
+      now: now + 4_000,
+    });
+    const sourceHealth = await testBackend.run(async (ctx) =>
+      ctx.db
+        .query("sourceHealth")
+        .withIndex("by_source_id", (query) => query.eq("sourceId", "fixture-source"))
+        .unique(),
+    );
+    expect(sourceHealth).toMatchObject({
+      status: "healthy",
+      consecutiveFailures: 0,
+      latencyMs: 120,
+      detail: "recovered",
+    });
   });
 });

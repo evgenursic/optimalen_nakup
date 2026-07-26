@@ -14,6 +14,8 @@ export interface SourceManifest {
   termsUrl: URL | null;
   policyStatus: SourcePolicyStatus;
   policyReviewedAt: string;
+  policyReviewExpiresAt: string;
+  policyNotes: string;
   allowedPathPrefixes: string[];
   forbiddenPathPrefixes: string[];
   minimumDelayMs: number;
@@ -36,6 +38,12 @@ export interface ExtractedOffer {
   offer: OfferV1;
   evidence: EvidenceRecordV1[];
   warnings: string[];
+  untrustedSourceText?: string;
+  /**
+   * Ephemeral input for an offline, network-blocked browser verification pass.
+   * It must never be persisted or logged.
+   */
+  untrustedCapturedHtml?: string;
 }
 
 export interface SourceHealth {
@@ -70,9 +78,12 @@ export interface SourceAdapterV1 {
   healthCheck(context: AdapterContext): Promise<SourceHealth>;
 }
 
-export function assertSourceUrlAllowed(manifest: SourceManifest, url: URL): void {
+export function assertSourceUrlAllowed(manifest: SourceManifest, url: URL, now = new Date()): void {
   if (manifest.policyStatus !== "approved") {
     throw new Error(`Source ${manifest.id} is not approved`);
+  }
+  if (Date.parse(manifest.policyReviewExpiresAt) <= now.getTime()) {
+    throw new Error(`Source ${manifest.id} requires a new policy review`);
   }
   if (url.protocol !== "https:" && url.protocol !== "http:") {
     throw new Error(`Unsupported protocol for ${url.toString()}`);
