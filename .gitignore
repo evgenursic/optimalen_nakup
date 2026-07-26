@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds and caches
+.next/
+dist/
+coverage/
+.turbo/
+.cache/
+playwright-report/
+test-results/
+lighthouse-reports/
+
+# Convex
+.convex/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Runtime data
+data/
+backups/
+*.log
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Figma workflow state
+.figma-state/
