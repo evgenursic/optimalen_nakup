@@ -9,7 +9,7 @@
     "dev": "tsx watch src/index.ts",
     "lint": "eslint \"src/**/*.ts\" --config ../../eslint.config.mjs --max-warnings=0",
     "start": "node dist/index.js",
-    "test": "vitest run --exclude \"dist/**\" --passWithNoTests",
+    "test": "vitest run --config ../../vitest.unit.config.ts --root . --passWithNoTests",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

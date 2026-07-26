@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint \"src/**/*.ts\" --config ../../eslint.config.mjs --max-warnings=0",
-    "test": "vitest run --exclude \"dist/**\"",
+    "test": "vitest run --config ../../vitest.unit.config.ts --root .",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

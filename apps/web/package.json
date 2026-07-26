@@ -7,7 +7,7 @@
     "dev": "next dev",
     "lint": "eslint . --max-warnings=0",
     "start": "next start",
-    "test": "vitest run --exclude \"tests/e2e/**\" --exclude \"dist/**\" --passWithNoTests",
+    "test": "vitest run --config ../../vitest.unit.config.ts --root . --passWithNoTests",
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit"
   },

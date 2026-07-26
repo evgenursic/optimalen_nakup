@@ -8,18 +8,25 @@
   },
   "scripts": {
     "build": "turbo run build",
+    "convex:codegen": "convex codegen",
+    "convex:dev": "convex dev",
     "dev": "turbo run dev --parallel",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
+    "lint": "turbo run lint && eslint \"convex/**/*.ts\" --max-warnings=0",
+    "test": "turbo run test && vitest run --config vitest.config.ts",
     "test:e2e": "pnpm --filter @optimalen-nakup/web test:e2e",
-    "typecheck": "turbo run typecheck",
+    "typecheck": "turbo run typecheck && tsc -p convex/tsconfig.json",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "convex": "1.42.3"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
+    "@edge-runtime/vm": "5.0.0",
     "@types/node": "22.20.1",
+    "convex-test": "0.0.54",
     "eslint": "9.39.5",
     "prettier": "3.9.6",
     "turbo": "2.10.7",
