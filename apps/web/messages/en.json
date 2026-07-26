@@ -1,0 +1,79 @@
+{
+  "metadata": {
+    "title": "Optimalen Nakup — verified offers without hidden influence",
+    "description": "An evidence-first research agent for transparent, verifiable, and unbiased buying decisions."
+  },
+  "nav": {
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "signIn": "Sign in",
+    "start": "Start research",
+    "skip": "Skip to content"
+  },
+  "hero": {
+    "eyebrow": "Evidence before recommendations",
+    "title": "Less guessing. A better purchase.",
+    "description": "Optimalen Nakup reviews permitted sources, verifies important details, and shows why an offer deserves attention — including what could not be confirmed.",
+    "primary": "Describe what you need",
+    "secondary": "See the process",
+    "coverage": "Coverage is always shown numerically",
+    "neutral": "No paid influence on organic ranking",
+    "evidence": "Evidence for every material claim"
+  },
+  "proof": {
+    "title": "A recommendation you can verify",
+    "subtitle": "Every result separates confirmed data from inference, missing information, and conflicts.",
+    "score": "Match score",
+    "verified": "Verified",
+    "inferred": "Inferred",
+    "missing": "Unavailable",
+    "risk": "Main risk",
+    "riskText": "Accident history is not stated in the public offer.",
+    "reason": "Why it was selected",
+    "reasonText": "It meets every hard requirement and has above-average evidence coverage."
+  },
+  "categories": {
+    "title": "Initial research verticals",
+    "vehicles": "Vehicles",
+    "vehiclesText": "Price, mileage, equipment, seller, history, and risks.",
+    "computers": "Computers",
+    "computersText": "Exact SKU, processor, graphics, display, warranty, and delivered price.",
+    "whiteGoods": "White goods",
+    "whiteGoodsText": "Dimensions, energy, noise, delivery, installation, and old-appliance removal."
+  },
+  "process": {
+    "title": "From a need to a defensible shortlist",
+    "one": "Tell us what you need",
+    "oneText": "Natural language becomes requirements, preferences, and exclusions.",
+    "two": "Confirm the interpretation",
+    "twoText": "Correct every filter and weight before research begins.",
+    "three": "Watch verification progress",
+    "threeText": "See sources, inspected pages, rejections, and warnings in real time.",
+    "four": "Compare without blind trust",
+    "fourText": "Open evidence, score breakdowns, and direct source links."
+  },
+  "pricing": {
+    "title": "Clear plans for different research depth",
+    "description": "Public pricing is not approved yet. Join the closed beta and help shape fair pricing based on actual time saved.",
+    "starter": "Starter",
+    "starterText": "Occasional individual research and essential comparison.",
+    "pro": "Pro",
+    "proText": "More sources, deeper verification, monitoring, and exports.",
+    "business": "Business",
+    "businessText": "Shared workspaces, collaboration, and higher limits.",
+    "cta": "Join the waitlist",
+    "configuredLater": "Pricing will follow unit-economics validation."
+  },
+  "auth": {
+    "title": "Enter Optimalen Nakup",
+    "description": "Authentication protects your research, saved searches, and workspaces.",
+    "notConfigured": "This development environment has no Clerk credentials yet. Add them through secure environment storage to activate sign-in."
+  },
+  "footer": {
+    "tagline": "Independent buying research with visible evidence.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "sources": "Source policy",
+    "legal": "Legal templates require qualified review before publication."
+  }
+}

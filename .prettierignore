@@ -1,0 +1,9 @@
+.next
+coverage
+dist
+lighthouse-reports
+node_modules
+playwright-report
+pnpm-lock.yaml
+test-results
+convex/_generated

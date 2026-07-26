@@ -1,0 +1,42 @@
+{
+  "name": "@optimalen-nakup/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "eslint . --max-warnings=0",
+    "start": "next start",
+    "test": "vitest run --exclude \"tests/e2e/**\" --exclude \"dist/**\" --passWithNoTests",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "7.6.1",
+    "@optimalen-nakup/config": "workspace:*",
+    "@optimalen-nakup/design-tokens": "workspace:*",
+    "@optimalen-nakup/domain": "workspace:*",
+    "@optimalen-nakup/security": "workspace:*",
+    "@tanstack/react-table": "8.21.3",
+    "@tanstack/react-virtual": "3.14.8",
+    "convex": "1.42.3",
+    "lucide-react": "1.27.0",
+    "next": "16.2.12",
+    "next-intl": "4.13.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.2.12",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vitest": "4.1.10"
+  }
+}
