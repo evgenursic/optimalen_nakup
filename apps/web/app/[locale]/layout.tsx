@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { AuthProvider } from "@/components/auth-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { WebVitalsReporter } from "@/components/web-vitals-reporter";
 import { routing } from "@/i18n/routing";
 
 import "../globals.css";
@@ -81,6 +82,7 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider>
           <AuthProvider>
+            <WebVitalsReporter />
             <a className="skip-link" href="#main-content">
               {locale === "sl" ? "Preskoči na vsebino" : "Skip to content"}
             </a>

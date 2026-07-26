@@ -88,7 +88,7 @@ describe("tenant isolation and authorization", () => {
       organizationId: bobOrganizationId,
       paginationOpts: { cursor: null, numItems: 20 },
     });
-    expect(bobJobs.items).toEqual([]);
+    expect(bobJobs.page).toEqual([]);
   });
 
   it("requires authentication for organization data", async () => {

@@ -12,6 +12,9 @@ importers:
 
   .:
     dependencies:
+      '@optimalen-nakup/providers':
+        specifier: workspace:*
+        version: link:packages/providers
       convex:
         specifier: 1.42.3
         version: 1.42.3(@clerk/react@6.12.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
@@ -52,6 +55,9 @@ importers:
       '@clerk/nextjs':
         specifier: 7.6.1
         version: 7.6.1(next@16.2.12(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.62.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@optimalen-nakup/ai':
+        specifier: workspace:*
+        version: link:../../packages/ai
       '@optimalen-nakup/config':
         specifier: workspace:*
         version: link:../../packages/config

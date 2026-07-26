@@ -4,6 +4,7 @@ import type { Id } from "./_generated/dataModel";
 import { internalMutation, internalQuery } from "./_generated/server";
 import type { MutationCtx } from "./_generated/server";
 import { writeAuditEvent } from "./lib/audit";
+import { enqueueCompletionAlerts } from "./lib/alerts";
 import {
   categoryValidator,
   extractionMethodValidator,
@@ -792,6 +793,9 @@ export const complete = internalMutation({
       targetId: job._id,
       metadata: { partial: args.partial, workerId: args.workerId },
     });
+    if (!cancelled) {
+      await enqueueCompletionAlerts(ctx, job, args.now, args.partial);
+    }
     return null;
   },
 });

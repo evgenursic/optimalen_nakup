@@ -10,6 +10,7 @@ import {
   filterSpecV1Validator,
   localeValidator,
   nullableMoneyValidator,
+  recommendationModeValidator,
   researchStageValidator,
   researchStateValidator,
   verificationStatusValidator,
@@ -130,6 +131,102 @@ export const updateFilter = mutation({
       updatedAt: Date.now(),
     });
     return filterId;
+  },
+});
+
+export const recordIntakeModelCost = mutation({
+  args: {
+    organizationId: v.id("organizations"),
+    model: v.string(),
+    inputTokens: v.number(),
+    cachedInputTokens: v.number(),
+    cacheWriteTokens: v.number(),
+    outputTokens: v.number(),
+    reasoningTokens: v.number(),
+    estimatedCostUsd: v.number(),
+    estimatedCostEur: v.number(),
+    usdToEurRate: v.number(),
+    pricingVersion: v.string(),
+    requestId: v.string(),
+    ingestSecret: v.string(),
+  },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    await requireMembership(ctx, args.organizationId, "researcher");
+    const configuredSecret = process.env.AI_COST_INGEST_SECRET;
+    const tokenValues = [
+      args.inputTokens,
+      args.cachedInputTokens,
+      args.cacheWriteTokens,
+      args.outputTokens,
+      args.reasoningTokens,
+    ];
+    if (
+      !configuredSecret ||
+      configuredSecret.length < 32 ||
+      args.ingestSecret !== configuredSecret ||
+      args.model.length < 1 ||
+      args.model.length > 120 ||
+      tokenValues.some((value) => !Number.isSafeInteger(value) || value < 0) ||
+      !Number.isFinite(args.estimatedCostUsd) ||
+      args.estimatedCostUsd < 0 ||
+      !Number.isFinite(args.estimatedCostEur) ||
+      args.estimatedCostEur < 0 ||
+      !Number.isFinite(args.usdToEurRate) ||
+      args.usdToEurRate <= 0 ||
+      args.pricingVersion.length < 1 ||
+      args.pricingVersion.length > 120 ||
+      !/^resp_[a-zA-Z0-9_-]{1,200}$/.test(args.requestId)
+    ) {
+      throw new ConvexError({
+        code: "INVALID_MODEL_COST",
+        message: "Model cost entry is invalid",
+      });
+    }
+    const existing = await ctx.db
+      .query("modelCosts")
+      .withIndex("by_organization_and_request_id", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId).eq("requestId", args.requestId),
+      )
+      .unique();
+    if (existing) {
+      return false;
+    }
+    const now = Date.now();
+    await ctx.db.insert("modelCosts", {
+      organizationId: args.organizationId,
+      model: args.model,
+      purpose: "filter_structuring",
+      inputTokens: args.inputTokens,
+      cachedInputTokens: args.cachedInputTokens,
+      cacheWriteTokens: args.cacheWriteTokens,
+      outputTokens: args.outputTokens,
+      reasoningTokens: args.reasoningTokens,
+      estimatedCostUsd: args.estimatedCostUsd,
+      estimatedCostEur: args.estimatedCostEur,
+      usdToEurRate: args.usdToEurRate,
+      pricingVersion: args.pricingVersion,
+      requestId: args.requestId,
+      createdAt: now,
+    });
+    for (const usage of [
+      { kind: "ai_input_token" as const, amount: args.inputTokens },
+      { kind: "ai_output_token" as const, amount: args.outputTokens },
+    ]) {
+      if (usage.amount === 0) {
+        continue;
+      }
+      await ctx.db.insert("usageLedger", {
+        organizationId: args.organizationId,
+        kind: usage.kind,
+        amount: usage.amount,
+        unit: "token",
+        referenceId: args.requestId,
+        idempotencyKey: `openai:${args.requestId}:${usage.kind}`,
+        occurredAt: now,
+      });
+    }
+    return true;
   },
 });
 
@@ -323,10 +420,12 @@ export const listJobs = query({
     paginationOpts: paginationOptsValidator,
   },
   returns: v.object({
-    items: v.array(
+    page: v.array(
       v.object({
         id: v.id("researchJobs"),
         researchRequestId: v.id("researchRequests"),
+        title: v.string(),
+        category: categoryValidator,
         state: researchStateValidator,
         stage: researchStageValidator,
         progress: v.number(),
@@ -336,8 +435,8 @@ export const listJobs = query({
         updatedAt: v.number(),
       }),
     ),
-    nextCursor: v.string(),
-    done: v.boolean(),
+    continueCursor: v.string(),
+    isDone: v.boolean(),
   }),
   handler: async (ctx, args) => {
     await requireMembership(ctx, args.organizationId, "viewer");
@@ -349,10 +448,17 @@ export const listJobs = query({
       )
       .order("desc")
       .paginate(args.paginationOpts);
-    return {
-      items: result.page.map((job) => ({
+    const items = [];
+    for (const job of result.page) {
+      const request = await ctx.db.get(job.researchRequestId);
+      if (!request || request.organizationId !== args.organizationId) {
+        continue;
+      }
+      items.push({
         id: job._id,
         researchRequestId: job.researchRequestId,
+        title: request.title,
+        category: request.category,
         state: job.state,
         stage: job.stage,
         progress: job.progress,
@@ -360,9 +466,12 @@ export const listJobs = query({
         maxPages: job.maxPages,
         createdAt: job.createdAt,
         updatedAt: job.updatedAt,
-      })),
-      nextCursor: result.continueCursor,
-      done: result.isDone,
+      });
+    }
+    return {
+      page: items,
+      continueCursor: result.continueCursor,
+      isDone: result.isDone,
     };
   },
 });
@@ -376,6 +485,10 @@ export const getJob = query({
     v.object({
       id: v.id("researchJobs"),
       researchRequestId: v.id("researchRequests"),
+      title: v.string(),
+      originalInput: v.string(),
+      category: categoryValidator,
+      filterSpec: filterSpecV1Validator,
       state: researchStateValidator,
       stage: researchStageValidator,
       progress: v.number(),
@@ -399,9 +512,23 @@ export const getJob = query({
     if (!job || job.organizationId !== args.organizationId) {
       return null;
     }
+    const request = await ctx.db.get(job.researchRequestId);
+    const filter = await ctx.db.get(job.filterId);
+    if (
+      !request ||
+      request.organizationId !== args.organizationId ||
+      !filter ||
+      filter.organizationId !== args.organizationId
+    ) {
+      return null;
+    }
     return {
       id: job._id,
       researchRequestId: job.researchRequestId,
+      title: request.title,
+      originalInput: request.originalInput,
+      category: request.category,
+      filterSpec: filter.spec,
       state: job.state,
       stage: job.stage,
       progress: job.progress,
@@ -427,7 +554,7 @@ export const listOffers = query({
     paginationOpts: paginationOptsValidator,
   },
   returns: v.object({
-    items: v.array(
+    page: v.array(
       v.object({
         id: v.id("offers"),
         sourceId: v.string(),
@@ -452,8 +579,8 @@ export const listOffers = query({
         score: v.union(v.number(), v.null()),
       }),
     ),
-    nextCursor: v.string(),
-    done: v.boolean(),
+    continueCursor: v.string(),
+    isDone: v.boolean(),
   }),
   handler: async (ctx, args) => {
     await requireMembership(ctx, args.organizationId, "viewer");
@@ -492,9 +619,9 @@ export const listOffers = query({
       });
     }
     return {
-      items,
-      nextCursor: result.continueCursor,
-      done: result.isDone,
+      page: items,
+      continueCursor: result.continueCursor,
+      isDone: result.isDone,
     };
   },
 });
@@ -540,5 +667,399 @@ export const evidenceForOffer = query({
       collectedAt: record.collectedAt,
       staleAt: record.staleAt,
     }));
+  },
+});
+
+export const listJobEvents = query({
+  args: {
+    organizationId: v.id("organizations"),
+    jobId: v.id("researchJobs"),
+  },
+  returns: v.array(
+    v.object({
+      id: v.id("jobEvents"),
+      sequence: v.number(),
+      type: v.string(),
+      stage: researchStageValidator,
+      payloadJson: v.string(),
+      createdAt: v.number(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    await requireMembership(ctx, args.organizationId, "viewer");
+    const job = await ctx.db.get(args.jobId);
+    if (!job || job.organizationId !== args.organizationId) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Research job not found" });
+    }
+    const events = await ctx.db
+      .query("jobEvents")
+      .withIndex("by_job_and_sequence", (indexQuery) => indexQuery.eq("jobId", job._id))
+      .order("desc")
+      .take(100);
+    return events.reverse().map((event) => ({
+      id: event._id,
+      sequence: event.sequence,
+      type: event.type,
+      stage: event.stage,
+      payloadJson: event.payloadJson,
+      createdAt: event.createdAt,
+    }));
+  },
+});
+
+export const listRecommendations = query({
+  args: {
+    organizationId: v.id("organizations"),
+    jobId: v.id("researchJobs"),
+  },
+  returns: v.array(
+    v.object({
+      id: v.id("recommendations"),
+      offerId: v.optional(v.id("offers")),
+      mode: recommendationModeValidator,
+      rank: v.number(),
+      headline: v.string(),
+      rationale: v.string(),
+      caveatsJson: v.string(),
+      evidenceCoverage: v.number(),
+      unsupportedClaimCount: v.number(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    await requireMembership(ctx, args.organizationId, "viewer");
+    const job = await ctx.db.get(args.jobId);
+    if (!job || job.organizationId !== args.organizationId) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Research job not found" });
+    }
+    const recommendations = await ctx.db
+      .query("recommendations")
+      .withIndex("by_job_and_rank", (indexQuery) => indexQuery.eq("researchJobId", job._id))
+      .take(20);
+    return recommendations.map((recommendation) => ({
+      id: recommendation._id,
+      ...(recommendation.offerId ? { offerId: recommendation.offerId } : {}),
+      mode: recommendation.mode,
+      rank: recommendation.rank,
+      headline: recommendation.headline,
+      rationale: recommendation.rationale,
+      caveatsJson: recommendation.caveatsJson,
+      evidenceCoverage: recommendation.evidenceCoverage,
+      unsupportedClaimCount: recommendation.unsupportedClaimCount,
+    }));
+  },
+});
+
+export const scoreForOffer = query({
+  args: {
+    organizationId: v.id("organizations"),
+    offerId: v.id("offers"),
+  },
+  returns: v.union(
+    v.object({
+      scoringModelVersion: v.string(),
+      total: v.number(),
+      componentsJson: v.string(),
+      weightsJson: v.string(),
+      penaltiesJson: v.string(),
+      reasonsJson: v.string(),
+      risksJson: v.string(),
+      createdAt: v.number(),
+    }),
+    v.null(),
+  ),
+  handler: async (ctx, args) => {
+    await requireMembership(ctx, args.organizationId, "viewer");
+    const offer = await ctx.db.get(args.offerId);
+    if (!offer || offer.organizationId !== args.organizationId) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Offer not found" });
+    }
+    const score = await ctx.db
+      .query("scores")
+      .withIndex("by_offer", (indexQuery) => indexQuery.eq("offerId", offer._id))
+      .order("desc")
+      .first();
+    if (!score) {
+      return null;
+    }
+    return {
+      scoringModelVersion: score.scoringModelVersion,
+      total: score.total,
+      componentsJson: score.componentsJson,
+      weightsJson: score.weightsJson,
+      penaltiesJson: score.penaltiesJson,
+      reasonsJson: score.reasonsJson,
+      risksJson: score.risksJson,
+      createdAt: score.createdAt,
+    };
+  },
+});
+
+export const listPinnedOffers = query({
+  args: {
+    organizationId: v.id("organizations"),
+    jobId: v.id("researchJobs"),
+  },
+  returns: v.array(v.id("offers")),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "viewer");
+    const job = await ctx.db.get(args.jobId);
+    if (!job || job.organizationId !== args.organizationId) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Research job not found" });
+    }
+    const pins = await ctx.db
+      .query("offerPins")
+      .withIndex("by_job_and_user", (indexQuery) =>
+        indexQuery.eq("researchJobId", job._id).eq("userId", user._id),
+      )
+      .take(100);
+    return pins.map((pin) => pin.offerId);
+  },
+});
+
+export const setOfferPinned = mutation({
+  args: {
+    organizationId: v.id("organizations"),
+    jobId: v.id("researchJobs"),
+    offerId: v.id("offers"),
+    pinned: v.boolean(),
+  },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "viewer");
+    const job = await ctx.db.get(args.jobId);
+    const offer = await ctx.db.get(args.offerId);
+    if (
+      !job ||
+      job.organizationId !== args.organizationId ||
+      !offer ||
+      offer.organizationId !== args.organizationId ||
+      offer.researchJobId !== job._id
+    ) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Offer not found" });
+    }
+    const existing = await ctx.db
+      .query("offerPins")
+      .withIndex("by_user_and_offer", (indexQuery) =>
+        indexQuery.eq("userId", user._id).eq("offerId", offer._id),
+      )
+      .unique();
+    if (args.pinned && !existing) {
+      await ctx.db.insert("offerPins", {
+        organizationId: args.organizationId,
+        researchJobId: job._id,
+        offerId: offer._id,
+        userId: user._id,
+        createdAt: Date.now(),
+      });
+    } else if (!args.pinned && existing) {
+      await ctx.db.delete(existing._id);
+    }
+    return args.pinned;
+  },
+});
+
+export const saveSearch = mutation({
+  args: {
+    organizationId: v.id("organizations"),
+    researchRequestId: v.id("researchRequests"),
+    name: v.string(),
+  },
+  returns: v.id("savedSearches"),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "researcher");
+    const request = await ctx.db.get(args.researchRequestId);
+    if (!request || request.organizationId !== args.organizationId) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Research request not found" });
+    }
+    const name = args.name.trim();
+    if (name.length < 3 || name.length > 200) {
+      throw new ConvexError({ code: "INVALID_NAME", message: "Saved-search name is invalid" });
+    }
+    const existing = (
+      await ctx.db
+        .query("savedSearches")
+        .withIndex("by_organization_and_creator", (indexQuery) =>
+          indexQuery.eq("organizationId", args.organizationId).eq("createdByUserId", user._id),
+        )
+        .take(100)
+    ).find((candidate) => candidate.researchRequestId === request._id);
+    const now = Date.now();
+    if (existing) {
+      await ctx.db.patch(existing._id, { name, active: true, updatedAt: now });
+      return existing._id;
+    }
+    return await ctx.db.insert("savedSearches", {
+      organizationId: args.organizationId,
+      createdByUserId: user._id,
+      researchRequestId: request._id,
+      name,
+      active: true,
+      emailEnabled: false,
+      monitoringIntervalHours: 24,
+      createdAt: now,
+      updatedAt: now,
+    });
+  },
+});
+
+export const listSavedSearches = query({
+  args: { organizationId: v.id("organizations") },
+  returns: v.array(
+    v.object({
+      id: v.id("savedSearches"),
+      researchRequestId: v.id("researchRequests"),
+      name: v.string(),
+      active: v.boolean(),
+      emailEnabled: v.boolean(),
+      monitoringIntervalHours: v.number(),
+      latestJobId: v.union(v.id("researchJobs"), v.null()),
+      createdAt: v.number(),
+      updatedAt: v.number(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "viewer");
+    const searches = await ctx.db
+      .query("savedSearches")
+      .withIndex("by_organization_and_creator", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId).eq("createdByUserId", user._id),
+      )
+      .order("desc")
+      .take(100);
+    const results = [];
+    for (const search of searches) {
+      const latestJob = await ctx.db
+        .query("researchJobs")
+        .withIndex("by_request", (indexQuery) =>
+          indexQuery.eq("researchRequestId", search.researchRequestId),
+        )
+        .order("desc")
+        .first();
+      results.push({
+        id: search._id,
+        researchRequestId: search.researchRequestId,
+        name: search.name,
+        active: search.active,
+        emailEnabled: search.emailEnabled ?? false,
+        monitoringIntervalHours: search.monitoringIntervalHours ?? 24,
+        latestJobId: latestJob?._id ?? null,
+        createdAt: search.createdAt,
+        updatedAt: search.updatedAt,
+      });
+    }
+    return results;
+  },
+});
+
+export const setSavedSearchActive = mutation({
+  args: {
+    organizationId: v.id("organizations"),
+    savedSearchId: v.id("savedSearches"),
+    active: v.boolean(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "viewer");
+    const search = await ctx.db.get(args.savedSearchId);
+    if (
+      !search ||
+      search.organizationId !== args.organizationId ||
+      search.createdByUserId !== user._id
+    ) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Saved search not found" });
+    }
+    await ctx.db.patch(search._id, { active: args.active, updatedAt: Date.now() });
+    return null;
+  },
+});
+
+export const configureSavedSearch = mutation({
+  args: {
+    organizationId: v.id("organizations"),
+    savedSearchId: v.id("savedSearches"),
+    active: v.boolean(),
+    emailEnabled: v.boolean(),
+    monitoringIntervalHours: v.number(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "viewer");
+    const search = await ctx.db.get(args.savedSearchId);
+    if (
+      !search ||
+      search.organizationId !== args.organizationId ||
+      search.createdByUserId !== user._id
+    ) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Saved search not found" });
+    }
+    if (
+      !Number.isInteger(args.monitoringIntervalHours) ||
+      args.monitoringIntervalHours < 6 ||
+      args.monitoringIntervalHours > 168
+    ) {
+      throw new ConvexError({
+        code: "INVALID_MONITORING_INTERVAL",
+        message: "Monitoring interval must be between 6 and 168 hours",
+      });
+    }
+    await ctx.db.patch(search._id, {
+      active: args.active,
+      emailEnabled: args.emailEnabled,
+      monitoringIntervalHours: args.monitoringIntervalHours,
+      updatedAt: Date.now(),
+    });
+    return null;
+  },
+});
+
+export const listAlerts = query({
+  args: { organizationId: v.id("organizations") },
+  returns: v.array(
+    v.object({
+      id: v.id("alerts"),
+      savedSearchId: v.id("savedSearches"),
+      channel: v.union(v.literal("in_app"), v.literal("email")),
+      eventType: v.string(),
+      payloadJson: v.string(),
+      state: v.union(
+        v.literal("pending"),
+        v.literal("sent"),
+        v.literal("failed"),
+        v.literal("skipped"),
+      ),
+      lastError: v.optional(v.string()),
+      sentAt: v.optional(v.number()),
+      createdAt: v.number(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    const { user } = await requireMembership(ctx, args.organizationId, "viewer");
+    const searches = await ctx.db
+      .query("savedSearches")
+      .withIndex("by_organization_and_creator", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId).eq("createdByUserId", user._id),
+      )
+      .take(100);
+    const allowedSearchIds = new Set(searches.map((search) => search._id));
+    const alerts = await ctx.db
+      .query("alerts")
+      .withIndex("by_organization", (indexQuery) =>
+        indexQuery.eq("organizationId", args.organizationId),
+      )
+      .order("desc")
+      .take(100);
+    return alerts
+      .filter((alert) => allowedSearchIds.has(alert.savedSearchId))
+      .map((alert) => ({
+        id: alert._id,
+        savedSearchId: alert.savedSearchId,
+        channel: alert.channel,
+        eventType: alert.eventType,
+        payloadJson: alert.payloadJson,
+        state: alert.state,
+        ...(alert.lastError === undefined ? {} : { lastError: alert.lastError }),
+        ...(alert.sentAt === undefined ? {} : { sentAt: alert.sentAt }),
+        createdAt: alert.createdAt,
+      }));
   },
 });

@@ -34,13 +34,30 @@ Updated: 2026-07-26
   a project key and budget are configured.
 - GitHub Actions quality, Playwright, dependency audit, and CodeQL workflows are present with action
   revisions pinned to commit SHAs.
+- The authenticated surface now includes workspace bootstrap/switching, natural-language intake,
+  explicit filter confirmation, live progress, sortable and paginated responsive results, dynamic
+  category attributes, evidence and score inspection, pinning, four-offer comparison, formula-safe
+  CSV, printable/PDF output, and cancellation.
+- Saved searches schedule bounded repeat research at 24/72/168-hour intervals, respect monthly and
+  page entitlements, create deduplicated in-app alerts, and dispatch through Resend only when the
+  provider confirms delivery. Unconfigured email is recorded as `skipped`, never `sent`.
+- Workspace settings implement verified-email invitations, RBAC management, billing checkout/portal,
+  bounded personal JSON export, and a last-owner-safe deletion flow that removes Clerk identity and
+  anonymizes Convex data.
+- Administration implements entitlements, monthly usage/model cost, audit events, source health, a
+  worker kill switch, and non-sensitive platform configuration. Public prices appear only from a
+  valid EUR admin configuration; otherwise the real closed-beta waitlist remains.
+- LCP, INP, CLS, and TTFB instrumentation omits dynamic identifiers and uses same-origin,
+  server-secret, rate-limited ingestion. Field targets remain unverified until production traffic.
 
 ## In progress
 
-- Authenticated application UI, results/monitoring/admin surfaces, and user data export/deletion.
+- Figma product design system and critical-screen parity validation.
+- Docker/Hostinger deployment, observability, backup/restore rehearsal, authenticated E2E, and
+  Lighthouse release evidence.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action
 
-Implement the authenticated intake, confirmation, progress, results, evidence, billing, monitoring,
-and administration experience against the completed Convex and worker contracts.
+Create and verify the required Figma file, then implement and exercise the pinned container,
+deployment, observability, backup/restore, authenticated-E2E, and Lighthouse release gates.

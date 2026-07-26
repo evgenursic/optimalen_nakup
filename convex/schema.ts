@@ -116,6 +116,8 @@ export default defineSchema({
     displayName: v.optional(v.string()),
     locale: localeValidator,
     status: v.union(v.literal("active"), v.literal("deletion_pending"), v.literal("deleted")),
+    deletionRequestedAt: v.optional(v.number()),
+    deletedAt: v.optional(v.number()),
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_clerk_user_id", ["clerkUserId"]),
@@ -290,6 +292,17 @@ export default defineSchema({
     .index("by_job_and_identity", ["researchJobId", "identityKey"])
     .index("by_source_offer", ["sourceId", "sourceOfferId"]),
 
+  offerPins: defineTable({
+    organizationId: v.id("organizations"),
+    researchJobId: v.id("researchJobs"),
+    offerId: v.id("offers"),
+    userId: v.id("users"),
+    createdAt: v.number(),
+  })
+    .index("by_organization", ["organizationId"])
+    .index("by_job_and_user", ["researchJobId", "userId"])
+    .index("by_user_and_offer", ["userId", "offerId"]),
+
   offerVersions: defineTable({
     organizationId: v.id("organizations"),
     offerId: v.id("offers"),
@@ -362,11 +375,15 @@ export default defineSchema({
     researchRequestId: v.id("researchRequests"),
     name: v.string(),
     active: v.boolean(),
+    emailEnabled: v.optional(v.boolean()),
+    monitoringIntervalHours: v.optional(v.number()),
+    lastScheduledAt: v.optional(v.number()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index("by_organization", ["organizationId"])
-    .index("by_organization_and_creator", ["organizationId", "createdByUserId"]),
+    .index("by_organization_and_creator", ["organizationId", "createdByUserId"])
+    .index("by_active_and_last_scheduled", ["active", "lastScheduledAt"]),
 
   alerts: defineTable({
     organizationId: v.id("organizations"),
@@ -381,6 +398,7 @@ export default defineSchema({
       v.literal("failed"),
       v.literal("skipped"),
     ),
+    lastError: v.optional(v.string()),
     sentAt: v.optional(v.number()),
     createdAt: v.number(),
   })
@@ -465,7 +483,7 @@ export default defineSchema({
 
   modelCosts: defineTable({
     organizationId: v.id("organizations"),
-    researchJobId: v.id("researchJobs"),
+    researchJobId: v.optional(v.id("researchJobs")),
     model: v.string(),
     purpose: v.union(
       v.literal("filter_structuring"),
@@ -488,6 +506,7 @@ export default defineSchema({
   })
     .index("by_organization", ["organizationId"])
     .index("by_job", ["researchJobId"])
+    .index("by_organization_and_request_id", ["organizationId", "requestId"])
     .index("by_job_and_request_id", ["researchJobId", "requestId"]),
 
   sourceHealth: defineTable({

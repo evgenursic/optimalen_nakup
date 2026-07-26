@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "7.6.1",
+    "@optimalen-nakup/ai": "workspace:*",
     "@optimalen-nakup/config": "workspace:*",
     "@optimalen-nakup/design-tokens": "workspace:*",
     "@optimalen-nakup/domain": "workspace:*",

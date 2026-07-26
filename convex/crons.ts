@@ -11,4 +11,18 @@ crons.interval(
   {},
 );
 
+crons.interval(
+  "queue due saved-search monitoring",
+  { minutes: 60 },
+  internal.monitoring.queueDueSavedSearches,
+  {},
+);
+
+crons.interval(
+  "dispatch pending saved-search email alerts",
+  { minutes: 5 },
+  internal.alerts.dispatchPendingEmailAlerts,
+  {},
+);
+
 export default crons;
