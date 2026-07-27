@@ -13,6 +13,8 @@ coverage/
 playwright-report/
 test-results/
 lighthouse-reports/
+.auth/
+.lighthouseci/
 
 # Convex
 .convex/

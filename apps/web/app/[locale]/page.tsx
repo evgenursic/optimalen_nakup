@@ -1,9 +1,20 @@
 import { ArrowRight, CheckCircle2, CircleAlert, CircleDashed, Gauge, Search } from "lucide-react";
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Link } from "@/i18n/navigation";
+import { localizedHref } from "@/lib/locale-path";
+import { localizedAlternates } from "@/lib/metadata";
 
 const categoryIcons = [Search, Gauge, CheckCircle2];
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return { alternates: localizedAlternates(locale, "") };
+}
 
 export default async function LandingPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -39,13 +50,13 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">{hero("description")}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/sign-in" className="button button-primary">
+              <a href={localizedHref(locale, "/sign-in")} className="button button-primary">
                 {hero("primary")}
                 <ArrowRight aria-hidden="true" size={18} />
-              </Link>
-              <Link href="/how-it-works" className="button button-secondary">
+              </a>
+              <a href={localizedHref(locale, "/how-it-works")} className="button button-secondary">
                 {hero("secondary")}
-              </Link>
+              </a>
             </div>
             <ul className="mt-9 grid gap-3 text-sm font-semibold text-slate-700 sm:grid-cols-3">
               {[hero("coverage"), hero("neutral"), hero("evidence")].map((item) => (

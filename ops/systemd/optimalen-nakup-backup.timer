@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the Optimalen Nakup encrypted backup daily
+
+[Timer]
+OnCalendar=*-*-* 02:30:00 Europe/Ljubljana
+Persistent=true
+RandomizedDelaySec=900
+Unit=optimalen-nakup-backup.service
+
+[Install]
+WantedBy=timers.target

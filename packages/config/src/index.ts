@@ -15,7 +15,7 @@ export const workerEnvironmentSchema = z.object({
   WORKER_ID: z.string().min(1).default("worker-local"),
   WORKER_SHARED_SECRET: z.string().min(32).optional(),
   WORKER_CONVEX_HTTP_URL: optionalUrl.optional(),
-  WORKER_MAX_CONCURRENCY: z.coerce.number().int().min(1).max(16).default(2),
+  WORKER_MAX_CONCURRENCY: z.coerce.number().int().min(1).max(16).default(1),
   WORKER_MAX_PAGES_PER_JOB: z.coerce.number().int().min(1).max(10_000).default(200),
   WORKER_MAX_RUNTIME_SECONDS: z.coerce.number().int().min(30).max(86_400).default(3_600),
   OPENAI_API_KEY: z.string().optional(),

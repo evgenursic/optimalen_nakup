@@ -1,3 +1,6 @@
+import { NextIntlClientProvider } from "next-intl";
+
+import { AuthProvider } from "@/components/auth-provider";
 import { ApplicationRoot } from "@/components/application/application-root";
 
 export const dynamic = "force-dynamic";
@@ -35,5 +38,11 @@ export default async function ApplicationLayout({
     );
   }
 
-  return <ApplicationRoot locale={locale}>{children}</ApplicationRoot>;
+  return (
+    <NextIntlClientProvider locale={locale} messages={null}>
+      <AuthProvider>
+        <ApplicationRoot locale={locale}>{children}</ApplicationRoot>
+      </AuthProvider>
+    </NextIntlClientProvider>
+  );
 }

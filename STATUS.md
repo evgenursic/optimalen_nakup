@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-07-26
+Updated: 2026-07-27
 
 ## Verified
 
@@ -49,15 +49,31 @@ Updated: 2026-07-26
   valid EUR admin configuration; otherwise the real closed-beta waitlist remains.
 - LCP, INP, CLS, and TTFB instrumentation omits dynamic identifiers and uses same-origin,
   server-secret, rate-limited ingestion. Field targets remain unverified until production traffic.
+- Digest-pinned multi-stage images, a hardened Compose topology, Caddy ingress, a production
+  observability profile, GHCR publication, SHA/digest-based SSH deployment with automatic rollback,
+  encrypted daily Convex backups, and a guarded restore rehearsal are implemented. Linux container
+  execution remains pending until the milestone runs in GitHub Actions.
+- A primary-source-backed competitor matrix, landing messages, interview tasks, outreach, pricing
+  experiments, privacy-bounded analytics events, and a 30-day closed-beta decision plan are recorded
+  in `MARKET_VALIDATION.md`.
+- The versioned evaluation package now contains all ten required scenarios plus executable,
+  evidence-first metric calculations and automated arithmetic checks.
+- Public pages run against the same standalone server entry point as the container, use per-request
+  nonce CSP without `unsafe-eval`, and pass 16 desktop/mobile production E2E checks.
+- Three-run desktop Lighthouse medians are 100 in Performance, Accessibility, Best Practices, and
+  SEO for all four public routes. All public transfer budgets pass after deferring the Clerk sign-in
+  client until user activation.
 
 ## In progress
 
 - Figma product design system and critical-screen parity validation.
-- Docker/Hostinger deployment, observability, backup/restore rehearsal, authenticated E2E, and
+- Container startup in Linux CI, real backup/restore rehearsal, authenticated production E2E, and
   Lighthouse release evidence.
+- Mobile Lighthouse Performance 100 remains open; the current local medians are 87-97 while
+  Accessibility, Best Practices, SEO, and transfer budgets pass.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action
 
-Create and verify the required Figma file, then implement and exercise the pinned container,
-deployment, observability, backup/restore, authenticated-E2E, and Lighthouse release gates.
+Publish the operations/evaluation milestone, exercise pinned containers and Lighthouse in Linux CI,
+then address any authoritative runner failures before resuming the externally blocked Figma work.

@@ -17,3 +17,7 @@ intentionally not stored in this repository.
 
 Development, verification, deployment, and security instructions will be maintained in the
 repository documentation as implementation progresses.
+
+Key operator documents are `DEPLOYMENT.md`, `OPERATIONS.md`, `SECURITY.md`, `TEST_RESULTS.md`, and
+`PERFORMANCE.md`. Product and market hypotheses, including the closed-beta evidence plan, are in
+`MARKET_VALIDATION.md`.

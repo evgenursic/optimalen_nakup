@@ -1,0 +1,121 @@
+name: Authenticated production validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: HTTPS origin of the deployed environment
+        required: true
+        type: string
+      results_job_id:
+        description: Existing completed research job owned by the dedicated test workspace
+        required: true
+        type: string
+      environment:
+        description: GitHub environment containing Clerk test credentials
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-validation-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  authenticated-lighthouse:
+    name: Authenticated results Lighthouse 100 gate
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Validate inputs
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+          JOB_ID: ${{ inputs.results_job_id }}
+        run: |
+          [[ "$BASE_URL" =~ ^https://[A-Za-z0-9.-]+(:[0-9]{1,5})?$ ]]
+          [[ "$JOB_ID" =~ ^[A-Za-z0-9_-]+$ ]]
+
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+        with:
+          version: 11.17.0
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22.18.0
+          cache: pnpm
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm --filter @optimalen-nakup/web exec playwright install --with-deps chromium
+
+      - name: Locate Chromium
+        run: |
+          chrome_path="$(find "$HOME/.cache/ms-playwright" -type f -name chrome -path '*chrome-linux*' -print -quit)"
+          test -n "$chrome_path"
+          echo "CHROME_PATH=$chrome_path" >> "$GITHUB_ENV"
+
+      - name: Create short-lived authenticated browser state
+        env:
+          CLERK_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
+          LHCI_BASE_URL: ${{ inputs.base_url }}
+        run: node ops/lighthouse/create-auth-state.mjs
+
+      - name: Run three authenticated mobile Lighthouse passes
+        id: lighthouse-mobile
+        continue-on-error: true
+        env:
+          E2E_EXISTING_JOB_ID: ${{ inputs.results_job_id }}
+          LHCI_BASE_URL: ${{ inputs.base_url }}
+        run: pnpm lighthouse:authenticated:mobile
+
+      - name: Reset Lighthouse working directory
+        if: always() && steps.lighthouse-mobile.outcome != 'skipped'
+        run: rm -rf "$GITHUB_WORKSPACE/.lighthouseci"
+
+      - name: Run three authenticated desktop Lighthouse passes
+        id: lighthouse-desktop
+        if: always() && steps.lighthouse-mobile.outcome != 'skipped'
+        continue-on-error: true
+        env:
+          E2E_EXISTING_JOB_ID: ${{ inputs.results_job_id }}
+          LHCI_BASE_URL: ${{ inputs.base_url }}
+        run: pnpm lighthouse:authenticated:desktop
+
+      - name: Remove short-lived browser state
+        if: always()
+        run: rm -f "$GITHUB_WORKSPACE/.auth/lighthouse-storage-state.json"
+
+      - name: Upload authenticated Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: lighthouse-authenticated-${{ inputs.environment }}
+          path: lighthouse-reports
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Enforce both authenticated Lighthouse profiles
+        if: always()
+        env:
+          DESKTOP_OUTCOME: ${{ steps.lighthouse-desktop.outcome }}
+          MOBILE_OUTCOME: ${{ steps.lighthouse-mobile.outcome }}
+        run: |
+          test "$MOBILE_OUTCOME" = success
+          test "$DESKTOP_OUTCOME" = success

@@ -1,3 +1,6 @@
+import { NextIntlClientProvider } from "next-intl";
+
+import { AuthProvider } from "@/components/auth-provider";
 import { InvitationAcceptPage } from "@/components/invitation-accept-page";
 
 export const dynamic = "force-dynamic";
@@ -26,5 +29,11 @@ export default async function InvitationRoute({
       </main>
     );
   }
-  return <InvitationAcceptPage locale={locale} token={token} />;
+  return (
+    <NextIntlClientProvider locale={locale} messages={null}>
+      <AuthProvider>
+        <InvitationAcceptPage locale={locale} token={token} />
+      </AuthProvider>
+    </NextIntlClientProvider>
+  );
 }

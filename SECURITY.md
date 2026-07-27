@@ -24,8 +24,9 @@ oversized payloads, runaway crawling/AI cost, dependency compromise, and privile
 - HMAC worker callbacks with timestamp, nonce, constant-time comparison, replay storage, and
   idempotent writes.
 - Lemon Squeezy raw-body signature verification and idempotent, order-aware event processing.
-- CSP, HSTS in production, frame denial, MIME sniffing protection, restrictive referrer and
-  permissions policies, secure cookies, and origin checks.
+- Per-request nonce CSP with strict-dynamic scripts, frame/object denial, restricted network/frame
+  destinations, HSTS at Caddy in production, MIME sniffing protection, restrictive referrer and
+  permissions policies, secure cookies, and origin checks. CSP does not permit `unsafe-eval`.
 - CSV cells beginning with formula control characters are escaped.
 - Secrets are environment-only and are redacted from logs and error output.
 - Web Vitals reach Convex only through same-origin `/api/web-vitals`, a per-client hashed rate-limit

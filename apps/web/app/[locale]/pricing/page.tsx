@@ -1,12 +1,23 @@
 import { api } from "@convex/_generated/api";
 import { ConvexHttpClient } from "convex/browser";
 import { CheckCircle2 } from "lucide-react";
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { WaitlistForm } from "@/components/waitlist-form";
-import { Link } from "@/i18n/navigation";
+import { localizedHref } from "@/lib/locale-path";
+import { localizedAlternates } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return { alternates: localizedAlternates(locale, "/pricing") };
+}
 
 export default async function PricingPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -72,9 +83,9 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
               ))}
             </ul>
             {pricing ? (
-              <Link href="/sign-in" className="button button-primary mt-auto">
+              <a href={localizedHref(locale, "/sign-in")} className="button button-primary mt-auto">
                 {locale === "sl" ? "Prijava za checkout" : "Sign in for checkout"}
-              </Link>
+              </a>
             ) : (
               <a href="#waitlist" className="button button-primary mt-auto">
                 {t("cta")}

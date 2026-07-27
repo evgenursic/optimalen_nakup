@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
-import { Link } from "@/i18n/navigation";
+import { localizedHref } from "@/lib/locale-path";
 
-export async function SiteFooter() {
+export async function SiteFooter({ locale }: Readonly<{ locale: "sl" | "en" }>) {
   const t = await getTranslations("footer");
 
   return (
@@ -14,9 +14,9 @@ export async function SiteFooter() {
           <p className="mt-4 max-w-xl text-xs leading-5 text-slate-600">{t("legal")}</p>
         </div>
         <nav aria-label="Legal" className="grid gap-3 text-sm font-semibold text-slate-700">
-          <Link href="/legal/privacy">{t("privacy")}</Link>
-          <Link href="/legal/terms">{t("terms")}</Link>
-          <Link href="/legal/sources">{t("sources")}</Link>
+          <a href={localizedHref(locale, "/legal/privacy")}>{t("privacy")}</a>
+          <a href={localizedHref(locale, "/legal/terms")}>{t("terms")}</a>
+          <a href={localizedHref(locale, "/legal/sources")}>{t("sources")}</a>
         </nav>
       </div>
     </footer>

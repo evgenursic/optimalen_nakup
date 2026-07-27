@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const remoteBaseUrl = process.env.PLAYWRIGHT_BASE_URL?.replace(/\/$/, "");
+
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
@@ -11,16 +13,20 @@ export default defineConfig({
   },
   reporter: [["html", { open: "never" }], ["list"]],
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: remoteBaseUrl ?? "http://127.0.0.1:3000",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
-  webServer: {
-    command: "pnpm start",
-    url: "http://127.0.0.1:3000/sl",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  ...(remoteBaseUrl
+    ? {}
+    : {
+        webServer: {
+          command: "pnpm start",
+          url: "http://127.0.0.1:3000/sl",
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+        },
+      }),
   projects: [
     {
       name: "chromium-desktop",

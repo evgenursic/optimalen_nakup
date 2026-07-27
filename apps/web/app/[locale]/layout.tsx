@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
-import { AuthProvider } from "@/components/auth-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WebVitalsReporter } from "@/components/web-vitals-reporter";
@@ -45,13 +45,6 @@ export async function generateMetadata({
       telephone: false,
     },
     manifest: "/manifest.webmanifest",
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        sl: "/sl",
-        en: "/en",
-      },
-    },
     openGraph: {
       title: t("title"),
       description: t("description"),
@@ -76,21 +69,23 @@ export default async function LocaleLayout({
   }
 
   setRequestLocale(locale);
+  await headers();
+  const telemetryConfigured = Boolean(
+    process.env.NEXT_PUBLIC_CONVEX_URL &&
+    process.env.WEB_VITALS_INGEST_SECRET &&
+    process.env.WEB_VITALS_INGEST_SECRET.length >= 32,
+  );
 
   return (
     <html lang={locale}>
       <body>
-        <NextIntlClientProvider>
-          <AuthProvider>
-            <WebVitalsReporter />
-            <a className="skip-link" href="#main-content">
-              {locale === "sl" ? "Preskoči na vsebino" : "Skip to content"}
-            </a>
-            <SiteHeader locale={locale} />
-            {children}
-            <SiteFooter />
-          </AuthProvider>
-        </NextIntlClientProvider>
+        {telemetryConfigured ? <WebVitalsReporter /> : null}
+        <a className="skip-link" href="#main-content">
+          {locale === "sl" ? "Preskoči na vsebino" : "Skip to content"}
+        </a>
+        <SiteHeader locale={locale} />
+        {children}
+        <SiteFooter locale={locale} />
       </body>
     </html>
   );
