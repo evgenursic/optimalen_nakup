@@ -1,6 +1,10 @@
 import { z } from "zod";
 
 const optionalUrl = z.union([z.literal(""), z.url()]).transform((value) => value || undefined);
+const optionalPositiveNumber = z.preprocess(
+  (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+  z.coerce.number().positive().optional(),
+);
 
 export const publicEnvironmentSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.url().default("http://localhost:3000"),
@@ -28,7 +32,7 @@ export const workerEnvironmentSchema = z.object({
   OPENAI_MODEL_SYNTHESIZER: z
     .enum(["gpt-5.6-luna", "gpt-5.6-terra", "gpt-5.6-sol"])
     .default("gpt-5.6-sol"),
-  OPENAI_USD_TO_EUR_RATE: z.coerce.number().positive().optional(),
+  OPENAI_USD_TO_EUR_RATE: optionalPositiveNumber,
   WORKER_APPROVED_SOURCE_IDS: z.string().default(""),
   WORKER_ENABLE_PLAYWRIGHT_VERIFICATION: z
     .enum(["true", "false"])
