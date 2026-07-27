@@ -124,8 +124,6 @@ jobs:
           ACME_EMAIL=ci@example.invalid
           APP_DOMAIN=http://localhost
           GRAFANA_ADMIN_PASSWORD=ci-not-production
-          WORKER_CONVEX_HTTP_URL=http://web:3000
-          WORKER_SHARED_SECRET=ci-worker-shared-secret-with-32-bytes
           EOF
 
       - name: Validate Compose model
@@ -165,7 +163,7 @@ jobs:
             grep -qx "$service" <<<"$running_services"
           done
           docker compose exec --no-TTY worker node -e \
-            "fetch('http://127.0.0.1:3001/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+            "fetch('http://127.0.0.1:3001/health').then(async r=>{const b=await r.json();if(r.status!==503||b.status!=='not_configured')process.exit(1)}).catch(()=>process.exit(1))"
           curl --fail --silent --show-error http://127.0.0.1:9090/-/ready
           curl --fail --silent --show-error http://127.0.0.1:3002/api/health
 
