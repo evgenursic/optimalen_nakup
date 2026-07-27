@@ -59,13 +59,11 @@ ENV APP_VERSION=${APP_VERSION} \
     NODE_ENV=production \
     PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
     PORT=3001
-RUN corepack enable \
-    && corepack prepare pnpm@11.17.0 --activate \
-    && groupadd --system --gid 1001 worker \
+RUN groupadd --system --gid 1001 worker \
     && useradd --system --uid 1001 --gid worker --home-dir /app worker
 WORKDIR /app
 COPY --from=worker-build --chown=worker:worker /opt/worker ./
-RUN pnpm exec playwright install --with-deps chromium \
+RUN node node_modules/playwright/cli.js install --with-deps chromium \
     && chmod -R a+rX /ms-playwright \
     && rm -rf /var/lib/apt/lists/*
 USER worker
