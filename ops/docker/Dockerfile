@@ -25,7 +25,7 @@ ENV APP_VERSION=${APP_VERSION} \
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY} \
     NEXT_PUBLIC_CONVEX_URL=${NEXT_PUBLIC_CONVEX_URL} \
     NEXT_PUBLIC_DEFAULT_LOCALE=${NEXT_PUBLIC_DEFAULT_LOCALE}
-RUN pnpm --filter @optimalen-nakup/web build
+RUN pnpm turbo run build --filter=@optimalen-nakup/web
 
 FROM ${NODE_IMAGE} AS web
 ARG APP_VERSION=development
@@ -47,7 +47,7 @@ EXPOSE 3000
 CMD ["node", "apps/web/server.js"]
 
 FROM dependencies AS worker-build
-RUN pnpm --filter @optimalen-nakup/worker build \
+RUN pnpm turbo run build --filter=@optimalen-nakup/worker \
     && pnpm --filter @optimalen-nakup/worker deploy --prod --legacy /opt/worker
 
 FROM ${NODE_IMAGE} AS worker
