@@ -164,8 +164,15 @@ jobs:
           done
           docker compose exec --no-TTY worker node -e \
             "fetch('http://127.0.0.1:3001/health').then(async r=>{const b=await r.json();if(r.status!==503||b.status!=='not_configured')process.exit(1)}).catch(()=>process.exit(1))"
-          curl --fail --silent --show-error http://127.0.0.1:9090/-/ready
-          curl --fail --silent --show-error http://127.0.0.1:3002/api/health
+          for attempt in $(seq 1 24); do
+            if curl --fail --silent --show-error http://127.0.0.1:9090/-/ready >/dev/null &&
+              curl --fail --silent --show-error http://127.0.0.1:3002/api/health >/dev/null; then
+              exit 0
+            fi
+            sleep 5
+          done
+          docker compose --profile observability ps
+          exit 1
 
       - name: Capture container diagnostics
         if: failure()
