@@ -1,6 +1,6 @@
 # Performance
 
-Updated: 2026-07-27
+Updated: 2026-07-28
 
 ## Budgets
 
@@ -16,13 +16,56 @@ cannot hide a budget overrun.
 
 ## Protocol
 
-The 2026-07-27 candidate used the standalone Next.js production server and Playwright Chromium,
+The 2026-07-27/28 candidate used the standalone Next.js production server and Playwright Chromium,
 three runs per route, with the median reported. Mobile uses a 412 × 823 viewport, 2.625 device scale
 factor, Lighthouse simulated throttling, and the normal mobile form factor. Desktop uses the
 Lighthouse desktop preset. No Clerk, Convex, or production secret was configured for this public
 credential-free run.
 
-## Mobile median
+## Clean Ubuntu CI evidence
+
+GitHub Actions run
+[`30286774130`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30286774130) measured
+commit `0151047` from a clean Ubuntu 24.04 runner. Subsequent commits through `a1f65dc` adjust only
+worker environment parsing and container CI verification; they do not change the web build. Artifact
+[`8661421754`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30286774130/artifacts/8661421754)
+stores all 24 HTML/JSON reports for 30 days; its uploaded ZIP SHA-256 is
+`62040565007ad77a6a91f93f3f2289487eb11206c2c318f8788cd3473c66004c`.
+
+A second clean run,
+[`30288575856`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30288575856), stored the
+same 24-report set as artifact
+[`8662047870`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30288575856/artifacts/8662047870)
+with ZIP SHA-256 `adb9995e7d31584294fc1b4e2a794cb6f86b62168388d412763c99f4dd703137`. Desktop
+remained 100 throughout; individual mobile scores remained 97-99 with unchanged transfer sizes. This
+reproduces the strict mobile failure on clean Linux instead of attributing it only to the local
+Windows environment.
+
+### Mobile median on Ubuntu
+
+| Route              | Perf. | A11y | Best | SEO | FCP    | LCP      | TBT   | CLS | TTFB  | JS bytes | CSS bytes |
+| ------------------ | ----: | ---: | ---: | --: | ------ | -------- | ----- | --: | ----- | -------: | --------: |
+| `/sl`              |    99 |  100 |  100 | 100 | 779 ms | 1,623 ms | 72 ms |   0 | 20 ms |  158,164 |     7,841 |
+| `/sl/pricing`      |    98 |  100 |  100 | 100 | 769 ms | 2,262 ms | 91 ms |   0 | 15 ms |  159,791 |     7,841 |
+| `/sl/how-it-works` |    98 |  100 |  100 | 100 | 773 ms | 2,278 ms | 93 ms |   0 | 14 ms |  158,164 |     7,841 |
+| `/sl/sign-in`      |    99 |  100 |  100 | 100 | 774 ms | 1,774 ms | 98 ms |   0 | 14 ms |  159,638 |     7,841 |
+
+The exact mobile Performance 100 assertion remains open. Every other mobile category and both
+transfer budgets pass. The remaining simulated score is dominated by the Next/React framework
+execution task and text LCP render-delay model. Static rendering, inline CSS, `content-visibility`,
+and a preloaded image candidate were each measured locally and rejected because they weakened the
+nonce CSP/Best Practices result or made the performance trace worse.
+
+### Desktop median on Ubuntu
+
+| Route              | Perf. | A11y | Best | SEO | FCP    | LCP    | TBT  | CLS | TTFB  | JS bytes | CSS bytes |
+| ------------------ | ----: | ---: | ---: | --: | ------ | ------ | ---- | --: | ----- | -------: | --------: |
+| `/sl`              |   100 |  100 |  100 | 100 | 223 ms | 510 ms | 0 ms |   0 | 16 ms |  158,164 |     7,841 |
+| `/sl/pricing`      |   100 |  100 |  100 | 100 | 223 ms | 545 ms | 0 ms |   0 | 13 ms |  159,791 |     7,841 |
+| `/sl/how-it-works` |   100 |  100 |  100 | 100 | 230 ms | 528 ms | 0 ms |   0 | 15 ms |  158,164 |     7,841 |
+| `/sl/sign-in`      |   100 |  100 |  100 | 100 | 218 ms | 544 ms | 0 ms |   0 | 11 ms |  159,638 |     7,841 |
+
+## Local mobile median
 
 | Route              | Perf. | A11y | Best | SEO | FCP    | LCP      | TBT    | CLS | TTFB  | JS bytes | CSS bytes |
 | ------------------ | ----: | ---: | ---: | --: | ------ | -------- | ------ | --: | ----- | -------: | --------: |
@@ -33,10 +76,11 @@ credential-free run.
 
 All transfer budgets, accessibility, Best Practices, SEO, and CLS gates pass. The exact Performance
 100 release gate fails on all four mobile routes. The main local constraints are simulated-CPU total
-blocking time and LCP render delay; they must be retested on the clean Linux runner before further
-route-level optimization is chosen.
+blocking time and LCP render delay. Clean Ubuntu reruns now confirm the same residual pattern, so
+this local table is retained only as historical diagnostic context rather than as the release
+decision source.
 
-## Desktop median
+## Local desktop median
 
 | Route              | Perf. | A11y | Best | SEO | FCP    | LCP    | TBT   | CLS | TTFB  | JS bytes | CSS bytes |
 | ------------------ | ----: | ---: | ---: | --: | ------ | ------ | ----- | --: | ----- | -------: | --------: |
@@ -57,6 +101,6 @@ authenticated research-results path also remains pending a Clerk test identity, 
 and completed owned research job.
 
 The local HTML/JSON reports are ignored by Git and are not release evidence by themselves. The
-Ubuntu workflow stores reports as artifacts even when the strict mobile assertion fails. No
-Lighthouse 100 claim is made for the release until mobile, desktop, and the authenticated results
-route all pass from stored production-build reports.
+Ubuntu public reports are stored, but the exact mobile assertion is still red. No Lighthouse 100
+claim is made for the release until mobile, desktop, and the authenticated results route all pass
+from stored production-build reports.

@@ -21,9 +21,9 @@ must not be reported as verified until their exact smoke tests pass.
 
 - Docker is not installed on the local Windows environment. Compose rendering, image builds, Linux
   shell syntax, least-privilege container startup, and health checks are therefore enforced by the
-  Ubuntu GitHub Actions job after push.
+  Ubuntu GitHub Actions job rather than claimed from the local machine.
 - The local `bash` command resolves to WSL, but no Linux distribution is installed. Shell parsing is
-  therefore part of the same Ubuntu Actions gate rather than a claimed local check.
+  verified by the same Ubuntu Actions gate rather than claimed locally.
 - A clean backup/restore rehearsal requires the external S3-compatible repository and a disposable
   Convex deployment.
 - Authenticated E2E and the real results-route Lighthouse run require a dedicated Clerk test user, a
@@ -31,9 +31,9 @@ must not be reported as verified until their exact smoke tests pass.
 - The Figma file is on a Starter team, which permits one variable mode. The Light mode is the v1
   release scope; semantic aliases remain ready for a later Dark mode after the workspace supports
   it.
-- The Figma connector began returning `INVALID_ARGUMENT` after the initial collections and color
-  variables were created. Component/page work remains open until the external connector accepts read
-  and write operations again.
-- The final local mobile Lighthouse series passes Accessibility, Best Practices, SEO, and both
-  transfer budgets, but Performance medians remain 87-97 rather than 100. The clean Linux result is
-  required before deciding whether remaining variance is environmental or needs more code work.
+- The Figma file metadata is readable again, but the general write endpoint and library-discovery
+  endpoint still return `INVALID_ARGUMENT`. Four initial collections and 49 variables were created
+  before that failure; pages, styles, components, and screen parity remain open.
+- Two clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer
+  budgets, while mobile Performance remains 97-99 rather than the required exact 100. The residual
+  variance is therefore reproduced outside the local Windows environment.

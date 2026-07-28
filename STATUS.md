@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-07-27
+Updated: 2026-07-28
 
 ## Verified
 
@@ -63,17 +63,27 @@ Updated: 2026-07-27
 - Three-run desktop Lighthouse medians are 100 in Performance, Accessibility, Best Practices, and
   SEO for all four public routes. All public transfer budgets pass after deferring the Clerk sign-in
   client until user activation.
+- Two clean Ubuntu 24.04 Lighthouse runs stored all 24 public reports per run as digest-checked
+  artifacts. Mobile Performance remains 97-99 rather than the required exact 100; Accessibility,
+  Best Practices, SEO, and transfer budgets are 100/pass.
+- The Ubuntu container job parses the shell scripts, renders the full Compose model, builds the web,
+  worker, and backup targets, and starts the hardened web, disconnected worker, Caddy, OTel,
+  Prometheus, Loki, and Grafana services. Web, explicit disconnected-worker state, and every
+  observability endpoint pass from the intended private network.
 
 ## In progress
 
-- Figma product design system and critical-screen parity validation.
-- Container startup in Linux CI, real backup/restore rehearsal, authenticated production E2E, and
-  Lighthouse release evidence.
-- Mobile Lighthouse Performance 100 remains open; the current local medians are 87-97 while
-  Accessibility, Best Practices, SEO, and transfer budgets pass.
+- Figma product design system and critical-screen parity validation. The existing file and its sole
+  page are readable through metadata, while the general write and library endpoints still return
+  `INVALID_ARGUMENT`.
+- Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
+  result.
+- Mobile Lighthouse Performance 100 remains open; clean Ubuntu medians are 98-99 in the first stored
+  run and individual reruns remain 97-99 while every other category and transfer budget passes.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action
 
-Publish the operations/evaluation milestone, exercise pinned containers and Lighthouse in Linux CI,
-then address any authoritative runner failures before resuming the externally blocked Figma work.
+Continue the externally blocked Figma work when its write endpoint recovers, while preserving the
+strict mobile Lighthouse 100 gate. Production credentials remain reserved for authenticated E2E,
+backup/restore, and bounded live-source verification.
