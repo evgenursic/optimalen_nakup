@@ -165,8 +165,8 @@ jobs:
           docker compose exec --no-TTY worker node -e \
             "fetch('http://127.0.0.1:3001/health').then(async r=>{const b=await r.json();if(r.status!==503||b.status!=='not_configured')process.exit(1)}).catch(()=>process.exit(1))"
           for attempt in $(seq 1 24); do
-            if curl --fail --silent --show-error http://127.0.0.1:9090/-/ready >/dev/null &&
-              curl --fail --silent --show-error http://127.0.0.1:3002/api/health >/dev/null; then
+            if docker compose exec --no-TTY worker node -e \
+              "const urls=['http://prometheus:9090/-/ready','http://grafana:3000/api/health','http://loki:3100/ready','http://otel-collector:13133/'];Promise.all(urls.map(async url=>{const r=await fetch(url);if(!r.ok)throw new Error(url)})).catch(()=>process.exit(1))"; then
               exit 0
             fi
             sleep 5
@@ -176,7 +176,10 @@ jobs:
 
       - name: Capture container diagnostics
         if: failure()
-        run: docker compose logs --no-color --tail 300 web worker caddy
+        run: |
+          docker compose --profile observability ps
+          docker compose --profile observability logs --no-color --tail 300 \
+            web worker caddy otel-collector prometheus loki grafana
 
       - name: Stop containers
         if: always()
