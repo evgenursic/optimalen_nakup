@@ -1,6 +1,9 @@
 import { z } from "zod";
 
 const optionalUrl = z.union([z.literal(""), z.url()]).transform((value) => value || undefined);
+const optionalSecret = z
+  .union([z.literal(""), z.string().min(32)])
+  .transform((value) => value || undefined);
 const optionalPositiveNumber = z.preprocess(
   (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
   z.coerce.number().positive().optional(),
@@ -17,7 +20,7 @@ export const workerEnvironmentSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
   WORKER_ID: z.string().min(1).default("worker-local"),
-  WORKER_SHARED_SECRET: z.string().min(32).optional(),
+  WORKER_SHARED_SECRET: optionalSecret.optional(),
   WORKER_CONVEX_HTTP_URL: optionalUrl.optional(),
   WORKER_MAX_CONCURRENCY: z.coerce.number().int().min(1).max(16).default(1),
   WORKER_MAX_PAGES_PER_JOB: z.coerce.number().int().min(1).max(10_000).default(200),

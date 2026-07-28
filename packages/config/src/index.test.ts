@@ -17,7 +17,17 @@ describe("worker environment", () => {
     );
   });
 
+  it("treats an empty optional worker secret as unconfigured", () => {
+    expect(parseWorkerEnvironment({ WORKER_SHARED_SECRET: "" }).WORKER_SHARED_SECRET).toBe(
+      undefined,
+    );
+  });
+
   it("rejects non-positive configured exchange rates", () => {
     expect(() => parseWorkerEnvironment({ OPENAI_USD_TO_EUR_RATE: "0" })).toThrow();
+  });
+
+  it("rejects configured worker secrets shorter than 32 characters", () => {
+    expect(() => parseWorkerEnvironment({ WORKER_SHARED_SECRET: "short" })).toThrow();
   });
 });
