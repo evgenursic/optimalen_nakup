@@ -8,7 +8,7 @@ the authoritative clean-environment gate.
 
 | Command or gate                                             | Result | Evidence                                                                                    |
 | ----------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------- |
-| `corepack pnpm verify`                                      | Pass   | Format, zero-warning lint, strict types, 53 tests, and the Next.js standalone build passed. |
+| `corepack pnpm verify`                                      | Pass   | Format, zero-warning lint, strict types, 54 tests, and the Next.js standalone build passed. |
 | `corepack pnpm test:e2e`                                    | Pass   | All 16 desktop/mobile Chromium scenarios passed against the standalone production server.   |
 | `corepack pnpm audit --prod --audit-level high`             | Pass   | No known production dependency vulnerabilities.                                             |
 | `pnpm --filter @optimalen-nakup/worker deploy --prod ...`   | Pass   | Production worker deployment tree and entry point were materialized locally on 2026-07-26.  |
@@ -25,7 +25,7 @@ health endpoint, confirmed the credential-free worker's explicit `503 not_config
 verified OTel, Prometheus, Loki, and Grafana from the private application network before clean
 shutdown.
 
-The 53 automated tests comprise 41 package tests and 12 Convex application, protocol, authorization,
+The 54 automated tests comprise 42 package tests and 12 Convex application, protocol, authorization,
 and tenant-isolation tests. New coverage validates the ten-case evaluation inventory and metric
 arithmetic, cautious worker concurrency default, CSP-compatible waitlist hydration, public health
 headers, responsive navigation, skip links, serious/critical axe findings on every measured public
