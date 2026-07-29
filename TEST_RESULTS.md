@@ -10,7 +10,7 @@ the authoritative clean-environment gate.
 | ----------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------- |
 | `corepack pnpm verify`                                      | Pass   | Format, zero-warning lint, strict types, 58 tests, and the Next.js standalone build passed.   |
 | Web Vitals device classification and persistence tests      | Pass   | Four new tests cover coarse classification, storage, and absence of retained User-Agent data. |
-| `corepack pnpm test:e2e`                                    | Pass   | All 16 desktop/mobile Chromium scenarios passed against the standalone production server.     |
+| `corepack pnpm test:e2e`                                    | Pass   | All 18 desktop/mobile Chromium scenarios passed against the standalone production server.     |
 | `corepack pnpm audit --prod --audit-level high`             | Pass   | No known production dependency vulnerabilities.                                               |
 | `pnpm --filter @optimalen-nakup/worker deploy --prod ...`   | Pass   | Production worker deployment tree and entry point were materialized locally on 2026-07-26.    |
 | `corepack pnpm convex:codegen`                              | Note   | The standalone command produced no output before the local four-minute timeout.               |
@@ -29,19 +29,21 @@ verified OTel, Prometheus, Loki, and Grafana from the private application networ
 shutdown.
 
 Latest completed baseline run
-[`30459547228`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30459547228)
-independently passes the quality/production-build job, all 16 public Playwright scenarios, the
-complete container startup/health job, and CodeQL for commit `b2cff1e`. Only the strict mobile
-Lighthouse Performance 100 job fails. Its uploaded `lighthouse-public` artifact is `8727262935`,
-contains all 24 HTML/JSON reports, and has ZIP SHA-256
-`ae9d8b949d07bac7be6100f42adda708d8730283b60f2e988607e718fc9bfeea`.
+[`30461698590`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30461698590)
+independently passes the quality/production-build job, all 16 public Playwright scenarios, and the
+complete container startup/health job for commit `b7b39fd`. CodeQL run
+[`30461703790`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30461703790) also passes.
+Only the strict mobile Lighthouse Performance 100 job fails. Its uploaded `lighthouse-public`
+artifact is `8728119687`, contains all 24 HTML/JSON reports, and has ZIP SHA-256
+`6c836961a5a5aabbcd1ef4d7620fe2a6b2c3fc8903bc2e2b10734190a7764498`.
 
 The 58 automated tests comprise 45 package tests and 13 Convex application, protocol, authorization,
 and tenant-isolation tests. New coverage validates the ten-case evaluation inventory and metric
 arithmetic, cautious worker concurrency default, CSP-compatible waitlist hydration, public health
 headers, responsive navigation, skip links, serious/critical axe findings on every measured public
 route, strict optional-secret parsing that accepts credential-free startup without accepting a short
-configured secret, and privacy-bounded device classification for Web Vitals.
+configured secret, privacy-bounded device classification for Web Vitals, and PWA registration that
+proves its runtime cache contains only the approved public static allowlist.
 
 The standalone E2E launcher copies only generated public/static assets beside Next.js' traced server
 and runs the same `server.js` entry point as the web image. This replaces the earlier `next start`

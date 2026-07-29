@@ -62,7 +62,11 @@ Updated: 2026-07-29
 - The versioned evaluation package now contains all ten required scenarios plus executable,
   evidence-first metric calculations and automated arithmetic checks.
 - Public pages run against the same standalone server entry point as the container, use per-request
-  nonce CSP without `unsafe-eval`, and pass 16 desktop/mobile production E2E checks.
+  nonce CSP without `unsafe-eval`, and pass 18 desktop/mobile production E2E checks.
+- The installable PWA now registers through the existing CSP nonce. Its bounded service worker
+  caches only same-origin hashed Next.js static assets, the public icon, and the manifest; it never
+  intercepts or stores navigations, HTML, API responses, authenticated application data, or research
+  results.
 - Three-run desktop Lighthouse medians are 100 in Performance, Accessibility, Best Practices, and
   SEO for all four public routes. All public transfer budgets pass after deferring the Clerk sign-in
   client until user activation.
@@ -74,11 +78,12 @@ Updated: 2026-07-29
   Prometheus, Loki, and Grafana services. Web, explicit disconnected-worker state, and every
   observability endpoint pass from the intended private network.
 - Latest completed CI baseline
-  [`30459547228`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30459547228) verifies
-  commit `b2cff1e`: quality/build, all 16 public E2E scenarios, container startup/health, and CodeQL
-  pass. The only red job remains the intentionally strict mobile Lighthouse Performance 100
-  assertion; its 24 reports are preserved as artifact `8727262935` with ZIP SHA-256
-  `ae9d8b949d07bac7be6100f42adda708d8730283b60f2e988607e718fc9bfeea`.
+  [`30461698590`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30461698590) verifies
+  commit `b7b39fd`: quality/build, all 16 public E2E scenarios, and container startup/health pass;
+  CodeQL run [`30461703790`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30461703790)
+  is also green. The only red job remains the intentionally strict mobile Lighthouse Performance 100
+  assertion; its 24 reports are preserved as artifact `8728119687` with ZIP SHA-256
+  `6c836961a5a5aabbcd1ef4d7620fe2a6b2c3fc8903bc2e2b10734190a7764498`.
 
 ## In progress
 
@@ -88,9 +93,8 @@ Updated: 2026-07-29
   before any mutation.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
-- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98-99 while
-  every other category and transfer budget passes. One of twelve mobile traces contained an isolated
-  480 ms unattributed task and scored 88; it is retained rather than discarded.
+- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98 on all four
+  public routes while every other category and transfer budget passes.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action

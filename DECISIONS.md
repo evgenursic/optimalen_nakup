@@ -26,3 +26,6 @@
 - Web Vitals device segmentation is derived server-side as `mobile`, `tablet`, `desktop`, or
   `unknown`. Raw User-Agent values are not retained; existing rows remain valid through an optional
   schema field while all new writes require a validated class.
+- PWA support uses a nonce-authorized inline registration and a bounded static-only service worker.
+  It intentionally provides no navigation or data cache, preventing private or stale research
+  results from becoming offline cache entries.

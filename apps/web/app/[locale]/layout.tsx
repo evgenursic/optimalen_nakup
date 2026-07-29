@@ -11,6 +11,9 @@ import { routing } from "@/i18n/routing";
 
 import "../globals.css";
 
+const serviceWorkerRegistration =
+  'if("serviceWorker"in navigator){addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{})},{once:true})}';
+
 export const viewport: Viewport = {
   colorScheme: "light",
   themeColor: "#f8fafc",
@@ -69,7 +72,8 @@ export default async function LocaleLayout({
   }
 
   setRequestLocale(locale);
-  await headers();
+  const requestHeaders = await headers();
+  const nonce = requestHeaders.get("x-nonce") ?? undefined;
   const telemetryConfigured = Boolean(
     process.env.NEXT_PUBLIC_CONVEX_URL &&
     process.env.WEB_VITALS_INGEST_SECRET &&
@@ -86,6 +90,7 @@ export default async function LocaleLayout({
         <SiteHeader locale={locale} />
         {children}
         <SiteFooter locale={locale} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: serviceWorkerRegistration }} />
       </body>
     </html>
   );

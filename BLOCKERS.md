@@ -36,8 +36,7 @@ must not be reported as verified until their exact smoke tests pass.
   before that failure; pages, styles, components, and screen parity remain open. The owner approved
   Phase 1 on 2026-07-29, but the first post-approval call was a read-only inventory and failed
   before any mutation, so no blind retry or duplicate creation was attempted.
-- Four clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer
-  budgets, while the latest mobile Performance medians remain 98-99 rather than the required
-  exact 100. The residual variance is therefore reproduced outside the local Windows environment.
-  Run `30459547228` stores all 24 reports as artifact `8727262935`; one retained mobile trace scored
-  88 after a 480 ms unattributed main-thread task.
+- Five clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer
+  budgets, while the latest mobile Performance medians remain 98 rather than the required exact 100.
+  The residual variance is therefore reproduced outside the local Windows environment. Run
+  `30461698590` stores all 24 reports as artifact `8728119687`.
