@@ -39,6 +39,33 @@ afterEach(() => {
 });
 
 describe("authenticated application experience", () => {
+  it("stores only a coarse device class with privacy-bounded Web Vitals", async () => {
+    vi.stubEnv("WEB_VITALS_INGEST_SECRET", "v".repeat(32));
+    const testBackend = convexTest(schema, modules);
+
+    await testBackend.mutation(api.public.recordWebVital, {
+      route: "/sl/pricing",
+      metric: "LCP",
+      value: 1_742,
+      rating: "good",
+      navigationType: "navigate",
+      deviceClass: "tablet",
+      appVersion: "b2cff1e",
+      rateLimitKey: "a".repeat(64),
+      ingestSecret: "v".repeat(32),
+    });
+
+    const stored = await testBackend.run(async (ctx) => await ctx.db.query("webVitals").collect());
+    expect(stored).toHaveLength(1);
+    expect(stored[0]).toMatchObject({
+      route: "/sl/pricing",
+      metric: "LCP",
+      deviceClass: "tablet",
+      appVersion: "b2cff1e",
+    });
+    expect(stored[0]).not.toHaveProperty("userAgent");
+  });
+
   it("persists intake model usage exactly once and includes it in the account export", async () => {
     vi.stubEnv("AI_COST_INGEST_SECRET", "a".repeat(32));
     const testBackend = convexTest(schema, modules);

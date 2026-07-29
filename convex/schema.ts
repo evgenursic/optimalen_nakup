@@ -10,6 +10,13 @@ export const roleValidator = v.union(
 
 export const localeValidator = v.union(v.literal("sl"), v.literal("en"));
 
+export const deviceClassValidator = v.union(
+  v.literal("mobile"),
+  v.literal("tablet"),
+  v.literal("desktop"),
+  v.literal("unknown"),
+);
+
 export const categoryValidator = v.union(
   v.literal("vehicles"),
   v.literal("computers"),
@@ -534,6 +541,7 @@ export default defineSchema({
     value: v.number(),
     rating: v.union(v.literal("good"), v.literal("needs-improvement"), v.literal("poor")),
     navigationType: v.string(),
+    deviceClass: v.optional(deviceClassValidator),
     appVersion: v.string(),
     recordedAt: v.number(),
   })

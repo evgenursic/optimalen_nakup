@@ -6,6 +6,7 @@ import { z } from "zod";
 import { api } from "@convex/_generated/api";
 import { ConvexHttpClient } from "convex/browser";
 
+import { classifyDevice } from "@/lib/device-class";
 import { hasSameOrigin } from "@/lib/server-auth";
 
 const metricSchema = z.object({
@@ -49,6 +50,7 @@ export async function POST(request: Request) {
   await client.mutation(api.public.recordWebVital, {
     ...parsed.data,
     appVersion: (process.env.APP_VERSION ?? "development").slice(0, 100),
+    deviceClass: classifyDevice(request.headers),
     rateLimitKey: sha256(`${ingestSecret}:web-vitals:${clientAddress}`),
     ingestSecret,
   });

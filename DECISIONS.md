@@ -23,3 +23,6 @@
 - Turbopack remains the production bundler. A no-source-change local Webpack comparison produced
   materially lower mobile Performance scores (89-96 versus the clean-Ubuntu Turbopack range of
   97-99), so the alternative was rejected and no code change was kept.
+- Web Vitals device segmentation is derived server-side as `mobile`, `tablet`, `desktop`, or
+  `unknown`. Raw User-Agent values are not retained; existing rows remain valid through an optional
+  schema field while all new writes require a validated class.

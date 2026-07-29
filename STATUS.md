@@ -48,7 +48,10 @@ Updated: 2026-07-29
   worker kill switch, and non-sensitive platform configuration. Public prices appear only from a
   valid EUR admin configuration; otherwise the real closed-beta waitlist remains.
 - LCP, INP, CLS, and TTFB instrumentation omits dynamic identifiers and uses same-origin,
-  server-secret, rate-limited ingestion. Field targets remain unverified until production traffic.
+  server-secret, rate-limited ingestion. It records the route, application version, and only a
+  server-derived coarse device class; the User-Agent value is never persisted. Field targets remain
+  unverified until production traffic. The migration-safe optional schema field and required new
+  write validator passed a one-shot local Convex deployment.
 - Digest-pinned multi-stage images, a hardened Compose topology, Caddy ingress, a production
   observability profile, GHCR publication, SHA/digest-based SSH deployment with automatic rollback,
   encrypted daily Convex backups, and a guarded restore rehearsal are implemented. Linux container
@@ -70,12 +73,12 @@ Updated: 2026-07-29
   worker, and backup targets, and starts the hardened web, disconnected worker, Caddy, OTel,
   Prometheus, Loki, and Grafana services. Web, explicit disconnected-worker state, and every
   observability endpoint pass from the intended private network.
-- Current-head CI run
-  [`30368617323`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30368617323) verifies
-  commit `8690200`: quality/build, all 16 public E2E scenarios, container startup/health, and CodeQL
+- Latest completed CI baseline
+  [`30459547228`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30459547228) verifies
+  commit `b2cff1e`: quality/build, all 16 public E2E scenarios, container startup/health, and CodeQL
   pass. The only red job remains the intentionally strict mobile Lighthouse Performance 100
-  assertion; its 24 reports are preserved as artifact `8692165282` with ZIP SHA-256
-  `5fa340b9523779dcbf8728f0e759000883b21f9a2c055ddf1903f684cb96b351`.
+  assertion; its 24 reports are preserved as artifact `8727262935` with ZIP SHA-256
+  `ae9d8b949d07bac7be6100f42adda708d8730283b60f2e988607e718fc9bfeea`.
 
 ## In progress
 
@@ -85,8 +88,9 @@ Updated: 2026-07-29
   before any mutation.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
-- Mobile Lighthouse Performance 100 remains open; clean Ubuntu medians are 98-99 in the first stored
-  run and individual reruns remain 97-99 while every other category and transfer budget passes.
+- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98-99 while
+  every other category and transfer budget passes. One of twelve mobile traces contained an isolated
+  480 ms unattributed task and scored 88; it is retained rather than discarded.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action

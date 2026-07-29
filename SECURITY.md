@@ -30,7 +30,8 @@ oversized payloads, runaway crawling/AI cost, dependency compromise, and privile
 - CSV cells beginning with formula control characters are escaped.
 - Secrets are environment-only and are redacted from logs and error output.
 - Web Vitals reach Convex only through same-origin `/api/web-vitals`, a per-client hashed rate-limit
-  key, and `WEB_VITALS_INGEST_SECRET`; direct writes without the server secret fail.
+  key, and `WEB_VITALS_INGEST_SECRET`; direct writes without the server secret fail. Device class is
+  derived server-side into four coarse values, and the User-Agent value is never persisted.
 - Intake model-cost writes require an authenticated researcher and `AI_COST_INGEST_SECRET`.
 - Account deletion requires same-origin authentication, last-owner validation, Clerk deletion, and
   `ACCOUNT_DELETION_INGEST_SECRET` before anonymization. Failed Clerk deletion restores Convex

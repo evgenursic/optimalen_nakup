@@ -2,7 +2,7 @@ import { ConvexError, v } from "convex/values";
 
 import { mutation, query } from "./_generated/server";
 import { requireMembership } from "./lib/auth";
-import { categoryValidator, localeValidator } from "./schema";
+import { categoryValidator, deviceClassValidator, localeValidator } from "./schema";
 
 const configuredPrice = v.object({
   monthly: v.number(),
@@ -149,6 +149,7 @@ export const recordWebVital = mutation({
     value: v.number(),
     rating: v.union(v.literal("good"), v.literal("needs-improvement"), v.literal("poor")),
     navigationType: v.string(),
+    deviceClass: deviceClassValidator,
     appVersion: v.string(),
     rateLimitKey: v.string(),
     ingestSecret: v.string(),
@@ -201,6 +202,7 @@ export const recordWebVital = mutation({
       value: args.value,
       rating: args.rating,
       navigationType: args.navigationType,
+      deviceClass: args.deviceClass,
       appVersion: args.appVersion,
       recordedAt: now,
     });
