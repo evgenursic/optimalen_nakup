@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-07-28
+Updated: 2026-07-29
 
 ## Verified
 
@@ -70,12 +70,19 @@ Updated: 2026-07-28
   worker, and backup targets, and starts the hardened web, disconnected worker, Caddy, OTel,
   Prometheus, Loki, and Grafana services. Web, explicit disconnected-worker state, and every
   observability endpoint pass from the intended private network.
+- Current-head CI run
+  [`30368617323`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30368617323) verifies
+  commit `8690200`: quality/build, all 16 public E2E scenarios, container startup/health, and CodeQL
+  pass. The only red job remains the intentionally strict mobile Lighthouse Performance 100
+  assertion; its 24 reports are preserved as artifact `8692165282` with ZIP SHA-256
+  `5fa340b9523779dcbf8728f0e759000883b21f9a2c055ddf1903f684cb96b351`.
 
 ## In progress
 
-- Figma product design system and critical-screen parity validation. The existing file and its sole
-  page are readable through metadata, while the general write and library endpoints still return
-  `INVALID_ARGUMENT`.
+- Figma product design system and critical-screen parity validation. The owner explicitly approved
+  Phase 1 on 2026-07-29. The existing file and its sole page remain readable through metadata, while
+  a fresh read-only Phase 1 inventory through the general endpoint returned `INVALID_ARGUMENT`
+  before any mutation.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
 - Mobile Lighthouse Performance 100 remains open; clean Ubuntu medians are 98-99 in the first stored

@@ -14,3 +14,12 @@
 - Theme: accessible light theme in version 1; semantic tokens remain dark-theme-ready.
 - Hosting: no second Sites production runtime.
 - License: all rights reserved pending qualified review.
+
+## 2026-07-29
+
+- Public pages retain per-request nonce CSP and dynamic rendering. Next.js requires dynamic
+  rendering to apply a fresh nonce to framework and inline scripts; weakening the script policy or
+  silently serving a static page without matching nonces is not an acceptable Lighthouse shortcut.
+- Turbopack remains the production bundler. A no-source-change local Webpack comparison produced
+  materially lower mobile Performance scores (89-96 versus the clean-Ubuntu Turbopack range of
+  97-99), so the alternative was rejected and no code change was kept.

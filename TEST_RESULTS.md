@@ -25,6 +25,14 @@ health endpoint, confirmed the credential-free worker's explicit `503 not_config
 verified OTel, Prometheus, Loki, and Grafana from the private application network before clean
 shutdown.
 
+Current-head run
+[`30368617323`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30368617323)
+independently passes the quality/production-build job, all 16 public Playwright scenarios, the
+complete container startup/health job, and CodeQL for commit `8690200`. Only the strict mobile
+Lighthouse Performance 100 job fails. Its uploaded `lighthouse-public` artifact is `8692165282`,
+contains all 24 HTML/JSON reports, and has ZIP SHA-256
+`5fa340b9523779dcbf8728f0e759000883b21f9a2c055ddf1903f684cb96b351`.
+
 The 54 automated tests comprise 42 package tests and 12 Convex application, protocol, authorization,
 and tenant-isolation tests. New coverage validates the ten-case evaluation inventory and metric
 arithmetic, cautious worker concurrency default, CSP-compatible waitlist hydration, public health
@@ -42,7 +50,8 @@ local flake, not concealed as a first-attempt success.
 Lighthouse details and remaining release limits are recorded in `PERFORMANCE.md`. Local report JSON
 and HTML exist under the ignored `lighthouse-reports/` directory and remain diagnostic only. Two
 clean Ubuntu runs uploaded all 24 public HTML/JSON reports as digest-checked GitHub Actions
-artifacts; the stored evidence still fails the exact mobile Performance 100 assertion.
+artifacts; the current-head run adds a third digest-checked 24-report set. The stored evidence still
+fails the exact mobile Performance 100 assertion.
 
 Convex tests cover tenant isolation, verified-email invitations, waitlist deduplication/rate
 limiting, subscription replay protection, worker request idempotency, lease claiming, budget

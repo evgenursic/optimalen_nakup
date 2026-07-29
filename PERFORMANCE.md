@@ -1,6 +1,6 @@
 # Performance
 
-Updated: 2026-07-28
+Updated: 2026-07-29
 
 ## Budgets
 
@@ -41,14 +41,22 @@ remained 100 throughout; individual mobile scores remained 97-99 with unchanged 
 reproduces the strict mobile failure on clean Linux instead of attributing it only to the local
 Windows environment.
 
-### Mobile median on Ubuntu
+Current-head run
+[`30368617323`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30368617323) measured
+commit `8690200`. Quality/build, 16 public E2E scenarios, containers, and CodeQL pass; only the
+mobile Performance 100 assertion remains red. Artifact
+[`8692165282`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30368617323/artifacts/8692165282)
+contains all 24 reports with ZIP SHA-256
+`5fa340b9523779dcbf8728f0e759000883b21f9a2c055ddf1903f684cb96b351`.
 
-| Route              | Perf. | A11y | Best | SEO | FCP    | LCP      | TBT   | CLS | TTFB  | JS bytes | CSS bytes |
-| ------------------ | ----: | ---: | ---: | --: | ------ | -------- | ----- | --: | ----- | -------: | --------: |
-| `/sl`              |    99 |  100 |  100 | 100 | 779 ms | 1,623 ms | 72 ms |   0 | 20 ms |  158,164 |     7,841 |
-| `/sl/pricing`      |    98 |  100 |  100 | 100 | 769 ms | 2,262 ms | 91 ms |   0 | 15 ms |  159,791 |     7,841 |
-| `/sl/how-it-works` |    98 |  100 |  100 | 100 | 773 ms | 2,278 ms | 93 ms |   0 | 14 ms |  158,164 |     7,841 |
-| `/sl/sign-in`      |    99 |  100 |  100 | 100 | 774 ms | 1,774 ms | 98 ms |   0 | 14 ms |  159,638 |     7,841 |
+### Current-head mobile median on Ubuntu
+
+| Route              | Perf. | A11y | Best | SEO | FCP    | LCP      | TBT    | CLS | TTFB  | JS bytes | CSS bytes |
+| ------------------ | ----: | ---: | ---: | --: | ------ | -------- | ------ | --: | ----- | -------: | --------: |
+| `/sl`              |    98 |  100 |  100 | 100 | 783 ms | 2,290 ms | 95 ms  |   0 | 21 ms |  158,164 |     7,841 |
+| `/sl/pricing`      |    97 |  100 |  100 | 100 | 778 ms | 2,279 ms | 112 ms |   0 | 17 ms |  159,791 |     7,841 |
+| `/sl/how-it-works` |    99 |  100 |  100 | 100 | 777 ms | 1,673 ms | 84 ms  |   0 | 15 ms |  158,164 |     7,841 |
+| `/sl/sign-in`      |    98 |  100 |  100 | 100 | 777 ms | 2,261 ms | 95 ms  |   0 | 16 ms |  159,638 |     7,841 |
 
 The exact mobile Performance 100 assertion remains open. Every other mobile category and both
 transfer budgets pass. The remaining simulated score is dominated by the Next/React framework
@@ -56,14 +64,23 @@ execution task and text LCP render-delay model. Static rendering, inline CSS, `c
 and a preloaded image candidate were each measured locally and rejected because they weakened the
 nonce CSP/Best Practices result or made the performance trace worse.
 
-### Desktop median on Ubuntu
+### Current-head desktop median on Ubuntu
 
 | Route              | Perf. | A11y | Best | SEO | FCP    | LCP    | TBT  | CLS | TTFB  | JS bytes | CSS bytes |
 | ------------------ | ----: | ---: | ---: | --: | ------ | ------ | ---- | --: | ----- | -------: | --------: |
-| `/sl`              |   100 |  100 |  100 | 100 | 223 ms | 510 ms | 0 ms |   0 | 16 ms |  158,164 |     7,841 |
-| `/sl/pricing`      |   100 |  100 |  100 | 100 | 223 ms | 545 ms | 0 ms |   0 | 13 ms |  159,791 |     7,841 |
-| `/sl/how-it-works` |   100 |  100 |  100 | 100 | 230 ms | 528 ms | 0 ms |   0 | 15 ms |  158,164 |     7,841 |
-| `/sl/sign-in`      |   100 |  100 |  100 | 100 | 218 ms | 544 ms | 0 ms |   0 | 11 ms |  159,638 |     7,841 |
+| `/sl`              |   100 |  100 |  100 | 100 | 226 ms | 511 ms | 0 ms |   0 | 15 ms |  158,164 |     7,841 |
+| `/sl/pricing`      |   100 |  100 |  100 | 100 | 224 ms | 556 ms | 0 ms |   0 | 12 ms |  159,791 |     7,841 |
+| `/sl/how-it-works` |   100 |  100 |  100 | 100 | 227 ms | 512 ms | 0 ms |   0 | 15 ms |  158,164 |     7,841 |
+| `/sl/sign-in`      |   100 |  100 |  100 | 100 | 224 ms | 552 ms | 0 ms |   0 | 13 ms |  159,638 |     7,841 |
+
+## Rejected no-source-change bundler comparison
+
+On 2026-07-29 the same source was rebuilt locally with `next build --webpack` and measured on an
+isolated production port with the existing three-run mobile protocol. Median Performance fell to
+89-96, compared with the clean-Ubuntu Turbopack range of 97-99. The temporary `127.0.0.1` origin
+also made that comparison unsuitable as SEO release evidence because canonical metadata targets
+`localhost`. The experiment is retained only as a performance diagnostic: it did not improve the
+controllable bottleneck, and no Webpack or CSP change was committed.
 
 ## Local mobile median
 

@@ -33,7 +33,10 @@ must not be reported as verified until their exact smoke tests pass.
   it.
 - The Figma file metadata is readable again, but the general write endpoint and library-discovery
   endpoint still return `INVALID_ARGUMENT`. Four initial collections and 49 variables were created
-  before that failure; pages, styles, components, and screen parity remain open.
-- Two clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer
+  before that failure; pages, styles, components, and screen parity remain open. The owner approved
+  Phase 1 on 2026-07-29, but the first post-approval call was a read-only inventory and failed
+  before any mutation, so no blind retry or duplicate creation was attempted.
+- Three clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer
   budgets, while mobile Performance remains 97-99 rather than the required exact 100. The residual
-  variance is therefore reproduced outside the local Windows environment.
+  variance is therefore reproduced outside the local Windows environment. Current-head run
+  `30368617323` independently reproduces 97-99 and stores the reports as artifact `8692165282`.
