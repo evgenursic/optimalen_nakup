@@ -35,7 +35,9 @@ Updated: 2026-08-01
 - OpenAI model-cost accounting now uses the public standard short-context rates effective
   2026-07-30, with an explicit pricing version recorded on intake and worker cost events. The
   routing remains Luna for intake, Terra for extraction, and Sol for evidence-bound synthesis or
-  disputes; deterministic arithmetic and scoring remain outside the model.
+  disputes; deterministic arithmetic and scoring remain outside the model. Sol receives only the
+  configurable top ranked synthesis candidates (default 10, bounded 1-20); all lower-ranked evidence
+  remains persisted and visible in the result set.
 - GitHub Actions quality, Playwright, dependency audit, and CodeQL workflows are present with action
   revisions pinned to commit SHAs.
 - The authenticated surface now includes workspace bootstrap/switching, natural-language intake,
@@ -82,22 +84,23 @@ Updated: 2026-08-01
   Prometheus, Loki, and Grafana services. Web, explicit disconnected-worker state, and every
   observability endpoint pass from the intended private network.
 - Latest completed CI baseline
-  [`30687513536`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687513536) verifies
-  current commit `f982855`: quality/build, all 18 public E2E scenarios, and container startup/health
+  [`30689797354`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30689797354) verifies
+  current commit `9f6281c`: quality/build, all 18 public E2E scenarios, and container startup/health
   pass; CodeQL run
-  [`30687513514`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687513514) is also
+  [`30689797336`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30689797336) is also
   green. The only red job remains the intentionally strict mobile Lighthouse Performance 100
-  assertion; its 24 reports are preserved as artifact `8814543979`.
+  assertion; its 24 reports are preserved as artifact `8815338691`.
 - Follow-up commit `45bbffc` keeps the strict nonce CSP while deferring the public Web Vitals client
   graph and removing experimental inline CSS. Run
   [`30686773465`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30686773465) confirms
   quality/build, 18 public E2E scenarios, containers, and CodeQL; mobile Lighthouse remains 97–99
   and its 24-report artifact is `8814285810` (digest recorded in `PERFORMANCE.md`).
-- Current-head documentation commit `431b913` is verified by run
-  [`30688728772`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30688728772):
+- Current-head implementation commit `9f6281c` is verified by run
+  [`30689797354`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30689797354):
   quality/build, 18 public E2E scenarios, containers, and CodeQL pass; desktop Lighthouse is 100 in
   every category, while the strict mobile Performance gate remains the only failure. Artifact
-  `8814979113` is retained for the current-head reports.
+  `8815338691` is retained for the current-head reports (digest
+  `sha256:1cb3c35db7c5a9cb63cd99c254be77b708457f928e26cee76679a21f2fe9e59f`).
 
 ## In progress
 
@@ -106,12 +109,13 @@ Updated: 2026-08-01
   [`Optimalen Nakup — Product Design System and Application`](https://www.figma.com/design/6WnVVNi9BYt1LI67ZyAzPi)
   now contains the Phase 1 foundations: 68 variables across four collections, 14 semantic aliases,
   six Inter text styles, and three effect styles. Validation found zero broken aliases, missing WEB
-  code syntax entries, or ALL_SCOPES variables. The endpoint became `INVALID_ARGUMENT` after the
-  line-height correction readback, so the post-correction validation and Phase 2 page skeleton
-  remain open; the local state ledger records all created IDs and completed steps.
+  code syntax entries, or ALL_SCOPES variables. The post-correction readback then hit the Figma
+  Starter-plan MCP tool-call limit (`INVALID_ARGUMENT`), so the post-correction validation and Phase
+  2 page skeleton remain open; the local state ledger records all created IDs and completed steps.
+  No further Figma mutations are attempted until that external limit resets or the plan is upgraded.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
-- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98, 98, 99,
+- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98, 99, 98,
   and 99 across the four public routes while every other category and transfer budget passes.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 

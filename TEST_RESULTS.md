@@ -1,18 +1,31 @@
 # Test results
 
-## 2026-08-01 current-head CI evidence (`431b913`)
+## 2026-08-01 current-head CI evidence (`9f6281c`)
 
 | Command or gate                          | Result | Evidence                                                         |
 | ---------------------------------------- | ------ | ---------------------------------------------------------------- |
-| GitHub quality/production build          | Pass   | Run `30688728772`, quality job completed successfully.           |
-| Public Playwright E2E                    | Pass   | Run `30688728772`, all 18 desktop/mobile scenarios passed.       |
-| Container build/startup/health           | Pass   | Run `30688728772`, container job completed successfully.         |
-| CodeQL                                   | Pass   | Run `30688729824` for the same commit.                           |
-| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `8814979113`. |
-| Public Lighthouse mobile Performance 100 | Open   | Mobile medians 99/99/98/99; other categories and budgets pass.   |
+| GitHub quality/production build          | Pass   | Run `30689797354`, quality job completed successfully.           |
+| Public Playwright E2E                    | Pass   | Run `30689797354`, all 18 desktop/mobile scenarios passed.       |
+| Container build/startup/health           | Pass   | Run `30689797354`, container job completed successfully.         |
+| CodeQL                                   | Pass   | Run `30689797336` for the same commit.                           |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `8815338691`. |
+| Public Lighthouse mobile Performance 100 | Open   | Mobile medians 98/99/98/99; other categories and budgets pass.   |
 
-Artifact `8814979113` is retained for the current-head reports; the strict mobile gate remains
-intentionally enforced and is the only failed CI assertion.
+Artifact `8815338691` is retained for the current-head reports; its ZIP digest is
+`sha256:1cb3c35db7c5a9cb63cd99c254be77b708457f928e26cee76679a21f2fe9e59f`. The strict mobile gate
+remains intentionally enforced and is the only failed CI assertion.
+
+## 2026-08-01 synthesis-context bound
+
+| Command or gate        | Result      | Evidence                                                                                                                                                       |
+| ---------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `corepack pnpm verify` | Pass        | Format, zero-warning lint, strict TypeScript, 16 workspace test tasks, 13 root Convex/integration tests, and all 9 production builds pass on commit `9f6281c`. |
+| Worker unit tests      | Pass        | 16 tests pass, including the top-ranked synthesis-candidate bound.                                                                                             |
+| Config unit tests      | Pass        | 8 tests pass, including the default and override for `WORKER_MAX_SYNTHESIS_OFFERS`.                                                                            |
+| AI context policy      | Implemented | Sol receives only the bounded ranked prefix (default 10, configurable 1-20); all ranked offers remain persisted.                                               |
+
+The local shell reports the expected non-blocking Node 24.14/pnpm 11.9 engine warning; CI runs on
+the pinned Node 22 workflow and remains authoritative for release evidence.
 
 ## 2026-08-01 public performance optimization follow-up
 

@@ -14,24 +14,25 @@ Updated: 2026-08-01
 The Lighthouse configs assert both category scores and transfer-size budgets. A category score
 cannot hide a budget overrun.
 
-## Latest current-head evidence (431b913)
+## Latest current-head evidence (9f6281c)
 
 GitHub Actions run
-[`30688728772`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30688728772) measured
-commit `431b913` on Ubuntu 24.04 with the same standalone production server. Quality/build, 18
+[`30689797354`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30689797354) measured
+commit `9f6281c` on Ubuntu 24.04 with the same standalone production server. Quality/build, 18
 public Playwright scenarios, container startup/health, and CodeQL pass. Desktop Lighthouse is 100 in
 all four categories on all three runs. Mobile Accessibility, Best Practices, SEO, and transfer
 budgets pass; the strict mobile Performance 100 assertion remains the only failed gate. Artifact
-[`8814979113`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30688728772/artifacts/8814979113)
-contains the current-head HTML/JSON reports. The strict gate is intentionally retained; no mobile
-Performance 100 release claim is made.
+[`8815338691`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30689797354/artifacts/8815338691)
+contains the current-head HTML/JSON reports and has digest
+`sha256:1cb3c35db7c5a9cb63cd99c254be77b708457f928e26cee76679a21f2fe9e59f`. The strict gate is
+intentionally retained; no mobile Performance 100 release claim is made.
 
 | Route              | Mobile Performance runs | Median | A11y | Best | SEO |
 | ------------------ | ----------------------- | -----: | ---: | ---: | --: |
-| `/sl`              | 97, 99, 99              |     99 |  100 |  100 | 100 |
-| `/sl/pricing`      | 99, 99, 99              |     99 |  100 |  100 | 100 |
+| `/sl`              | 98, 99, 98              |     98 |  100 |  100 | 100 |
+| `/sl/pricing`      | 99, 98, 99              |     99 |  100 |  100 | 100 |
 | `/sl/how-it-works` | 98, 98, 99              |     98 |  100 |  100 | 100 |
-| `/sl/sign-in`      | 98, 99, 99              |     99 |  100 |  100 | 100 |
+| `/sl/sign-in`      | 99, 99, 99              |     99 |  100 |  100 | 100 |
 
 This current-head run confirms the residual issue is reproducible on clean Linux and is not a
 desktop, accessibility, SEO, or transfer-budget regression. No Lighthouse 100 release claim is made
