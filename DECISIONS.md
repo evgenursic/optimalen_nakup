@@ -5,6 +5,9 @@
 - Keep the three-stage GPT-5.6 route: Luna for high-volume intake/routing, Terra for ambiguous
   extraction and normalisation, and Sol for evidence-bound final synthesis or disputes. Do not use a
   single flagship model for deterministic parsing, scoring, arithmetic, or aggregation.
+- Keep all ranked offers in Convex, but send only the configurable top synthesis candidates to Sol
+  (default 10, bounded 1–20), matching the deterministic recommendation set and reducing redundant
+  context, latency, and model cost without hiding lower-ranked evidence.
 - Pin model-cost accounting to the official standard short-context API pricing effective 2026-07-30
   and record `openai-api-pricing-2026-07-30` with every intake/worker cost event. Recheck this
   version before production activation rather than treating a historical price snapshot as live.

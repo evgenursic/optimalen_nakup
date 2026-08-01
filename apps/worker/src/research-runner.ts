@@ -531,8 +531,12 @@ export class ResearchRunner {
       let recommendations = deterministicRecommendations(ranked, offerIds, job.filterSpec.mode);
       if (this.options.ai && ranked.length > 0) {
         try {
+          const synthesisCandidates = ranked.slice(
+            0,
+            this.options.environment.WORKER_MAX_SYNTHESIS_OFFERS,
+          );
           const synthesis = await this.options.ai.synthesize({
-            offers: ranked.map((bundle) => ({
+            offers: synthesisCandidates.map((bundle) => ({
               offerKey: makeOfferIdentity(bundle.offer),
               title: bundle.offer.title,
               score: bundle.score.total,

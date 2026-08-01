@@ -7,6 +7,16 @@ describe("worker environment", () => {
     expect(parseWorkerEnvironment({}).WORKER_MAX_CONCURRENCY).toBe(1);
   });
 
+  it("defaults synthesis context to the ten deterministic recommendations", () => {
+    expect(parseWorkerEnvironment({}).WORKER_MAX_SYNTHESIS_OFFERS).toBe(10);
+  });
+
+  it("allows a bounded synthesis context override", () => {
+    expect(
+      parseWorkerEnvironment({ WORKER_MAX_SYNTHESIS_OFFERS: "4" }).WORKER_MAX_SYNTHESIS_OFFERS,
+    ).toBe(4);
+  });
+
   it("allows an explicitly reviewed bounded concurrency override", () => {
     expect(parseWorkerEnvironment({ WORKER_MAX_CONCURRENCY: "3" }).WORKER_MAX_CONCURRENCY).toBe(3);
   });
