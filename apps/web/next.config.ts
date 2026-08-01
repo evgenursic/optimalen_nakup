@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(process.cwd(), "../.."),
   poweredByHeader: false,
   reactStrictMode: true,
+  experimental: {
+    inlineCss: true,
+  },
   transpilePackages: [
     "@optimalen-nakup/config",
     "@optimalen-nakup/design-tokens",

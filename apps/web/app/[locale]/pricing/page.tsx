@@ -1,9 +1,9 @@
 import { api } from "@convex/_generated/api";
 import { ConvexHttpClient } from "convex/browser";
-import { CheckCircle2 } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { CheckCircleIcon } from "@/components/public-icons";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { localizedHref } from "@/lib/locale-path";
 import { localizedAlternates } from "@/lib/metadata";
@@ -77,7 +77,7 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
             <ul className="my-6 grid gap-3 text-sm text-slate-700">
               {features.map((feature) => (
                 <li key={feature} className="flex items-center gap-2">
-                  <CheckCircle2 aria-hidden="true" className="text-[#0f766e]" size={18} />
+                  <CheckCircleIcon className="text-[#0f766e]" size={18} />
                   {feature}
                 </li>
               ))}

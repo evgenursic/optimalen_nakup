@@ -1,7 +1,8 @@
-import { Languages, ShieldCheck } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { localizedHref } from "@/lib/locale-path";
+
+import { LanguagesIcon, ShieldCheckIcon } from "./public-icons";
 
 export async function SiteHeader({ locale }: Readonly<{ locale: "sl" | "en" }>) {
   const t = await getTranslations("nav");
@@ -15,7 +16,7 @@ export async function SiteHeader({ locale }: Readonly<{ locale: "sl" | "en" }>) 
           className="flex items-center gap-2 font-extrabold text-[#0b1f33]"
         >
           <span className="grid size-9 place-items-center rounded-xl bg-[#0f766e] text-white">
-            <ShieldCheck aria-hidden="true" size={21} strokeWidth={2.2} />
+            <ShieldCheckIcon size={21} strokeWidth={2.2} />
           </span>
           <span>Optimalen Nakup</span>
         </a>
@@ -42,7 +43,7 @@ export async function SiteHeader({ locale }: Readonly<{ locale: "sl" | "en" }>) 
             aria-label={alternateLocale === "sl" ? "Slovenščina" : "English"}
             className="button button-secondary px-3"
           >
-            <Languages aria-hidden="true" size={17} />
+            <LanguagesIcon size={17} />
             {alternateLocale.toUpperCase()}
           </a>
           <a

@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { WebVitalsReporter } from "@/components/web-vitals-reporter";
+import { DeferredWebVitalsReporter } from "@/components/deferred-web-vitals-reporter";
 import { routing } from "@/i18n/routing";
 
 import "../globals.css";
@@ -79,11 +79,10 @@ export default async function LocaleLayout({
     process.env.WEB_VITALS_INGEST_SECRET &&
     process.env.WEB_VITALS_INGEST_SECRET.length >= 32,
   );
-
   return (
     <html lang={locale}>
       <body>
-        {telemetryConfigured ? <WebVitalsReporter /> : null}
+        {telemetryConfigured ? <DeferredWebVitalsReporter /> : null}
         <a className="skip-link" href="#main-content">
           {locale === "sl" ? "Preskoči na vsebino" : "Skip to content"}
         </a>

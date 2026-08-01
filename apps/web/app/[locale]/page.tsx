@@ -1,11 +1,18 @@
-import { ArrowRight, CheckCircle2, CircleAlert, CircleDashed, Gauge, Search } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import {
+  ArrowRightIcon,
+  CheckCircleIcon,
+  CircleAlertIcon,
+  CircleDashedIcon,
+  GaugeIcon,
+  SearchIcon,
+} from "@/components/public-icons";
 import { localizedHref } from "@/lib/locale-path";
 import { localizedAlternates } from "@/lib/metadata";
 
-const categoryIcons = [Search, Gauge, CheckCircle2];
+const categoryIcons = [SearchIcon, GaugeIcon, CheckCircleIcon];
 
 export async function generateMetadata({
   params,
@@ -52,7 +59,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
             <div className="mt-8 flex flex-wrap gap-3">
               <a href={localizedHref(locale, "/sign-in")} className="button button-primary">
                 {hero("primary")}
-                <ArrowRight aria-hidden="true" size={18} />
+                <ArrowRightIcon size={18} />
               </a>
               <a href={localizedHref(locale, "/how-it-works")} className="button button-secondary">
                 {hero("secondary")}
@@ -61,11 +68,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
             <ul className="mt-9 grid gap-3 text-sm font-semibold text-slate-700 sm:grid-cols-3">
               {[hero("coverage"), hero("neutral"), hero("evidence")].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <CheckCircle2
-                    aria-hidden="true"
-                    className="mt-0.5 shrink-0 text-[#0f766e]"
-                    size={18}
-                  />
+                  <CheckCircleIcon className="mt-0.5 shrink-0 text-[#0f766e]" size={18} />
                   {item}
                 </li>
               ))}
@@ -93,17 +96,17 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
               </div>
               <div className="grid gap-4 p-5 sm:grid-cols-3">
                 <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-                  <CheckCircle2 aria-hidden="true" className="text-emerald-700" size={19} />
+                  <CheckCircleIcon className="text-emerald-700" size={19} />
                   <p className="mt-4 text-xs font-bold text-emerald-900">{proof("verified")}</p>
                   <p className="mt-1 text-sm text-emerald-900">M Sport, 22.461 km</p>
                 </div>
                 <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
-                  <CircleDashed aria-hidden="true" className="text-amber-700" size={19} />
+                  <CircleDashedIcon className="text-amber-700" size={19} />
                   <p className="mt-4 text-xs font-bold text-amber-900">{proof("inferred")}</p>
                   <p className="mt-1 text-sm text-amber-900">Cena je primerljiva</p>
                 </div>
                 <div className="rounded-xl border border-slate-300 bg-slate-50 p-3">
-                  <CircleAlert aria-hidden="true" className="text-slate-700" size={19} />
+                  <CircleAlertIcon className="text-slate-700" size={19} />
                   <p className="mt-4 text-xs font-bold text-slate-900">{proof("missing")}</p>
                   <p className="mt-1 text-sm text-slate-700">Zgodovina škod</p>
                 </div>
@@ -130,7 +133,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
         <h2 className="section-heading">{categories("title")}</h2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {categoryItems.map(([title, text], index) => {
-            const Icon = categoryIcons[index] ?? Search;
+            const Icon = categoryIcons[index] ?? SearchIcon;
             return (
               <article key={title} className="card p-6">
                 <span className="grid size-11 place-items-center rounded-xl bg-[#f0fdfa] text-[#0f766e]">
