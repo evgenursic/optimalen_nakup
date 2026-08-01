@@ -69,6 +69,9 @@ Updated: 2026-08-01
   evidence-first metric calculations and automated arithmetic checks.
 - Public pages run against the same standalone server entry point as the container, use per-request
   nonce CSP without `unsafe-eval`, and pass 18 desktop/mobile production E2E checks.
+- The generated Tailwind palette is limited to the semantic colors used by the application; the
+  standalone critical stylesheet dropped from 30,750 to 29,264 bytes without changing public E2E/axe
+  behavior or the nonce CSP.
 - The installable PWA now registers through the existing CSP nonce. Its bounded service worker
   caches only same-origin hashed Next.js static assets, the public icon, and the manifest; it never
   intercepts or stores navigations, HTML, API responses, authenticated application data, or research
@@ -95,12 +98,12 @@ Updated: 2026-08-01
   [`30686773465`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30686773465) confirms
   quality/build, 18 public E2E scenarios, containers, and CodeQL; mobile Lighthouse remains 97–99
   and its 24-report artifact is `8814285810` (digest recorded in `PERFORMANCE.md`).
-- Current-head implementation commit `9f6281c` is verified by run
-  [`30689797354`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30689797354):
+- Current-head implementation commit `a0b3de3` is verified by run
+  [`30690962971`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30690962971):
   quality/build, 18 public E2E scenarios, containers, and CodeQL pass; desktop Lighthouse is 100 in
   every category, while the strict mobile Performance gate remains the only failure. Artifact
-  `8815338691` is retained for the current-head reports (digest
-  `sha256:1cb3c35db7c5a9cb63cd99c254be77b708457f928e26cee76679a21f2fe9e59f`).
+  `8815725793` is retained for the current-head reports (digest
+  `sha256:864a417b7020d9a4f65dd38bb22f32b194b28e6763592dfff69644e79d551f90`).
 
 ## In progress
 
