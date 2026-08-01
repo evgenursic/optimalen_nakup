@@ -4,7 +4,7 @@ import pino from "pino";
 import { describe, expect, it, vi } from "vitest";
 
 import type { ClaimedJob, WorkerProtocol } from "./protocol.js";
-import { ResearchRunner } from "./research-runner.js";
+import { ResearchRunner, selectSynthesisCandidates } from "./research-runner.js";
 
 const filter: FilterSpecV1 = {
   schemaVersion: 1,
@@ -24,6 +24,13 @@ const filter: FilterSpecV1 = {
 };
 
 describe("ResearchRunner", () => {
+  it("bounds AI synthesis to the configured ranked prefix", () => {
+    expect(selectSynthesisCandidates(["first", "second", "third"], 2)).toEqual([
+      "first",
+      "second",
+    ]);
+  });
+
   it("preserves coverage and completes partially when no approved source is available", async () => {
     const serviceController = new AbortController();
     const job: ClaimedJob = {

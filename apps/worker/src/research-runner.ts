@@ -169,6 +169,10 @@ function deterministicRecommendations(
   });
 }
 
+export function selectSynthesisCandidates<T>(ranked: readonly T[], maxOffers: number): T[] {
+  return ranked.slice(0, maxOffers);
+}
+
 export class ResearchRunner {
   private readonly adapters: SourceAdapterV1[];
   private readonly verifier: OfflinePlaywrightVerifier | null;
@@ -531,8 +535,8 @@ export class ResearchRunner {
       let recommendations = deterministicRecommendations(ranked, offerIds, job.filterSpec.mode);
       if (this.options.ai && ranked.length > 0) {
         try {
-          const synthesisCandidates = ranked.slice(
-            0,
+          const synthesisCandidates = selectSynthesisCandidates(
+            ranked,
             this.options.environment.WORKER_MAX_SYNTHESIS_OFFERS,
           );
           const synthesis = await this.options.ai.synthesize({
