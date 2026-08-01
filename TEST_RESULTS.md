@@ -1,5 +1,19 @@
 # Test results
 
+## 2026-08-01 public performance optimization follow-up
+
+| Command or gate                              | Result | Evidence                                                                                                                                                   |
+| -------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Web strict typecheck, lint, build            | Pass   | Public client deferral, inline SVG icons, and cacheable CSS compile without warnings.                                                                      |
+| `corepack pnpm format:check`                 | Pass   | All repository files match Prettier.                                                                                                                       |
+| `corepack pnpm test`                         | Pass   | 16 workspace tasks plus 13 root Convex/integration tests pass.                                                                                             |
+| GitHub quality/build, E2E, container, CodeQL | Pass   | Run `30686773465` is green for every job except the intentionally strict mobile Lighthouse Performance 100 gate.                                           |
+| Public Lighthouse mobile                     | Open   | Run `30686773465`; medians are 98–99, with all other categories and transfer budgets passing. Artifact `8814285810` is digest-checked in `PERFORMANCE.md`. |
+
+The attempted static-public-page variant was rejected: removing the per-request layout headers
+caused Next inline/client scripts to lose the nonce, breaking CSP-compatible waitlist hydration and
+PWA registration. The final branch retains dynamic nonce rendering and strict CSP.
+
 ## 2026-08-01 OpenAI model-cost accounting correction
 
 The official [OpenAI API pricing table](https://developers.openai.com/api/docs/pricing) was

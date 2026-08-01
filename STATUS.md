@@ -88,6 +88,11 @@ Updated: 2026-08-01
   is also green. The only red job remains the intentionally strict mobile Lighthouse Performance 100
   assertion; its 24 reports are preserved as artifact `8728119687` with ZIP SHA-256
   `6c836961a5a5aabbcd1ef4d7620fe2a6b2c3fc8903bc2e2b10734190a7764498`.
+- Follow-up commit `45bbffc` keeps the strict nonce CSP while deferring the public Web Vitals client
+  graph and removing experimental inline CSS. Run
+  [`30686773465`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30686773465) confirms
+  quality/build, 18 public E2E scenarios, containers, and CodeQL; mobile Lighthouse remains 97–99
+  and its 24-report artifact is `8814285810` (digest recorded in `PERFORMANCE.md`).
 
 ## In progress
 
@@ -97,8 +102,8 @@ Updated: 2026-08-01
   before any mutation.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
-- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98 on all four
-  public routes while every other category and transfer budget passes.
+- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98, 98, 99,
+  and 99 across the four public routes while every other category and transfer budget passes.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action

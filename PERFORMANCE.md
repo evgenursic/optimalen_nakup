@@ -1,6 +1,6 @@
 # Performance
 
-Updated: 2026-07-29
+Updated: 2026-08-01
 
 ## Budgets
 
@@ -13,6 +13,34 @@ Updated: 2026-07-29
 
 The Lighthouse configs assert both category scores and transfer-size budgets. A category score
 cannot hide a budget overrun.
+
+## Latest clean Ubuntu evidence (45bbffc)
+
+GitHub Actions run
+[`30686773465`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30686773465) measured
+commit `45bbffc` on Ubuntu 24.04 with the standalone production server. Quality/build, 18 public
+Playwright scenarios, container startup/health, and CodeQL pass. Desktop Lighthouse is 100 in all
+four categories. Mobile Accessibility, Best Practices, SEO, and both transfer budgets pass; the
+strict Performance 100 assertion remains the only failed job. Artifact
+[`8814285810`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30686773465/artifacts/8814285810)
+contains the 24 HTML/JSON reports and has ZIP SHA-256
+`770c9b7fe7a2e6f96522b698a3fef42cf3b571f0597418b2b193447054ae89f1`.
+
+The public client graph is now deferred outside the first 30 seconds of navigation, public-only
+icons are inline SVG, and the experimental inline-CSS flag was removed after a clean A/B check. The
+result reduced mobile script transfer from 158,164 to 154,911 bytes on the landing/how-it-works
+routes (pricing 156,538; sign-in 156,385) while preserving nonce CSP and all E2E behavior. The
+remaining score gap is the intermittent text LCP render-delay model, not a transfer-budget or
+accessibility failure.
+
+### Latest mobile median on Ubuntu (45bbffc)
+
+| Route              | Perf. | A11y | Best | SEO | FCP    | LCP      | TBT    | CLS | JS bytes | CSS bytes |
+| ------------------ | ----: | ---: | ---: | --: | ------ | -------- | ------ | --: | -------: | --------: |
+| `/sl`              |    98 |  100 |  100 | 100 | 782 ms | 2,254 ms | 96 ms  |   0 |  154,911 |     7,841 |
+| `/sl/pricing`      |    98 |  100 |  100 | 100 | 778 ms | 2,142 ms | 94 ms  |   0 |  156,538 |     7,841 |
+| `/sl/how-it-works` |    99 |  100 |  100 | 100 | 779 ms | 1,632 ms | 120 ms |   0 |  154,911 |     7,841 |
+| `/sl/sign-in`      |    99 |  100 |  100 | 100 | 776 ms | 1,984 ms | 71 ms  |   0 |  156,385 |     7,841 |
 
 ## Protocol
 

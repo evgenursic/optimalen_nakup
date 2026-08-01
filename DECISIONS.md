@@ -8,6 +8,10 @@
 - Pin model-cost accounting to the official standard short-context API pricing effective 2026-07-30
   and record `openai-api-pricing-2026-07-30` with every intake/worker cost event. Recheck this
   version before production activation rather than treating a historical price snapshot as live.
+- Defer the public Web Vitals client graph until after the first 30 seconds of navigation and use
+  inline SVG paths for public-only icons. Remove experimental inline CSS after clean Ubuntu evidence
+  showed no mobile score improvement. Do not trade away per-request nonce CSP or hydration/PWA
+  behavior for a synthetic Lighthouse shortcut.
 
 ## 2026-07-26
 
