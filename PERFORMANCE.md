@@ -14,18 +14,17 @@ Updated: 2026-08-01
 The Lighthouse configs assert both category scores and transfer-size budgets. A category score
 cannot hide a budget overrun.
 
-## Latest current-head evidence (f982855)
+## Latest current-head evidence (210e594)
 
 GitHub Actions run
-[`30687513536`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687513536) measured
-commit `f982855` on Ubuntu 24.04 with the same standalone production server. Quality/build, 18
+[`30688395288`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30688395288) measured
+commit `210e594` on Ubuntu 24.04 with the same standalone production server. Quality/build, 18
 public Playwright scenarios, container startup/health, and CodeQL pass. Desktop Lighthouse is 100 in
 all four categories on all three runs. Mobile Accessibility, Best Practices, SEO, and transfer
 budgets pass; the strict mobile Performance 100 assertion remains the only failed gate. Artifact
-[`8814543979`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687513536/artifacts/8814543979)
-contains the current-head HTML/JSON reports and has ZIP SHA-256
-`afb603daf06980d4ac90a22e434a4067de83bfc64c82926af273bccef2f8bd91`. The strict gate is intentionally
-retained; no mobile Performance 100 release claim is made.
+[`8814850870`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30688395288/artifacts/8814850870)
+contains the current-head HTML/JSON reports. The strict gate is intentionally retained; no mobile
+Performance 100 release claim is made.
 
 | Route              | Mobile Performance runs | Median | A11y | Best | SEO |
 | ------------------ | ----------------------- | -----: | ---: | ---: | --: |
