@@ -72,6 +72,10 @@ Updated: 2026-08-01
 - The generated Tailwind palette is limited to the semantic colors used by the application; the
   standalone critical stylesheet dropped from 30,750 to 29,264 bytes without changing public E2E/axe
   behavior or the nonce CSP.
+- Public Web Vitals collection no longer adds a React client boundary to the first navigation. When
+  telemetry is configured, the privacy-bounded static collector loads after 30 seconds; service
+  worker registration and nonce CSP remain in the initial document. Format, lint, typecheck, tests,
+  production builds, 18 public E2E scenarios, containers, and CodeQL pass for commit `f72a2b0`.
 - The installable PWA now registers through the existing CSP nonce. Its bounded service worker
   caches only same-origin hashed Next.js static assets, the public icon, and the manifest; it never
   intercepts or stores navigations, HTML, API responses, authenticated application data, or research
@@ -98,12 +102,12 @@ Updated: 2026-08-01
   [`30686773465`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30686773465) confirms
   quality/build, 18 public E2E scenarios, containers, and CodeQL; mobile Lighthouse remains 97–99
   and its 24-report artifact is `8814285810` (digest recorded in `PERFORMANCE.md`).
-- Current-head implementation commit `a0b3de3` is verified by run
-  [`30690962971`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30690962971):
+- Current-head performance commit `f72a2b0` is verified by run
+  [`30692258676`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30692258676):
   quality/build, 18 public E2E scenarios, containers, and CodeQL pass; desktop Lighthouse is 100 in
-  every category, while the strict mobile Performance gate remains the only failure. Artifact
-  `8815725793` is retained for the current-head reports (digest
-  `sha256:864a417b7020d9a4f65dd38bb22f32b194b28e6763592dfff69644e79d551f90`).
+  every category, while the strict mobile Performance gate remains the only failure. Mobile medians
+  are 99, 98, 98, and 99; artifact `8816145747` is retained for the current-head reports (digest
+  `sha256:a2c1f28a1ebfa82cc2641d5d4e0fa27ee4e8fba7da7914d4167d70cbf9f6a473`).
 
 ## In progress
 
@@ -118,7 +122,7 @@ Updated: 2026-08-01
   No further Figma mutations are attempted until that external limit resets or the plan is upgraded.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
-- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98, 99, 98,
+- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 99, 98, 98,
   and 99 across the four public routes while every other category and transfer budget passes.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
