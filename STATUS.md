@@ -82,29 +82,33 @@ Updated: 2026-08-01
   Prometheus, Loki, and Grafana services. Web, explicit disconnected-worker state, and every
   observability endpoint pass from the intended private network.
 - Latest completed CI baseline
-  [`30461698590`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30461698590) verifies
-  commit `b7b39fd`: quality/build, all 16 public E2E scenarios, and container startup/health pass;
-  CodeQL run [`30461703790`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30461703790)
-  is also green. The only red job remains the intentionally strict mobile Lighthouse Performance 100
-  assertion; its 24 reports are preserved as artifact `8728119687` with ZIP SHA-256
-  `6c836961a5a5aabbcd1ef4d7620fe2a6b2c3fc8903bc2e2b10734190a7764498`.
+  [`30687513536`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687513536) verifies
+  current commit `f982855`: quality/build, all 18 public E2E scenarios, and container startup/health
+  pass; CodeQL run
+  [`30687513514`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687513514) is also
+  green. The only red job remains the intentionally strict mobile Lighthouse Performance 100
+  assertion; its 24 reports are preserved as artifact `8814543979`.
 - Follow-up commit `45bbffc` keeps the strict nonce CSP while deferring the public Web Vitals client
   graph and removing experimental inline CSS. Run
   [`30686773465`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30686773465) confirms
   quality/build, 18 public E2E scenarios, containers, and CodeQL; mobile Lighthouse remains 97–99
   and its 24-report artifact is `8814285810` (digest recorded in `PERFORMANCE.md`).
-- Current-head documentation commit `50cc8eb` is verified by run
-  [`30687155552`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687155552):
+- Current-head documentation commit `f982855` is verified by run
+  [`30687513536`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687513536):
   quality/build, 18 public E2E scenarios, containers, and CodeQL pass; desktop Lighthouse is 100 in
   every category, while the strict mobile Performance gate remains the only failure. Artifact
-  `8814422692` is digest-checked in `PERFORMANCE.md`.
+  `8814543979` is retained for the current-head reports.
 
 ## In progress
 
 - Figma product design system and critical-screen parity validation. The owner explicitly approved
-  Phase 1 on 2026-07-29. The existing file and its sole page remain readable through metadata, while
-  a fresh read-only Phase 1 inventory through the general endpoint returned `INVALID_ARGUMENT`
-  before any mutation.
+  Phase 1 on 2026-07-29. File
+  [`Optimalen Nakup — Product Design System and Application`](https://www.figma.com/design/6WnVVNi9BYt1LI67ZyAzPi)
+  now contains the Phase 1 foundations: 68 variables across four collections, 14 semantic aliases,
+  six Inter text styles, and three effect styles. Validation found zero broken aliases, missing WEB
+  code syntax entries, or ALL_SCOPES variables. The endpoint became `INVALID_ARGUMENT` after the
+  line-height correction readback, so the post-correction validation and Phase 2 page skeleton
+  remain open; the local state ledger records all created IDs and completed steps.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
 - Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98, 98, 99,
@@ -113,6 +117,7 @@ Updated: 2026-08-01
 
 ## Next action
 
-Continue the externally blocked Figma work when its write endpoint recovers, while preserving the
-strict mobile Lighthouse 100 gate. Production credentials remain reserved for authenticated E2E,
-backup/restore, and bounded live-source verification.
+Continue the externally blocked Figma work when its read/write endpoint recovers, starting with the
+post-correction readback and then the approved Phase 2 page skeleton. Preserve the strict mobile
+Lighthouse 100 gate; production credentials remain reserved for authenticated E2E, backup/restore,
+and bounded live-source verification.

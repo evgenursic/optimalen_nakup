@@ -1,17 +1,17 @@
 # Test results
 
-## 2026-08-01 current-head CI evidence (`50cc8eb`)
+## 2026-08-01 current-head CI evidence (`f982855`)
 
 | Command or gate                          | Result | Evidence                                                         |
 | ---------------------------------------- | ------ | ---------------------------------------------------------------- |
-| GitHub quality/production build          | Pass   | Run `30687155552`, quality job completed successfully.           |
-| Public Playwright E2E                    | Pass   | Run `30687155552`, all 18 desktop/mobile scenarios passed.       |
-| Container build/startup/health           | Pass   | Run `30687155552`, container job completed successfully.         |
-| CodeQL                                   | Pass   | Run `30687155537` for the same commit.                           |
-| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `8814422692`. |
+| GitHub quality/production build          | Pass   | Run `30687513536`, quality job completed successfully.           |
+| Public Playwright E2E                    | Pass   | Run `30687513536`, all 18 desktop/mobile scenarios passed.       |
+| Container build/startup/health           | Pass   | Run `30687513536`, container job completed successfully.         |
+| CodeQL                                   | Pass   | Run `30687513514` for the same commit.                           |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `8814543979`. |
 | Public Lighthouse mobile Performance 100 | Open   | Mobile medians 99/99/98/99; other categories and budgets pass.   |
 
-Artifact `8814422692` is digest-checked in `PERFORMANCE.md`; the strict mobile gate remains
+Artifact `8814543979` is retained for the current-head reports; the strict mobile gate remains
 intentionally enforced and is the only failed CI assertion.
 
 ## 2026-08-01 public performance optimization follow-up
