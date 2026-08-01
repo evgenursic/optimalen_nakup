@@ -93,6 +93,11 @@ Updated: 2026-08-01
   [`30686773465`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30686773465) confirms
   quality/build, 18 public E2E scenarios, containers, and CodeQL; mobile Lighthouse remains 97–99
   and its 24-report artifact is `8814285810` (digest recorded in `PERFORMANCE.md`).
+- Current-head documentation commit `50cc8eb` is verified by run
+  [`30687155552`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30687155552):
+  quality/build, 18 public E2E scenarios, containers, and CodeQL pass; desktop Lighthouse is 100 in
+  every category, while the strict mobile Performance gate remains the only failure. Artifact
+  `8814422692` is digest-checked in `PERFORMANCE.md`.
 
 ## In progress
 
