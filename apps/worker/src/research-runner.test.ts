@@ -25,10 +25,7 @@ const filter: FilterSpecV1 = {
 
 describe("ResearchRunner", () => {
   it("bounds AI synthesis to the configured ranked prefix", () => {
-    expect(selectSynthesisCandidates(["first", "second", "third"], 2)).toEqual([
-      "first",
-      "second",
-    ]);
+    expect(selectSynthesisCandidates(["first", "second", "third"], 2)).toEqual(["first", "second"]);
   });
 
   it("preserves coverage and completes partially when no approved source is available", async () => {
