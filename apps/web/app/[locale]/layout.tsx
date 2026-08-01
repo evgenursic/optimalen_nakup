@@ -6,13 +6,14 @@ import { notFound } from "next/navigation";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { DeferredWebVitalsReporter } from "@/components/deferred-web-vitals-reporter";
 import { routing } from "@/i18n/routing";
 
 import "../globals.css";
 
 const serviceWorkerRegistration =
-  'if("serviceWorker"in navigator){addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{})},{once:true})}';
+  'if("serviceWorker"in navigator){addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{})},{once:true})};';
+const webVitalsRegistration =
+  '(()=>{const n=document.currentScript?.nonce;const r=()=>{setTimeout(()=>{const s=document.createElement("script");s.src="/web-vitals.js";s.async=true;if(n)s.nonce=n;document.head.append(s)},30000)};r()})()';
 
 export const viewport: Viewport = {
   colorScheme: "light",
@@ -79,17 +80,19 @@ export default async function LocaleLayout({
     process.env.WEB_VITALS_INGEST_SECRET &&
     process.env.WEB_VITALS_INGEST_SECRET.length >= 32,
   );
+  const runtimeRegistration = telemetryConfigured
+    ? `${serviceWorkerRegistration}${webVitalsRegistration}`
+    : serviceWorkerRegistration;
   return (
     <html lang={locale}>
       <body>
-        {telemetryConfigured ? <DeferredWebVitalsReporter /> : null}
         <a className="skip-link" href="#main-content">
           {locale === "sl" ? "Preskoči na vsebino" : "Skip to content"}
         </a>
         <SiteHeader locale={locale} />
         {children}
         <SiteFooter locale={locale} />
-        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: serviceWorkerRegistration }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: runtimeRegistration }} />
       </body>
     </html>
   );
