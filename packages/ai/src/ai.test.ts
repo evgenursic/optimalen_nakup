@@ -11,7 +11,7 @@ describe("OpenAI cost accounting", () => {
         cacheWriteTokens: 100_000,
         outputTokens: 100_000,
       }),
-    ).toBe(3.6125);
+    ).toBe(2.89);
   });
 
   it("does not invent pricing for a configured unknown model", () => {

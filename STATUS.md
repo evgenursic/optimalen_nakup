@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-07-29
+Updated: 2026-08-01
 
 ## Verified
 
@@ -32,6 +32,10 @@ Updated: 2026-07-29
 - Official OpenAI documentation was reviewed for the Responses API and the configured
   `gpt-5.6-luna`, `gpt-5.6-terra`, and `gpt-5.6-sol` routing. Live API calls remain unverified until
   a project key and budget are configured.
+- OpenAI model-cost accounting now uses the public standard short-context rates effective
+  2026-07-30, with an explicit pricing version recorded on intake and worker cost events. The
+  routing remains Luna for intake, Terra for extraction, and Sol for evidence-bound synthesis or
+  disputes; deterministic arithmetic and scoring remain outside the model.
 - GitHub Actions quality, Playwright, dependency audit, and CodeQL workflows are present with action
   revisions pinned to commit SHAs.
 - The authenticated surface now includes workspace bootstrap/switching, natural-language intake,

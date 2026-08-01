@@ -1,5 +1,23 @@
 # Test results
 
+## 2026-08-01 OpenAI model-cost accounting correction
+
+The official [OpenAI API pricing table](https://developers.openai.com/api/docs/pricing) was
+rechecked after the 2026-07-30 pricing change. Standard short-context rates are now represented for
+the configured GPT-5.6 family: Luna $0.20/$0.02/$1.20, Terra $2.00/$0.20/$12.00, and Sol
+$5.00/$0.50/$30.00 per million input/cached-input/output tokens. Cache writes remain calculated at
+1.25x uncached input, as specified by the same table. The worker and web intake now emit pricing
+version `openai-api-pricing-2026-07-30`.
+
+| Command or gate                                   | Result | Evidence                                                                    |
+| ------------------------------------------------- | ------ | --------------------------------------------------------------------------- |
+| `corepack pnpm --filter @optimalen-nakup/ai test` | Pass   | 3 AI cost-accounting tests pass, including the corrected Terra calculation. |
+| AI lint, typecheck, and build                     | Pass   | Package lint, strict TypeScript, and declaration build pass.                |
+| Web and worker typecheck                          | Pass   | Both application package typechecks pass.                                   |
+| `corepack pnpm test`                              | Pass   | 16 workspace tasks and 13 root Convex/integration tests pass.               |
+| `corepack pnpm build`                             | Pass   | All 9 workspace production builds pass; Next.js standalone build passes.    |
+| `corepack pnpm format:check`                      | Pass   | All files match Prettier formatting.                                        |
+
 ## 2026-07-28 operations, evaluation, and performance milestone
 
 Environment: Windows 11 with direct Node 22.18.0 and corepack pnpm 11.17.0. The Codex shell's nested

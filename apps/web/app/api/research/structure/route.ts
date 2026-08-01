@@ -92,7 +92,7 @@ export async function POST(request: Request) {
       estimatedCostUsd: result.usage.estimatedCostUsd,
       estimatedCostEur: result.usage.estimatedCostUsd * usdToEurRate,
       usdToEurRate,
-      pricingVersion: "openai-model-catalog-2026-07-26",
+      pricingVersion: "openai-api-pricing-2026-07-30",
       requestId: result.responseId,
       ingestSecret: costIngestSecret,
     });

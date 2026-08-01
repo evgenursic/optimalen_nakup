@@ -145,8 +145,10 @@ const pricingPerMillion: Record<
   EvidenceModel,
   { input: number; cachedInput: number; output: number }
 > = {
-  "gpt-5.6-luna": { input: 1, cachedInput: 0.1, output: 6 },
-  "gpt-5.6-terra": { input: 2.5, cachedInput: 0.25, output: 15 },
+  // Standard short-context prices per 1M tokens, effective 2026-07-30.
+  // Cache writes are calculated as 1.25x input below, matching the public API pricing table.
+  "gpt-5.6-luna": { input: 0.2, cachedInput: 0.02, output: 1.2 },
+  "gpt-5.6-terra": { input: 2, cachedInput: 0.2, output: 12 },
   "gpt-5.6-sol": { input: 5, cachedInput: 0.5, output: 30 },
 };
 

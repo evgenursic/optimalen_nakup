@@ -31,7 +31,7 @@ import {
 import { OfflinePlaywrightVerifier } from "./playwright-verifier.js";
 import { SourceBlockedError, SourceRuntime } from "./source-runtime.js";
 
-const pricingVersion = "openai-public-2026-07-26";
+const pricingVersion = "openai-api-pricing-2026-07-30";
 
 export interface ResearchRunnerOptions {
   environment: WorkerEnvironment;
