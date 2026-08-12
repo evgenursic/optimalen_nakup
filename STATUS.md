@@ -118,6 +118,11 @@ Updated: 2026-08-12
   dependency audit, 18 public E2E scenarios, and containers pass, but mobile Performance remains
   variable at medians 98, 99, 97, and 97. It was reverted in `c2b3e47`; the strict 100 gate remains
   open and no Lighthouse 100 claim is made.
+- A follow-up `content-visibility: auto` experiment (`be3dbe3`) was validated by run
+  [`31639501917`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31639501917): quality,
+  dependency audit, 18 public E2E scenarios, containers, and desktop Lighthouse pass, but mobile
+  Performance regressed to medians 96, 97, 96, and 99. It was reverted in `21fdbd3`; artifact
+  `9158512173` is retained and the strict 100 gate remains open.
 
 ## In progress
 

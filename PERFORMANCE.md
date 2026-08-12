@@ -42,6 +42,17 @@ public Web Vitals client now loads only after the first 30 seconds when telemetr
 service-worker registration and nonce CSP remain in the initial document. No Lighthouse 100 release
 claim is made while this mobile gate remains open.
 
+## Rejected below-fold deferral experiment (`be3dbe3`)
+
+GitHub Actions run
+[`31639501917`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31639501917) tested
+`content-visibility: auto` on light below-the-fold sections. Quality/build, dependency audit, all 18
+public Playwright scenarios, containers, and desktop Lighthouse passed, but mobile Performance
+medians fell to 96/97/96/99 for `/sl`, `/sl/pricing`, `/sl/how-it-works`, and `/sl/sign-in`. The
+experiment was reverted in `21fdbd3`. Reports remain in artifact
+[`9158512173`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31639501917/artifacts/9158512173)
+with ZIP digest `sha256:6dca96f6fc97e1f43ad27b853853b7d11e43ff086a1da48e19d4457ba45e577c`.
+
 ## Rejected section-containment experiment (`b56a308`)
 
 GitHub Actions run

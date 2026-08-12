@@ -15,6 +15,20 @@ Artifact `9156656165` is retained for the current-head reports; its ZIP digest i
 `sha256:f08155be7ce667ab8f523d1271033838e0998b16fcb207f76e5429838dce400f`. The strict mobile gate
 remains intentionally enforced and is the only failed CI assertion.
 
+## 2026-08-12 rejected below-fold deferral experiment (`be3dbe3`)
+
+| Command or gate                          | Result | Evidence                                                         |
+| ---------------------------------------- | ------ | ---------------------------------------------------------------- |
+| GitHub quality/production build          | Pass   | Run `31639501917`, quality job and dependency audit passed.      |
+| Public Playwright E2E                    | Pass   | Run `31639501917`, all 18 desktop/mobile scenarios passed.       |
+| Container build/startup/health           | Pass   | Run `31639501917`, container job completed successfully.         |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `9158512173`. |
+| Public Lighthouse mobile Performance 100 | Open   | Medians 96/97/96/99; worse than the documented baseline.         |
+
+The experiment added `content-visibility: auto` to light below-the-fold sections. It was reverted in
+`21fdbd3` after the clean Ubuntu run showed a regression in the strict mobile Performance gate. The
+artifact ZIP digest is `sha256:6dca96f6fc97e1f43ad27b853853b7d11e43ff086a1da48e19d4457ba45e577c`.
+
 ## 2026-08-12 rejected performance experiment (`b56a308`)
 
 | Command or gate                          | Result | Evidence                                                         |
