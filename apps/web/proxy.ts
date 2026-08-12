@@ -14,7 +14,7 @@ function contentSecurityPolicy(nonce: string): string {
     "object-src 'none'",
     "frame-ancestors 'none'",
     "form-action 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https:`,
+    `script-src 'self' 'nonce-${nonce}' 'sha256-p2Zwn9GKPuVutUzL2V4EDzCwe1Gg2k9mON3i0ItjBBY=' 'strict-dynamic' https:`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data: https:",

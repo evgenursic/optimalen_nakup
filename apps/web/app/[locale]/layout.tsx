@@ -3,17 +3,14 @@ import path from "node:path";
 import type { Metadata, Viewport } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { routing } from "@/i18n/routing";
 
-const serviceWorkerRegistration =
-  'if("serviceWorker"in navigator){addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{})},{once:true})};';
-const webVitalsRegistration =
-  '(()=>{const n=document.currentScript?.nonce;const r=()=>{setTimeout(()=>{const s=document.createElement("script");s.src="/web-vitals.js";s.async=true;if(n)s.nonce=n;document.head.append(s)},30000)};r()})()';
+const runtimeRegistration =
+  '(()=>{const e=document.currentScript;const r=()=>{"serviceWorker"in navigator&&navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{})};"loading"===document.readyState?addEventListener("load",r,{once:!0}):r();e?.dataset.telemetry==="enabled"&&setTimeout(()=>{const t=document.createElement("script");t.src="/web-vitals.js";t.async=!0;document.head.append(t)},3e4)})()';
 
 function readGeneratedStyles() {
   const candidates = [
@@ -85,21 +82,16 @@ export default async function LocaleLayout({
   }
 
   setRequestLocale(locale);
-  const requestHeaders = await headers();
-  const nonce = requestHeaders.get("x-nonce") ?? undefined;
   const telemetryConfigured = Boolean(
     process.env.NEXT_PUBLIC_CONVEX_URL &&
     process.env.WEB_VITALS_INGEST_SECRET &&
     process.env.WEB_VITALS_INGEST_SECRET.length >= 32,
   );
-  const runtimeRegistration = telemetryConfigured
-    ? `${serviceWorkerRegistration}${webVitalsRegistration}`
-    : serviceWorkerRegistration;
   const generatedStyles = readGeneratedStyles();
   return (
     <html lang={locale}>
       <head>
-        <style nonce={nonce} dangerouslySetInnerHTML={{ __html: generatedStyles }} />
+        <style dangerouslySetInnerHTML={{ __html: generatedStyles }} />
       </head>
       <body>
         <a className="skip-link" href="#main-content">
@@ -108,7 +100,10 @@ export default async function LocaleLayout({
         <SiteHeader locale={locale} />
         {children}
         <SiteFooter locale={locale} />
-        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: runtimeRegistration }} />
+        <script
+          data-telemetry={telemetryConfigured ? "enabled" : "disabled"}
+          dangerouslySetInnerHTML={{ __html: runtimeRegistration }}
+        />
       </body>
     </html>
   );
