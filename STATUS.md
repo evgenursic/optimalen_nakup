@@ -29,6 +29,10 @@ Updated: 2026-08-12
   Foreign currencies are normalized from the ECB daily reference-rate feed. Ambiguous pages can be
   rendered only after active content and network surfaces are removed, in a JavaScript-disabled
   Playwright context with all requests blocked.
+- The 2026-08-12 read-only source-policy recheck confirmed BMW robots/sitemap paths, Enaa robots and
+  current terms at `/cms/63`, and Big Bang robots and current terms at `/pogoji-poslovanja/`. Stale
+  terms paths were removed from the manifests. All three adapters remain conditional; this technical
+  check does not replace owner/legal activation.
 - Official OpenAI documentation was reviewed for the Responses API and the configured
   `gpt-5.6-luna`, `gpt-5.6-terra`, and `gpt-5.6-sol` routing. Live API calls remain unverified until
   a project key and budget are configured.

@@ -1,5 +1,17 @@
 # Test results
 
+## 2026-08-12 source-policy recheck
+
+| Check                           | Result        | Evidence                                                                                                                    |
+| ------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| BMW `robots.txt`                | Pass          | HTTP 200; redirect to Slovenian robots policy; `/rabljeno/sitemap.xml` advertised and `/rabljeno/api` disallowed.           |
+| Enaa `robots.txt` and terms     | Pass          | HTTP 200 robots; `/sitemap` advertised; current terms URL `/cms/63` returns HTTP 200; stale `/splosni-pogoji` returned 404. |
+| Big Bang `robots.txt` and terms | Pass          | HTTP 200 robots; `/sitemap.xml` advertised; current terms URL `/pogoji-poslovanja/` returns HTTP 200.                       |
+| Adapter policy activation       | Not performed | All three manifests remain `conditional`; owner/legal approval is still required.                                           |
+| Worker adapter tests            | Pass          | `corepack pnpm --filter @optimalen-nakup/worker test`: 7 files, 17 tests.                                                   |
+
+The network checks were read-only and were not treated as permission to enable live crawling.
+
 ## 2026-08-12 current-head CI evidence (`da76b90`)
 
 | Command or gate                          | Result | Evidence                                                         |

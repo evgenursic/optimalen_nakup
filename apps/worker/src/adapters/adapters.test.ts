@@ -14,6 +14,16 @@ import { bigBangSiManifest, bmwSiUsedManifest, enaaSiManifest } from "./index.js
 const collectedAt = new Date("2026-07-26T12:00:00.000Z");
 
 describe("deterministic adapters", () => {
+  it("tracks the current official terms URLs without activating a source", () => {
+    expect(enaaSiManifest.termsUrl?.toString()).toBe("https://www.enaa.com/cms/63");
+    expect(bigBangSiManifest.termsUrl?.toString()).toBe(
+      "https://www.bigbang.si/pogoji-poslovanja/",
+    );
+    expect(enaaSiManifest.policyStatus).toBe("conditional");
+    expect(bigBangSiManifest.policyStatus).toBe("conditional");
+    expect(bmwSiUsedManifest.termsUrl).toBeNull();
+  });
+
   it("extracts the BMW M Sport evidence case without AI", () => {
     const url = new URL("https://odkrijuzitek.bmw.si/rabljeno/iskanje/podrobnosti/123456");
     const extracted = extractBmwHtml(

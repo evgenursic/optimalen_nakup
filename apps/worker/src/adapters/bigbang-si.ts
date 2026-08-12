@@ -23,12 +23,12 @@ const manifest: SourceManifest = {
   categories: ["white_goods"],
   baseUrl: new URL("https://www.bigbang.si"),
   robotsUrl: new URL("https://www.bigbang.si/robots.txt"),
-  termsUrl: new URL("https://www.bigbang.si/splosni-pogoji-poslovanja/"),
+  termsUrl: new URL("https://www.bigbang.si/pogoji-poslovanja/"),
   policyStatus: "conditional",
-  policyReviewedAt: "2026-07-26T12:18:00.000Z",
-  policyReviewExpiresAt: "2026-08-25T12:18:00.000Z",
+  policyReviewedAt: "2026-08-12T22:00:00.000Z",
+  policyReviewExpiresAt: "2026-09-11T22:00:00.000Z",
   policyNotes:
-    "robots.txt advertises /sitemap.xml and blocks /api plus account/admin/data paths. Production activation still requires owner/legal approval.",
+    "2026-08-12 technical review: robots.txt advertises /sitemap.xml and blocks /api plus account/admin/data paths; terms are published at /pogoji-poslovanja/. Production activation still requires owner/legal approval.",
   allowedPathPrefixes: ["/robots.txt", "/sitemap", "/"],
   forbiddenPathPrefixes: [
     "/api",
