@@ -1,6 +1,6 @@
 # Performance
 
-Updated: 2026-08-12
+Updated: 2026-08-13
 
 ## Budgets
 
@@ -13,6 +13,24 @@ Updated: 2026-08-12
 
 The Lighthouse configs assert both category scores and transfer-size budgets. A category score
 cannot hide a budget overrun.
+
+## Rejected RSC below-fold streaming experiment (`83d4cae`)
+
+GitHub Actions run
+[`31647693574`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31647693574) tested an
+async `Suspense` boundary around the landing-page sections below the hero. Quality/build, dependency
+audit, all 18 public Playwright scenarios, container startup/health, and CodeQL
+[`31647693576`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31647693576) passed. The
+clean Ubuntu Lighthouse run did not improve the strict mobile Performance gate: mobile values were
+`97, 98, 99` for `/sl`, `97, 98, 98` for `/sl/pricing`, `97, 98, 98` for `/sl/how-it-works`, and
+`98, 99, 98` for `/sl/sign-in` (asserted minima 98/97/97/98). Desktop `/sl` also varied to
+`99, 100, 99`, so the experiment was reverted in `4fc6058` to preserve the established desktop
+baseline and avoid unnecessary RSC complexity. Artifact
+[`9161583646`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31647693574/artifacts/9161583646)
+contains the 24 reports and has ZIP digest
+`sha256:46da05dd5560143568ae50336808cd6eb0d1c510daf99342eecce6a4c82b1d26`.
+
+The strict mobile Performance 100 assertion remains open; no Lighthouse 100 release claim is made.
 
 ## Latest security-head CI evidence (`56d4fb9`)
 

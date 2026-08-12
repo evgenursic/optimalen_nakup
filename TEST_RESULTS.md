@@ -1,5 +1,22 @@
 # Test results
 
+## 2026-08-13 rejected RSC streaming experiment (`83d4cae`)
+
+| Command or gate                          | Result | Evidence                                                                |
+| ---------------------------------------- | ------ | ----------------------------------------------------------------------- |
+| GitHub quality/production build          | Pass   | Run `31647693574`; formatting, lint, strict types, tests, audit, build. |
+| Public Playwright E2E                    | Pass   | Run `31647693574`; all 18 desktop/mobile scenarios passed.              |
+| Container build/startup/health           | Pass   | Run `31647693574`; Compose and observability checks passed.             |
+| CodeQL                                   | Pass   | Run `31647693576` for the same source commit.                           |
+| Local `corepack pnpm verify` on revert   | Pass   | Formatting, lint, strict types, 58 tests, and 9 production builds.      |
+| Public Lighthouse desktop                | Open   | `/sl` values 99/100/99; other routes passed their category assertions.  |
+| Public Lighthouse mobile Performance 100 | Open   | Values 97/98/99, 97/98/98, 97/98/98, and 98/99/98 by route.             |
+
+The experiment streamed below-fold landing sections behind an async React Server Component boundary.
+It preserved all public E2E behavior but did not improve the mobile gate and introduced desktop
+score variability, so it was reverted in `4fc6058`. Artifact `9161583646` has ZIP digest
+`sha256:46da05dd5560143568ae50336808cd6eb0d1c510daf99342eecce6a4c82b1d26`.
+
 ## 2026-08-12 redirect-allowlist CI evidence (`56d4fb9`)
 
 | Command or gate                          | Result | Evidence                                                                |

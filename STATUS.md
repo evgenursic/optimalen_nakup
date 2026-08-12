@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-08-12
+Updated: 2026-08-13
 
 ## Verified
 
@@ -49,6 +49,9 @@ Updated: 2026-08-12
   remains persisted and visible in the result set.
 - GitHub Actions quality, Playwright, dependency audit, and CodeQL workflows are present with action
   revisions pinned to commit SHAs.
+- A clean Ubuntu RSC below-fold streaming experiment (`83d4cae`) passed build, container, CodeQL,
+  and all 18 public E2E scenarios but did not improve mobile Lighthouse and reduced desktop `/sl`
+  stability; it was reverted in `4fc6058`. The strict mobile Performance 100 gate remains open.
 - The authenticated surface now includes workspace bootstrap/switching, natural-language intake,
   explicit filter confirmation, live progress, sortable and paginated responsive results, dynamic
   category attributes, evidence and score inspection, pinning, four-offer comparison, formula-safe
