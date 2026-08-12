@@ -58,6 +58,16 @@ budgets pass. The reports are in artifact
 [`9159087180`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31640940677/artifacts/9159087180)
 with ZIP digest `sha256:008834322d7d85edc89997b0894f8a90ac410c1fdc405a717681db5a8d210ebe`.
 
+The subsequent documentation-head run
+[`31642878579`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31642878579) exercises
+the same Webpack code with the complete current documentation tree. Quality/build, dependency audit,
+containers, all 18 public Playwright scenarios, and CodeQL
+[`31642878569`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31642878569) pass. Its
+mobile medians are 99/99/97/98 for `/sl`, `/sl/pricing`, `/sl/how-it-works`, and `/sl/sign-in`;
+desktop remains 100 in every category. The current artifact is
+[`9159800457`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31642878579/artifacts/9159800457)
+with ZIP digest `sha256:1510b8bccd68ac677862a6a59a1688320d99cefde2aa4019d0ca4b87b5ec289b`.
+
 ## Rejected below-fold deferral experiment (`be3dbe3`)
 
 GitHub Actions run

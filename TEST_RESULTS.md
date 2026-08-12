@@ -30,6 +30,11 @@ The Webpack build reduced local initial script transfer to approximately 129 KB 
 153 KB without changing the CSP, PWA, accessibility, or public E2E behavior. The artifact ZIP digest
 is `sha256:008834322d7d85edc89997b0894f8a90ac410c1fdc405a717681db5a8d210ebe`.
 
+The subsequent current-head run `31642878579` repeats the same gates with the full documentation
+tree and CodeQL `31642878569`; all non-Lighthouse jobs pass. The current mobile medians are
+99/99/97/98 and the current report artifact is `9159800457`, digest
+`sha256:1510b8bccd68ac677862a6a59a1688320d99cefde2aa4019d0ca4b87b5ec289b`.
+
 ## 2026-08-12 rejected below-fold deferral experiment (`be3dbe3`)
 
 | Command or gate                          | Result | Evidence                                                         |

@@ -130,6 +130,12 @@ Updated: 2026-08-12
   in every category and mobile Performance medians are 99 on all four routes. The strict 100 gate
   remains open, while the separate LCP containment follow-up (`3558660`) was reverted in `caf5b34`
   after run `31642081563` showed no consistent gain.
+- Current documentation-head CI run
+  [`31642878579`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31642878579) repeats
+  the Webpack build, dependency audit, 18 public E2E scenarios, containers, and CodeQL
+  [`31642878569`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31642878569). Desktop
+  is 100 in every category; mobile medians are 99, 99, 97, and 98. Artifact `9159800457` is retained
+  with digest `sha256:1510b8bccd68ac677862a6a59a1688320d99cefde2aa4019d0ca4b87b5ec289b`.
 
 ## In progress
 
