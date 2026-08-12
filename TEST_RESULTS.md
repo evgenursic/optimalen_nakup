@@ -35,6 +35,13 @@ tree and CodeQL `31642878569`; all non-Lighthouse jobs pass. The current mobile 
 99/99/97/98 and the current report artifact is `9159800457`, digest
 `sha256:1510b8bccd68ac677862a6a59a1688320d99cefde2aa4019d0ca4b87b5ec289b`.
 
+The next completed docs-head rerun `31643808786` also passes quality/build, dependency audit,
+containers, all 18 public Playwright scenarios, and CodeQL. Desktop Lighthouse remains 100 in every
+category. Mobile Performance medians are 99/99/99/97; Accessibility, Best Practices, SEO, and
+transfer budgets pass. Artifact `9160148063` is retained with digest
+`sha256:5d57747d44b1f95d3e37fa7b62c40ae443090de12d5a5e2e5a602127be63a566`. The strict mobile
+Performance 100 assertion remains open.
+
 ## 2026-08-12 rejected below-fold deferral experiment (`be3dbe3`)
 
 | Command or gate                          | Result | Evidence                                                         |

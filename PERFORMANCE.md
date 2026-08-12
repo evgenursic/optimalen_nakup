@@ -68,6 +68,15 @@ desktop remains 100 in every category. The current artifact is
 [`9159800457`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31642878579/artifacts/9159800457)
 with ZIP digest `sha256:1510b8bccd68ac677862a6a59a1688320d99cefde2aa4019d0ca4b87b5ec289b`.
 
+The next completed docs-head rerun
+[`31643808786`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31643808786) repeats the
+same quality/build, dependency audit, container, E2E, and CodeQL gates. Desktop remains 100 in every
+category. Mobile Performance values were `95, 99, 99` on `/sl`, `100, 99, 99` on `/sl/pricing`,
+`99, 100, 99` on `/sl/how-it-works`, and `84, 99, 97` on `/sl/sign-in` (medians 99/99/99/97). All
+other mobile categories and transfer budgets pass. The retained artifact is
+[`9160148063`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31643808786/artifacts/9160148063)
+with ZIP digest `sha256:5d57747d44b1f95d3e37fa7b62c40ae443090de12d5a5e2e5a602127be63a566`.
+
 ## Rejected below-fold deferral experiment (`be3dbe3`)
 
 GitHub Actions run

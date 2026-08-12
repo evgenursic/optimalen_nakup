@@ -136,6 +136,11 @@ Updated: 2026-08-12
   [`31642878569`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31642878569). Desktop
   is 100 in every category; mobile medians are 99, 99, 97, and 98. Artifact `9159800457` is retained
   with digest `sha256:1510b8bccd68ac677862a6a59a1688320d99cefde2aa4019d0ca4b87b5ec289b`.
+- The next completed documentation-head rerun
+  [`31643808786`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31643808786) also
+  passes quality/build, dependency audit, containers, all 18 public E2E scenarios, and CodeQL.
+  Desktop is 100 in every category; mobile medians are 99, 99, 99, and 97. Artifact `9160148063` is
+  retained with digest `sha256:5d57747d44b1f95d3e37fa7b62c40ae443090de12d5a5e2e5a602127be63a566`.
 
 ## In progress
 
