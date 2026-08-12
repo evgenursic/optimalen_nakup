@@ -129,7 +129,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      <section className="container py-18 lg:py-24">
+      <section className="below-fold container py-18 lg:py-24">
         <h2 className="section-heading">{categories("title")}</h2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {categoryItems.map(([title, text], index) => {
@@ -147,7 +147,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      <section className="border-y border-slate-200 bg-[#0b1f33] text-white">
+      <section className="below-fold border-y border-slate-200 bg-[#0b1f33] text-white">
         <div className="container py-18 lg:py-24">
           <h2 className="max-w-3xl text-[clamp(2rem,4vw,3.35rem)] leading-tight font-extrabold tracking-[-0.045em]">
             {process("title")}
