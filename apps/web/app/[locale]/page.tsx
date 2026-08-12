@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -14,68 +13,6 @@ import { localizedHref } from "@/lib/locale-path";
 import { localizedAlternates } from "@/lib/metadata";
 
 const categoryIcons = [SearchIcon, GaugeIcon, CheckCircleIcon];
-
-async function BelowFoldContent({
-  categories,
-  process,
-}: Readonly<{
-  categories: Awaited<ReturnType<typeof getTranslations>>;
-  process: Awaited<ReturnType<typeof getTranslations>>;
-}>) {
-  await new Promise<void>((resolve) => setTimeout(resolve, 0));
-
-  const categoryItems = [
-    [categories("vehicles"), categories("vehiclesText")],
-    [categories("computers"), categories("computersText")],
-    [categories("whiteGoods"), categories("whiteGoodsText")],
-  ] as const;
-
-  const processItems = [
-    [process("one"), process("oneText")],
-    [process("two"), process("twoText")],
-    [process("three"), process("threeText")],
-    [process("four"), process("fourText")],
-  ] as const;
-
-  return (
-    <>
-      <section className="container py-18 lg:py-24">
-        <h2 className="section-heading">{categories("title")}</h2>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {categoryItems.map(([title, text], index) => {
-            const Icon = categoryIcons[index] ?? SearchIcon;
-            return (
-              <article key={title} className="card p-6">
-                <span className="grid size-11 place-items-center rounded-xl bg-[#f0fdfa] text-[#0f766e]">
-                  <Icon aria-hidden="true" size={22} />
-                </span>
-                <h3 className="mt-6 text-xl font-extrabold text-[#0b1f33]">{title}</h3>
-                <p className="mt-3 leading-7 text-slate-600">{text}</p>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="border-y border-slate-200 bg-[#0b1f33] text-white">
-        <div className="container py-18 lg:py-24">
-          <h2 className="max-w-3xl text-[clamp(2rem,4vw,3.35rem)] leading-tight font-extrabold tracking-[-0.045em]">
-            {process("title")}
-          </h2>
-          <ol className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {processItems.map(([title, text], index) => (
-              <li key={title} className="border-t border-white/30 pt-5">
-                <span className="text-sm font-extrabold text-[#5eead4]">0{index + 1}</span>
-                <h3 className="mt-5 text-lg font-extrabold">{title}</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-300">{text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-    </>
-  );
-}
 
 export async function generateMetadata({
   params,
@@ -95,6 +32,19 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
     getTranslations("categories"),
     getTranslations("process"),
   ]);
+
+  const categoryItems = [
+    [categories("vehicles"), categories("vehiclesText")],
+    [categories("computers"), categories("computersText")],
+    [categories("whiteGoods"), categories("whiteGoodsText")],
+  ] as const;
+
+  const processItems = [
+    [process("one"), process("oneText")],
+    [process("two"), process("twoText")],
+    [process("three"), process("threeText")],
+    [process("four"), process("fourText")],
+  ] as const;
 
   return (
     <main id="main-content">
@@ -179,9 +129,40 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      <Suspense fallback={null}>
-        <BelowFoldContent categories={categories} process={process} />
-      </Suspense>
+      <section className="container py-18 lg:py-24">
+        <h2 className="section-heading">{categories("title")}</h2>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {categoryItems.map(([title, text], index) => {
+            const Icon = categoryIcons[index] ?? SearchIcon;
+            return (
+              <article key={title} className="card p-6">
+                <span className="grid size-11 place-items-center rounded-xl bg-[#f0fdfa] text-[#0f766e]">
+                  <Icon aria-hidden="true" size={22} />
+                </span>
+                <h3 className="mt-6 text-xl font-extrabold text-[#0b1f33]">{title}</h3>
+                <p className="mt-3 leading-7 text-slate-600">{text}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="border-y border-slate-200 bg-[#0b1f33] text-white">
+        <div className="container py-18 lg:py-24">
+          <h2 className="max-w-3xl text-[clamp(2rem,4vw,3.35rem)] leading-tight font-extrabold tracking-[-0.045em]">
+            {process("title")}
+          </h2>
+          <ol className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {processItems.map(([title, text], index) => (
+              <li key={title} className="border-t border-white/30 pt-5">
+                <span className="text-sm font-extrabold text-[#5eead4]">0{index + 1}</span>
+                <h3 className="mt-5 text-lg font-extrabold">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
     </main>
   );
 }
