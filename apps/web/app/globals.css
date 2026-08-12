@@ -185,10 +185,6 @@ select {
   box-shadow: var(--shadow-sm);
 }
 
-.lcp-candidate {
-  contain: paint;
-}
-
 .section-heading {
   max-width: 44rem;
   margin: 0;

@@ -47,9 +47,7 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
     <main id="main-content" className="container py-16 lg:py-24">
       <p className="eyebrow">Closed beta</p>
       <h1 className="section-heading mt-5">{t("title")}</h1>
-      <p className="lcp-candidate mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-        {t("description")}
-      </p>
+      <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600">{t("description")}</p>
       <div className="mt-12 grid gap-5 lg:grid-cols-3">
         {plans.map(([key, name, description, features], index) => (
           <article

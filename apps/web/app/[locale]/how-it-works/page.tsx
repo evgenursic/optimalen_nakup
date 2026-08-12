@@ -26,7 +26,7 @@ export default async function HowItWorksPage({ params }: { params: Promise<{ loc
   return (
     <main id="main-content" className="container py-16 lg:py-24">
       <p className="eyebrow">Evidence-first workflow</p>
-      <h1 className="lcp-candidate section-heading mt-5">{t("title")}</h1>
+      <h1 className="section-heading mt-5">{t("title")}</h1>
       <ol className="mt-12 grid gap-5 lg:grid-cols-2">
         {steps.map(([title, text], index) => (
           <li key={title} className="card grid grid-cols-[auto_1fr] gap-5 p-7">
