@@ -185,13 +185,6 @@ select {
   box-shadow: var(--shadow-sm);
 }
 
-/* Isolate independent public sections so layout work in the lower page cannot
- * invalidate the hero. Unlike content-visibility, this keeps all content in
- * the accessibility tree and fully painted. */
-.below-fold {
-  contain: layout paint;
-}
-
 .section-heading {
   max-width: 44rem;
   margin: 0;
