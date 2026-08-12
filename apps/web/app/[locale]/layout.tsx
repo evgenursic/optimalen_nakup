@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 import type { Metadata, Viewport } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -8,12 +10,22 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { routing } from "@/i18n/routing";
 
-import "../globals.css";
-
 const serviceWorkerRegistration =
   'if("serviceWorker"in navigator){addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{})},{once:true})};';
 const webVitalsRegistration =
   '(()=>{const n=document.currentScript?.nonce;const r=()=>{setTimeout(()=>{const s=document.createElement("script");s.src="/web-vitals.js";s.async=true;if(n)s.nonce=n;document.head.append(s)},30000)};r()})()';
+
+function readGeneratedStyles() {
+  const candidates = [
+    path.join(process.cwd(), "public", "styles.generated.css"),
+    path.join(process.cwd(), "apps", "web", "public", "styles.generated.css"),
+  ];
+  const sourcePath = candidates.find((candidate) => existsSync(candidate));
+  if (!sourcePath) {
+    throw new Error("Generated styles are missing; run the web prebuild step first.");
+  }
+  return readFileSync(sourcePath, "utf8");
+}
 
 export const viewport: Viewport = {
   colorScheme: "light",
@@ -83,8 +95,12 @@ export default async function LocaleLayout({
   const runtimeRegistration = telemetryConfigured
     ? `${serviceWorkerRegistration}${webVitalsRegistration}`
     : serviceWorkerRegistration;
+  const generatedStyles = readGeneratedStyles();
   return (
     <html lang={locale}>
+      <head>
+        <style nonce={nonce} dangerouslySetInnerHTML={{ __html: generatedStyles }} />
+      </head>
       <body>
         <a className="skip-link" href="#main-content">
           {locale === "sl" ? "Preskoči na vsebino" : "Skip to content"}

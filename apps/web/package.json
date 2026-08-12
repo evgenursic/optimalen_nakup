@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/generate-styles.mjs",
+    "predev": "node scripts/generate-styles.mjs",
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint . --max-warnings=0",
@@ -37,6 +39,8 @@
     "@types/react-dom": "19.2.3",
     "eslint": "9.39.5",
     "eslint-config-next": "16.2.12",
+    "lightningcss": "1.33.0",
+    "postcss": "8.5.18",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
     "vitest": "4.1.10"

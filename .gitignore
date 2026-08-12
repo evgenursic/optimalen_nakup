@@ -4,6 +4,7 @@ node_modules/
 
 # Builds and caches
 .next/
+apps/web/public/styles.generated.css
 dist/
 coverage/
 .turbo/
