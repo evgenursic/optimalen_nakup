@@ -77,7 +77,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
           <div className="relative">
             <div
               aria-hidden="true"
-              className="absolute -inset-10 -z-10 rounded-full bg-[#ccfbf1] opacity-60 blur-3xl"
+              className="hero-glow absolute -inset-10 -z-10 rounded-full opacity-60"
             />
             <article className="card overflow-hidden">
               <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">

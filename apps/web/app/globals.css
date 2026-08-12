@@ -178,6 +178,10 @@ select {
   content: "";
 }
 
+.hero-glow {
+  background: radial-gradient(circle at center, var(--color-teal-100) 0%, transparent 70%);
+}
+
 .card {
   border: 1px solid var(--color-slate-200);
   border-radius: 1rem;
