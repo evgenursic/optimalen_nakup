@@ -30,13 +30,12 @@ must not be reported as verified until their exact smoke tests pass.
   deployed environment, and a completed research job owned by that user's test workspace.
 - The Figma file is on a Starter team, which permits one variable mode. The Light mode is the v1
   release scope; semantic aliases remain ready for a later Dark mode after the workspace supports
-  it.
-- The Figma file metadata is readable again, but the general write endpoint and library-discovery
-  endpoint still return `INVALID_ARGUMENT`. Four initial collections and 49 variables were created
-  before that failure; pages, styles, components, and screen parity remain open. The owner approved
-  Phase 1 on 2026-07-29, but the first post-approval call was a read-only inventory and failed
-  before any mutation, so no blind retry or duplicate creation was attempted.
-- Five clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer
-  budgets, while the latest mobile Performance medians remain 98 rather than the required exact 100.
-  The residual variance is therefore reproduced outside the local Windows environment. Run
-  `30461698590` stores all 24 reports as artifact `8728119687`.
+  it. Phase 1 currently contains 68 variables across four collections, 14 semantic aliases, six
+  Inter text styles, and three effect styles.
+- The post-correction Figma readback hit the Starter-plan MCP limit (`INVALID_ARGUMENT`), so
+  post-correction validation and the approved Phase 2 page skeleton remain open. No further
+  mutations are attempted until the endpoint limit resets or the plan is upgraded.
+- Clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer budgets.
+  The latest completed docs-head run `31642878579` reports mobile Performance medians of 99, 99, 97,
+  and 98 across the four public routes; the strict exact-100 gate remains open and the 24-report
+  artifact is retained as `9159800457`.

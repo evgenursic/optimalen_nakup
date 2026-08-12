@@ -16,6 +16,16 @@
   showed no mobile score improvement. Do not trade away per-request nonce CSP or hydration/PWA
   behavior for a synthetic Lighthouse shortcut.
 
+## 2026-08-12
+
+- Use the Webpack production bundler via `next build --webpack`. The clean Ubuntu run `31640940677`
+  confirmed quality/build, containers, 18 public E2E scenarios, and CodeQL while reducing local
+  initial script transfer from approximately 153 KB to 129 KB. Turbopack remains available for local
+  development only.
+- Do not retain layout, `content-visibility`, or narrow LCP containment experiments without a
+  reproducible gain. Runs `31635807214`, `31639501917`, and `31642081563` showed variable or
+  regressed mobile Performance, so those changes were reverted while the strict 100 gate stays open.
+
 ## 2026-07-26
 
 - Product name: Optimalen Nakup.
@@ -36,9 +46,8 @@
 - Public pages retain per-request nonce CSP and dynamic rendering. Next.js requires dynamic
   rendering to apply a fresh nonce to framework and inline scripts; weakening the script policy or
   silently serving a static page without matching nonces is not an acceptable Lighthouse shortcut.
-- Turbopack remains the production bundler. A no-source-change local Webpack comparison produced
-  materially lower mobile Performance scores (89-96 versus the clean-Ubuntu Turbopack range of
-  97-99), so the alternative was rejected and no code change was kept.
+- The production bundler decision is recorded above: Webpack is used for production, while Turbopack
+  remains available for local development.
 - Web Vitals device segmentation is derived server-side as `mobile`, `tablet`, `desktop`, or
   `unknown`. Raw User-Agent values are not retained; existing rows remain valid through an optional
   schema field while all new writes require a validated class.
