@@ -1,18 +1,18 @@
 # Test results
 
-## 2026-08-01 current-head CI evidence (`f72a2b0`)
+## 2026-08-12 current-head CI evidence (`da76b90`)
 
 | Command or gate                          | Result | Evidence                                                         |
 | ---------------------------------------- | ------ | ---------------------------------------------------------------- |
-| GitHub quality/production build          | Pass   | Run `30692258676`, quality job completed successfully.           |
-| Public Playwright E2E                    | Pass   | Run `30692258676`, all 18 desktop/mobile scenarios passed.       |
-| Container build/startup/health           | Pass   | Run `30692258676`, container job completed successfully.         |
-| CodeQL                                   | Pass   | Run `30692258680` for the same commit.                           |
-| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `8816145747`. |
-| Public Lighthouse mobile Performance 100 | Open   | Mobile medians 99/98/98/99; other categories and budgets pass.   |
+| GitHub quality/production build          | Pass   | Run `31634319725`, quality job and dependency audit passed.      |
+| Public Playwright E2E                    | Pass   | Run `31634319725`, all 18 desktop/mobile scenarios passed.       |
+| Container build/startup/health           | Pass   | Run `31634319725`, container job completed successfully.         |
+| CodeQL                                   | Pass   | Run `31634319677` for the same commit.                           |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `9156656165`. |
+| Public Lighthouse mobile Performance 100 | Open   | Mobile medians 98/97/99/97; other categories and budgets pass.   |
 
-Artifact `8816145747` is retained for the current-head reports; its ZIP digest is
-`sha256:a2c1f28a1ebfa82cc2641d5d4e0fa27ee4e8fba7da7914d4167d70cbf9f6a473`. The strict mobile gate
+Artifact `9156656165` is retained for the current-head reports; its ZIP digest is
+`sha256:f08155be7ce667ab8f523d1271033838e0998b16fcb207f76e5429838dce400f`. The strict mobile gate
 remains intentionally enforced and is the only failed CI assertion.
 
 ## 2026-08-01 previous current-head CI evidence (`a0b3de3`)

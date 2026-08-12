@@ -1,6 +1,6 @@
 # Status
 
-Updated: 2026-08-01
+Updated: 2026-08-12
 
 ## Verified
 
@@ -108,6 +108,11 @@ Updated: 2026-08-01
   every category, while the strict mobile Performance gate remains the only failure. Mobile medians
   are 99, 98, 98, and 99; artifact `8816145747` is retained for the current-head reports (digest
   `sha256:a2c1f28a1ebfa82cc2641d5d4e0fa27ee4e8fba7da7914d4167d70cbf9f6a473`).
+- Latest current-head commit `da76b90` is verified by run
+  [`31634319725`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31634319725): quality,
+  dependency audit, 18 public E2E scenarios, containers, and CodeQL pass; desktop Lighthouse is 100
+  in every category. Mobile medians are 98, 97, 99, and 97; artifact `9156656165` is retained with
+  digest `sha256:f08155be7ce667ab8f523d1271033838e0998b16fcb207f76e5429838dce400f`.
 
 ## In progress
 
@@ -122,8 +127,8 @@ Updated: 2026-08-01
   No further Figma mutations are attempted until that external limit resets or the plan is upgraded.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
-- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 99, 98, 98,
-  and 99 across the four public routes while every other category and transfer budget passes.
+- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98, 97, 99,
+  and 97 across the four public routes while every other category and transfer budget passes.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action

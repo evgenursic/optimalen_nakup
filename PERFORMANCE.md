@@ -1,6 +1,6 @@
 # Performance
 
-Updated: 2026-08-01
+Updated: 2026-08-12
 
 ## Budgets
 
@@ -14,31 +14,33 @@ Updated: 2026-08-01
 The Lighthouse configs assert both category scores and transfer-size budgets. A category score
 cannot hide a budget overrun.
 
-## Latest current-head evidence (f72a2b0)
+## Latest current-head evidence (da76b90)
 
 GitHub Actions run
-[`30692258676`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30692258676) measured
-commit `f72a2b0` on Ubuntu 24.04 with the same standalone production server. Quality/build, 18
-public Playwright scenarios, container startup/health, and CodeQL pass. Desktop Lighthouse is 100 in
-all four categories on all three runs. Mobile Accessibility, Best Practices, SEO, and transfer
-budgets pass; the strict mobile Performance 100 assertion remains the only failed gate. Artifact
-[`8816145747`](https://github.com/evgenursic/optimalen_nakup/actions/runs/30692258676/artifacts/8816145747)
+[`31634319725`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31634319725) measured
+commit `da76b90` on Ubuntu 24.04 with the same standalone production server. Quality/build,
+dependency audit, 18 public Playwright scenarios, container startup/health, and CodeQL pass. Desktop
+Lighthouse is 100 in all four categories on all three runs. Mobile Accessibility, Best Practices,
+SEO, and transfer budgets pass; the strict mobile Performance 100 assertion remains the only failed
+gate. Artifact
+[`9156656165`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31634319725/artifacts/9156656165)
 contains the current-head HTML/JSON reports and has digest
-`sha256:a2c1f28a1ebfa82cc2641d5d4e0fa27ee4e8fba7da7914d4167d70cbf9f6a473`. The strict gate is
+`sha256:f08155be7ce667ab8f523d1271033838e0998b16fcb207f76e5429838dce400f`. The strict gate is
 intentionally retained; no mobile Performance 100 release claim is made.
 
 | Route              | Mobile Performance runs | Median | A11y | Best | SEO |
 | ------------------ | ----------------------- | -----: | ---: | ---: | --: |
-| `/sl`              | 99, 99, 98              |     99 |  100 |  100 | 100 |
-| `/sl/pricing`      | 98, 98, 98              |     98 |  100 |  100 | 100 |
-| `/sl/how-it-works` | 98, 97, 99              |     98 |  100 |  100 | 100 |
-| `/sl/sign-in`      | 99, 98, 99              |     99 |  100 |  100 | 100 |
+| `/sl`              | 99, 97, 98              |     98 |  100 |  100 | 100 |
+| `/sl/pricing`      | 97, 97, 99              |     97 |  100 |  100 | 100 |
+| `/sl/how-it-works` | 97, 99, 99              |     99 |  100 |  100 | 100 |
+| `/sl/sign-in`      | 97, 97, 98              |     97 |  100 |  100 | 100 |
 
 This current-head run confirms the residual issue is reproducible on clean Linux and is not a
-desktop, accessibility, SEO, or transfer-budget regression. The public Web Vitals client now loads
-only after the first 30 seconds when telemetry is configured; service-worker registration and nonce
-CSP remain in the initial document. No Lighthouse 100 release claim is made while this mobile gate
-remains open.
+desktop, accessibility, SEO, or transfer-budget regression. The inline generated stylesheet removes
+the external render-blocking CSS request; its generator runs in the web prebuild/predev hooks. The
+public Web Vitals client now loads only after the first 30 seconds when telemetry is configured;
+service-worker registration and nonce CSP remain in the initial document. No Lighthouse 100 release
+claim is made while this mobile gate remains open.
 
 ## Latest clean Ubuntu evidence (45bbffc)
 
