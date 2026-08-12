@@ -42,6 +42,22 @@ public Web Vitals client now loads only after the first 30 seconds when telemetr
 service-worker registration and nonce CSP remain in the initial document. No Lighthouse 100 release
 claim is made while this mobile gate remains open.
 
+## Accepted Webpack runtime optimization (`1c41642`)
+
+The production build now uses `next build --webpack` instead of the default Turbopack build. On the
+same local standalone page, this reduced the initial script transfer from approximately 153 KB to
+129 KB and the initial script count from 10 to 5. The change preserves the generated nonce
+stylesheet and did not alter the public HTML behavior.
+
+GitHub Actions run
+[`31640940677`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31640940677) confirms
+quality/build, dependency audit, containers, and all 18 public Playwright scenarios. Desktop
+Lighthouse remains 100 in every category. Mobile Performance was 99 on all three runs for each
+public route, so the strict 100 gate remains open; Accessibility, Best Practices, SEO, and transfer
+budgets pass. The reports are in artifact
+[`9159087180`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31640940677/artifacts/9159087180)
+with ZIP digest `sha256:008834322d7d85edc89997b0894f8a90ac410c1fdc405a717681db5a8d210ebe`.
+
 ## Rejected below-fold deferral experiment (`be3dbe3`)
 
 GitHub Actions run

@@ -15,6 +15,21 @@ Artifact `9156656165` is retained for the current-head reports; its ZIP digest i
 `sha256:f08155be7ce667ab8f523d1271033838e0998b16fcb207f76e5429838dce400f`. The strict mobile gate
 remains intentionally enforced and is the only failed CI assertion.
 
+## 2026-08-12 Webpack production-build optimization (`1c41642`)
+
+| Command or gate                          | Result | Evidence                                                                  |
+| ---------------------------------------- | ------ | ------------------------------------------------------------------------- |
+| Webpack production build                 | Pass   | `next build --webpack` completed in the quality job of run `31640940677`. |
+| Dependency audit                         | Pass   | Run `31640940677`, no production vulnerabilities reported.                |
+| Public Playwright E2E                    | Pass   | Run `31640940677`, all 18 desktop/mobile scenarios passed.                |
+| Container build/startup/health           | Pass   | Run `31640940677`, container job completed successfully.                  |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `9159087180`.          |
+| Public Lighthouse mobile Performance 100 | Open   | All route medians are 99; other categories and budgets pass.              |
+
+The Webpack build reduced local initial script transfer to approximately 129 KB from approximately
+153 KB without changing the CSP, PWA, accessibility, or public E2E behavior. The artifact ZIP digest
+is `sha256:008834322d7d85edc89997b0894f8a90ac410c1fdc405a717681db5a8d210ebe`.
+
 ## 2026-08-12 rejected below-fold deferral experiment (`be3dbe3`)
 
 | Command or gate                          | Result | Evidence                                                         |

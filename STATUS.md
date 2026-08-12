@@ -123,6 +123,13 @@ Updated: 2026-08-12
   dependency audit, 18 public E2E scenarios, containers, and desktop Lighthouse pass, but mobile
   Performance regressed to medians 96, 97, 96, and 99. It was reverted in `21fdbd3`; artifact
   `9158512173` is retained and the strict 100 gate remains open.
+- The production build now uses Webpack (`1c41642`), reducing local initial script transfer from
+  approximately 153 KB to 129 KB. Run
+  [`31640940677`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31640940677) verifies
+  quality/build, audit, containers, 18 public E2E scenarios, and CodeQL; desktop Lighthouse is 100
+  in every category and mobile Performance medians are 99 on all four routes. The strict 100 gate
+  remains open, while the separate LCP containment follow-up (`3558660`) was reverted in `caf5b34`
+  after run `31642081563` showed no consistent gain.
 
 ## In progress
 
