@@ -48,7 +48,7 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
       <p className="eyebrow">Closed beta</p>
       <h1 className="section-heading mt-5">{t("title")}</h1>
       <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600">{t("description")}</p>
-      <div className="below-fold mt-12 grid gap-5 lg:grid-cols-3">
+      <div className="mt-12 grid gap-5 lg:grid-cols-3">
         {plans.map(([key, name, description, features], index) => (
           <article
             className={`card flex flex-col p-7 ${index === 1 ? "border-[#0f766e] ring-2 ring-[#0f766e]/15" : ""}`}
@@ -101,20 +101,18 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
             : `Annual prices: Starter €${pricing.starter.annual}, Pro €${pricing.pro.annual}, Business €${pricing.business.annual}. Final totals and taxes always appear in Lemon Squeezy checkout.`}
         </p>
       ) : (
-        <div className="below-fold">
-          <WaitlistForm
-            locale={locale === "en" ? "en" : "sl"}
-            labels={{
-              title: t("waitlistTitle"),
-              email: t("email"),
-              submit: t("submit"),
-              privacy: t("privacy"),
-              success: t("success"),
-              duplicate: t("duplicate"),
-              error: t("error"),
-            }}
-          />
-        </div>
+        <WaitlistForm
+          locale={locale === "en" ? "en" : "sl"}
+          labels={{
+            title: t("waitlistTitle"),
+            email: t("email"),
+            submit: t("submit"),
+            privacy: t("privacy"),
+            success: t("success"),
+            duplicate: t("duplicate"),
+            error: t("error"),
+          }}
+        />
       )}
     </main>
   );
