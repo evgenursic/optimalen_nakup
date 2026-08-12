@@ -28,7 +28,9 @@ export default async function SignInPage({ params }: { params: Promise<{ locale:
       <div>
         <p className="eyebrow">Secure workspace</p>
         <h1 className="section-heading mt-5">{t("title")}</h1>
-        <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">{t("description")}</p>
+        <p className="lcp-candidate mt-6 max-w-xl text-lg leading-8 text-slate-600">
+          {t("description")}
+        </p>
       </div>
       <div className="lg:justify-self-end">
         {configured ? (

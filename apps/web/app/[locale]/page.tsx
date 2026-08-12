@@ -55,7 +55,9 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
             <h1 className="mt-5 max-w-3xl text-[clamp(3rem,7vw,5.7rem)] leading-[0.94] font-extrabold tracking-[-0.06em] text-[#0b1f33]">
               {hero("title")}
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">{hero("description")}</p>
+            <p className="lcp-candidate mt-7 max-w-2xl text-lg leading-8 text-slate-600">
+              {hero("description")}
+            </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href={localizedHref(locale, "/sign-in")} className="button button-primary">
                 {hero("primary")}
