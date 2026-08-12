@@ -113,6 +113,11 @@ Updated: 2026-08-12
   dependency audit, 18 public E2E scenarios, containers, and CodeQL pass; desktop Lighthouse is 100
   in every category. Mobile medians are 98, 97, 99, and 97; artifact `9156656165` is retained with
   digest `sha256:f08155be7ce667ab8f523d1271033838e0998b16fcb207f76e5429838dce400f`.
+- A bounded `contain: layout paint` public-section experiment (`b56a308`) was validated by run
+  [`31635807214`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31635807214): quality,
+  dependency audit, 18 public E2E scenarios, and containers pass, but mobile Performance remains
+  variable at medians 98, 99, 97, and 97. It was reverted in `c2b3e47`; the strict 100 gate remains
+  open and no Lighthouse 100 claim is made.
 
 ## In progress
 

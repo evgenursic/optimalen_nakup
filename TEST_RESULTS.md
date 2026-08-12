@@ -15,6 +15,21 @@ Artifact `9156656165` is retained for the current-head reports; its ZIP digest i
 `sha256:f08155be7ce667ab8f523d1271033838e0998b16fcb207f76e5429838dce400f`. The strict mobile gate
 remains intentionally enforced and is the only failed CI assertion.
 
+## 2026-08-12 rejected performance experiment (`b56a308`)
+
+| Command or gate                          | Result | Evidence                                                         |
+| ---------------------------------------- | ------ | ---------------------------------------------------------------- |
+| GitHub quality/production build          | Pass   | Run `31635807214`, quality job and dependency audit passed.      |
+| Public Playwright E2E                    | Pass   | Run `31635807214`, all 18 desktop/mobile scenarios passed.       |
+| Container build/startup/health           | Pass   | Run `31635807214`, container job completed successfully.         |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `9157204112`. |
+| Public Lighthouse mobile Performance 100 | Open   | Medians 98/99/97/97; no material improvement over the baseline.  |
+
+The experiment added `contain: layout paint` to independent public sections. It preserved the
+accessibility tree and axe checks, but the variable mobile score did not justify the extra CSS
+complexity, so it was reverted in `c2b3e47`. The artifact ZIP digest is
+`sha256:493c4f761a3bdd8dde3ca41b844b8550199943e12422e9ae84442ea547478e5d`.
+
 ## 2026-08-01 previous current-head CI evidence (`a0b3de3`)
 
 | Command or gate                          | Result | Evidence                                                         |

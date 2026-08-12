@@ -42,6 +42,19 @@ public Web Vitals client now loads only after the first 30 seconds when telemetr
 service-worker registration and nonce CSP remain in the initial document. No Lighthouse 100 release
 claim is made while this mobile gate remains open.
 
+## Rejected section-containment experiment (`b56a308`)
+
+GitHub Actions run
+[`31635807214`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31635807214) tested
+`contain: layout paint` on independent public sections. Quality/build, dependency audit, all 18
+public Playwright scenarios, and container startup/health passed. Desktop Lighthouse remained 100 in
+every category. Mobile Performance values were `98, 99, 97` on `/sl`, `97, 99, 99` on `/sl/pricing`,
+`97, 97, 97` on `/sl/how-it-works`, and `97, 97, 99` on `/sl/sign-in` (medians 98/99/97/97). The
+experiment therefore did not materially improve the strict mobile gate and was reverted in
+`c2b3e47`; its reports remain in artifact
+[`9157204112`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31635807214/artifacts/9157204112)
+with ZIP digest `sha256:493c4f761a3bdd8dde3ca41b844b8550199943e12422e9ae84442ea547478e5d`.
+
 ## Latest clean Ubuntu evidence (45bbffc)
 
 GitHub Actions run
