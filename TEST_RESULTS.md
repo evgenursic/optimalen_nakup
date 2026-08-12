@@ -9,6 +9,7 @@
 | Container build/startup/health           | Pass   | Run `31647693574`; Compose and observability checks passed.             |
 | CodeQL                                   | Pass   | Run `31647693576` for the same source commit.                           |
 | Local `corepack pnpm verify` on revert   | Pass   | Formatting, lint, strict types, 58 tests, and 9 production builds.      |
+| Local Playwright E2E on revert           | Pass   | `corepack pnpm test:e2e`; all 18 desktop/mobile scenarios passed.       |
 | Public Lighthouse desktop                | Open   | `/sl` values 99/100/99; other routes passed their category assertions.  |
 | Public Lighthouse mobile Performance 100 | Open   | Values 97/98/99, 97/98/98, 97/98/98, and 98/99/98 by route.             |
 
