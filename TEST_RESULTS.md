@@ -18,6 +18,21 @@ It preserved all public E2E behavior but did not improve the mobile gate and int
 score variability, so it was reverted in `4fc6058`. Artifact `9161583646` has ZIP digest
 `sha256:46da05dd5560143568ae50336808cd6eb0d1c510daf99342eecce6a4c82b1d26`.
 
+## 2026-08-13 stable-head CI evidence (`8c4bec4`)
+
+| Command or gate                          | Result | Evidence                                                                |
+| ---------------------------------------- | ------ | ----------------------------------------------------------------------- |
+| GitHub quality/production build          | Pass   | Run `31648571304`; formatting, lint, strict types, tests, audit, build. |
+| Public Playwright E2E                    | Pass   | Run `31648571304`; all 18 desktop/mobile scenarios passed.              |
+| Container build/startup/health           | Pass   | Run `31648571304`; Compose and observability checks passed.             |
+| CodeQL                                   | Pass   | Run `31648571336` for the same source.                                  |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `9161880420`.        |
+| Public Lighthouse mobile Performance 100 | Open   | Medians 98/98/98/99; other categories and budgets pass.                 |
+
+The report artifact ZIP digest is
+`sha256:6521cd64f416bd909c8e265e3537f16970a8eff9d865563c1f99b2e9a5d61891`; the strict mobile
+Performance assertion remains intentionally enforced.
+
 ## 2026-08-12 redirect-allowlist CI evidence (`56d4fb9`)
 
 | Command or gate                          | Result | Evidence                                                                |

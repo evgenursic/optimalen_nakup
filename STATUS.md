@@ -52,6 +52,12 @@ Updated: 2026-08-13
 - A clean Ubuntu RSC below-fold streaming experiment (`83d4cae`) passed build, container, CodeQL,
   and all 18 public E2E scenarios but did not improve mobile Lighthouse and reduced desktop `/sl`
   stability; it was reverted in `4fc6058`. The strict mobile Performance 100 gate remains open.
+- Stable-head CI run
+  [`31648571304`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31648571304) passes
+  quality/build, Playwright, containers, and CodeQL (`31648571336`). Desktop Lighthouse is 100 in
+  every category; mobile Performance medians are 98/98/98/99, so the strict mobile gate is still
+  open. Artifact `9161880420` is retained with digest
+  `sha256:6521cd64f416bd909c8e265e3537f16970a8eff9d865563c1f99b2e9a5d61891`.
 - The authenticated surface now includes workspace bootstrap/switching, natural-language intake,
   explicit filter confirmation, live progress, sortable and paginated responsive results, dynamic
   category attributes, evidence and score inspection, pinning, four-offer comparison, formula-safe

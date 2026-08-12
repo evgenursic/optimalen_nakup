@@ -32,6 +32,23 @@ contains the 24 reports and has ZIP digest
 
 The strict mobile Performance 100 assertion remains open; no Lighthouse 100 release claim is made.
 
+## Latest stable-head CI evidence (`8c4bec4`)
+
+GitHub Actions run
+[`31648571304`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31648571304) measured the
+reverted stable landing page on Ubuntu 24.04. Quality/build, dependency audit, all 18 public
+Playwright scenarios, container startup/health, and CodeQL
+[`31648571336`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31648571336) passed.
+Desktop Lighthouse passed all four categories on all three runs. Mobile Accessibility, Best
+Practices, SEO, and transfer budgets passed; Performance runs were `99, 96, 98` on `/sl`,
+`98, 98, 99` on `/sl/pricing`, `98, 98, 99` on `/sl/how-it-works`, and `98, 99, 99` on `/sl/sign-in`
+(medians 98/98/98/99). Artifact
+[`9161880420`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31648571304/artifacts/9161880420)
+contains the 24 reports and has ZIP digest
+`sha256:6521cd64f416bd909c8e265e3537f16970a8eff9d865563c1f99b2e9a5d61891`.
+
+The strict mobile Performance 100 assertion remains open and no threshold was weakened.
+
 ## Latest security-head CI evidence (`56d4fb9`)
 
 GitHub Actions run
