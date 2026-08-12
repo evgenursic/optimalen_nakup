@@ -185,6 +185,13 @@ select {
   box-shadow: var(--shadow-sm);
 }
 
+/* Keep below-the-fold sections out of the initial layout/paint work while
+ * retaining their full content and reserving space for stable scrolling. */
+.below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 720px;
+}
+
 .section-heading {
   max-width: 44rem;
   margin: 0;
