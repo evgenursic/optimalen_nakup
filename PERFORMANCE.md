@@ -14,6 +14,24 @@ Updated: 2026-08-12
 The Lighthouse configs assert both category scores and transfer-size budgets. A category score
 cannot hide a budget overrun.
 
+## Latest security-head CI evidence (`56d4fb9`)
+
+GitHub Actions run
+[`31645543065`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31645543065) measured the
+redirect source-allowlist hardening on Ubuntu 24.04. Quality/build, dependency audit, 18 public
+Playwright scenarios, container startup/health, and CodeQL
+[`31645543098`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31645543098) passed.
+Desktop Lighthouse remained 100 in Performance, Accessibility, Best Practices, and SEO on all four
+routes. Mobile Accessibility, Best Practices, SEO, and transfer budgets passed; the strict mobile
+Performance 100 assertion remains open with medians 97/98/98/98 for `/sl`, `/sl/pricing`,
+`/sl/how-it-works`, and `/sl/sign-in`. Artifact
+[`9160851515`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31645543065/artifacts/9160851515)
+contains all 24 reports and has digest
+`sha256:eda67620a40aeae17a75c7d26a99a87222b545662a6221ba13b453418c74529f`.
+
+The source-allowlist change does not claim a performance improvement; it closes a redirect
+validation gap while preserving the existing release gate.
+
 ## Latest current-head evidence (da76b90)
 
 GitHub Actions run

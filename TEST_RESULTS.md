@@ -1,5 +1,20 @@
 # Test results
 
+## 2026-08-12 redirect-allowlist CI evidence (`56d4fb9`)
+
+| Command or gate                          | Result | Evidence                                                                |
+| ---------------------------------------- | ------ | ----------------------------------------------------------------------- |
+| GitHub quality/production build          | Pass   | Run `31645543065`; formatting, lint, strict types, tests, audit, build. |
+| Public Playwright E2E                    | Pass   | Run `31645543065`; all 18 desktop/mobile scenarios passed.              |
+| Container build/startup/health           | Pass   | Run `31645543065`; Compose and observability checks passed.             |
+| CodeQL                                   | Pass   | Run `31645543098` for the same commit.                                  |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `9160851515`.        |
+| Public Lighthouse mobile Performance 100 | Open   | Medians 97/98/98/98; other categories and budgets pass.                 |
+
+The Lighthouse artifact digest is
+`sha256:eda67620a40aeae17a75c7d26a99a87222b545662a6221ba13b453418c74529f`. The only failed CI
+assertion is the intentionally strict mobile Performance 100 gate; no threshold was weakened.
+
 ## 2026-08-12 source-policy recheck
 
 | Check                           | Result        | Evidence                                                                                                                    |

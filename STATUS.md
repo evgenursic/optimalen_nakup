@@ -33,6 +33,11 @@ Updated: 2026-08-12
   current terms at `/cms/63`, and Big Bang robots and current terms at `/pogoji-poslovanja/`. Stale
   terms paths were removed from the manifests. All three adapters remain conditional; this technical
   check does not replace owner/legal activation.
+- Latest security-head CI run
+  [`31645543065`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31645543065) passes
+  quality/build, dependency audit, 18 public Playwright scenarios, containers, and CodeQL
+  (`31645543098`). Desktop Lighthouse remains 100 in every category; mobile medians are 97, 98, 98,
+  and 98, so the strict mobile Performance 100 gate remains open.
 - Official OpenAI documentation was reviewed for the Responses API and the configured
   `gpt-5.6-luna`, `gpt-5.6-terra`, and `gpt-5.6-sol` routing. Live API calls remain unverified until
   a project key and budget are configured.
