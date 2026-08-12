@@ -32,6 +32,25 @@ contains the 24 reports and has ZIP digest
 
 The strict mobile Performance 100 assertion remains open; no Lighthouse 100 release claim is made.
 
+## Latest hero-rendering optimization (`f96adb9`)
+
+GitHub Actions run
+[`31649694061`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31649694061) measured the
+hero glow change on Ubuntu 24.04. The decorative `blur-3xl` filter was replaced with an equivalent
+radial gradient, removing a filter-heavy first-viewport effect without changing the layout or
+content. Quality/build, dependency audit, all 18 public Playwright scenarios, container
+startup/health, and CodeQL
+[`31649694038`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31649694038) passed.
+Desktop Lighthouse passed all categories. Mobile Performance values were `99, 98, 98` on `/sl`,
+`98, 97, 99` on `/sl/pricing`, `98, 98, 98` on `/sl/how-it-works`, and `98, 98, 99` on `/sl/sign-in`
+(medians 98/98/98/98); all other mobile categories and transfer budgets passed. Artifact
+[`9162304050`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31649694061/artifacts/9162304050)
+contains the 24 reports and has ZIP digest
+`sha256:280e76f2d8bde6da05cec88a2718082c4ddd1dbc3d748d24778a41ce9197448b`.
+
+This is a small first-viewport optimization, not a claim of Lighthouse 100. The strict mobile
+Performance assertion remains enforced.
+
 ## Latest stable-head CI evidence (`8c4bec4`)
 
 GitHub Actions run

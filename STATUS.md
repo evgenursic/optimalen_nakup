@@ -58,6 +58,11 @@ Updated: 2026-08-13
   every category; mobile Performance medians are 98/98/98/99, so the strict mobile gate is still
   open. Artifact `9161880420` is retained with digest
   `sha256:6521cd64f416bd909c8e265e3537f16970a8eff9d865563c1f99b2e9a5d61891`.
+- The hero-rendering optimization in `f96adb9` replaces the first-viewport blur filter with a radial
+  gradient. CI run
+  [`31649694061`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31649694061) passes
+  quality/build, Playwright, containers, and CodeQL (`31649694038`); desktop Lighthouse is 100 in
+  every category and mobile medians are 98/98/98/98. The strict mobile gate remains open.
 - The authenticated surface now includes workspace bootstrap/switching, natural-language intake,
   explicit filter confirmation, live progress, sortable and paginated responsive results, dynamic
   category attributes, evidence and score inspection, pinning, four-offer comparison, formula-safe

@@ -33,6 +33,21 @@ The report artifact ZIP digest is
 `sha256:6521cd64f416bd909c8e265e3537f16970a8eff9d865563c1f99b2e9a5d61891`; the strict mobile
 Performance assertion remains intentionally enforced.
 
+## 2026-08-13 hero-rendering optimization (`f96adb9`)
+
+| Command or gate                          | Result | Evidence                                                                |
+| ---------------------------------------- | ------ | ----------------------------------------------------------------------- |
+| GitHub quality/production build          | Pass   | Run `31649694061`; formatting, lint, strict types, tests, audit, build. |
+| Public Playwright E2E                    | Pass   | Run `31649694061`; all 18 desktop/mobile scenarios passed.              |
+| Container build/startup/health           | Pass   | Run `31649694061`; Compose and observability checks passed.             |
+| CodeQL                                   | Pass   | Run `31649694038` for the same source.                                  |
+| Public Lighthouse desktop                | Pass   | Three runs per route, all categories 100; artifact `9162304050`.        |
+| Public Lighthouse mobile Performance 100 | Open   | Medians 98/98/98/98; other categories and budgets pass.                 |
+
+The `blur-3xl` decorative hero effect was replaced with a radial gradient. It preserves the visual
+role and public E2E behavior while avoiding a filter-heavy first viewport. Artifact ZIP digest:
+`sha256:280e76f2d8bde6da05cec88a2718082c4ddd1dbc3d748d24778a41ce9197448b`.
+
 ## 2026-08-12 redirect-allowlist CI evidence (`56d4fb9`)
 
 | Command or gate                          | Result | Evidence                                                                |
