@@ -30,7 +30,12 @@ const manifest: SourceManifest = {
   policyReviewExpiresAt: "2026-09-11T22:00:00.000Z",
   policyNotes:
     "2026-08-12 technical review: robots.txt redirects to the Slovenian policy file and advertises /rabljeno/sitemap.xml while blocking /rabljeno/api. No terms URL is published in the manifest; production activation still requires owner/legal approval.",
-  allowedPathPrefixes: ["/robots.txt", "/rabljeno/sitemap.xml", "/rabljeno/iskanje/podrobnosti/"],
+  allowedPathPrefixes: [
+    "/robots.txt",
+    "/robots_sl.txt",
+    "/rabljeno/sitemap.xml",
+    "/rabljeno/iskanje/podrobnosti/",
+  ],
   forbiddenPathPrefixes: ["/rabljeno/api", "/api", "/typo3"],
   minimumDelayMs: 2_500,
   maximumConcurrency: 1,

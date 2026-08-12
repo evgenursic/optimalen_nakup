@@ -176,6 +176,8 @@ export class SourceRuntime {
       signal: this.options.signal,
       maximumBytes,
       timeoutMs: 20_000,
+      validateRedirect: (redirectUrl) =>
+        assertSourceUrlAllowed(this.options.manifest, redirectUrl, this.now()),
       headers: Object.fromEntries(new Headers(init?.headers).entries()),
     });
     const text = result.text();
@@ -202,6 +204,11 @@ export class SourceRuntime {
       maximumBytes: 256 * 1024,
       timeoutMs: 10_000,
       allowedContentTypes: ["text/plain"],
+      validateRedirect: (redirectUrl) => {
+        if (redirectUrl.origin !== this.options.manifest.baseUrl.origin) {
+          throw new SourceBlockedError("robots.txt redirected outside the source origin");
+        }
+      },
     });
     if (result.status < 200 || result.status >= 300) {
       throw new SourceBlockedError(`robots.txt returned HTTP ${result.status}`);

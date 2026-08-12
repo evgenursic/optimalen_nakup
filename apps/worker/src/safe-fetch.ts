@@ -21,6 +21,7 @@ export interface SecureFetchOptions {
   timeoutMs?: number;
   allowedContentTypes?: string[];
   resolver?: HostResolver;
+  validateRedirect?(redirectUrl: URL, fromUrl: URL): void;
 }
 
 export interface SecureFetchResult {
@@ -108,6 +109,12 @@ function validateUrl(url: URL): void {
   ) {
     throw new SecureFetchError(`Blocked URL: ${url.toString()}`, "BLOCKED_TARGET");
   }
+}
+
+export function resolveRedirectUrl(currentUrl: URL, location: string): URL {
+  const redirectUrl = new URL(location, currentUrl);
+  validateUrl(redirectUrl);
+  return redirectUrl;
 }
 
 function normalizeHeaders(
@@ -252,7 +259,9 @@ export async function secureFetch(
     if (redirectCount === maximumRedirects) {
       throw new SecureFetchError("Redirect limit exceeded", "REDIRECT_LIMIT");
     }
-    currentUrl = new URL(result.location, currentUrl);
+    const redirectUrl = resolveRedirectUrl(currentUrl, result.location);
+    options.validateRedirect?.(redirectUrl, currentUrl);
+    currentUrl = redirectUrl;
   }
   throw new SecureFetchError("Redirect limit exceeded", "REDIRECT_LIMIT");
 }

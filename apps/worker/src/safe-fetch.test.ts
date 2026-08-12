@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { resolvePublicAddresses } from "./safe-fetch.js";
+import { resolvePublicAddresses, resolveRedirectUrl } from "./safe-fetch.js";
 
 describe("resolvePublicAddresses", () => {
   it("rejects every target when any DNS result is private", async () => {
@@ -21,5 +21,16 @@ describe("resolvePublicAddresses", () => {
         { address: "93.184.216.34", family: 4 },
       ]),
     ).rejects.toThrow("Blocked host");
+  });
+});
+
+describe("redirect validation", () => {
+  it("resolves relative redirects without allowing URL validation to be skipped", () => {
+    expect(
+      resolveRedirectUrl(new URL("https://source.example/catalog"), "/robots.txt").toString(),
+    ).toBe("https://source.example/robots.txt");
+    expect(() =>
+      resolveRedirectUrl(new URL("https://source.example/catalog"), "file:///secret"),
+    ).toThrow("Blocked URL");
   });
 });

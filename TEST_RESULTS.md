@@ -8,7 +8,11 @@
 | Enaa `robots.txt` and terms     | Pass          | HTTP 200 robots; `/sitemap` advertised; current terms URL `/cms/63` returns HTTP 200; stale `/splosni-pogoji` returned 404. |
 | Big Bang `robots.txt` and terms | Pass          | HTTP 200 robots; `/sitemap.xml` advertised; current terms URL `/pogoji-poslovanja/` returns HTTP 200.                       |
 | Adapter policy activation       | Not performed | All three manifests remain `conditional`; owner/legal approval is still required.                                           |
-| Worker adapter tests            | Pass          | `corepack pnpm --filter @optimalen-nakup/worker test`: 7 files, 17 tests.                                                   |
+| Worker adapter tests            | Pass          | `corepack pnpm --filter @optimalen-nakup/worker test`: 7 files, 18 tests.                                                   |
+
+The worker security tests also cover redirect URL validation; the full local `corepack pnpm verify`
+run passed after this change (format, lint, strict typecheck, 16 workspace test tasks, 13 root
+Convex/integration tests, and all 9 production builds).
 
 The network checks were read-only and were not treated as permission to enable live crawling.
 
