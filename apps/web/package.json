@@ -5,7 +5,7 @@
   "scripts": {
     "prebuild": "node scripts/generate-styles.mjs",
     "predev": "node scripts/generate-styles.mjs",
-    "build": "next build",
+    "build": "next build --webpack",
     "dev": "next dev",
     "lint": "eslint . --max-warnings=0",
     "start": "node scripts/start-standalone.mjs",
