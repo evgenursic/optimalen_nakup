@@ -79,6 +79,9 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <head>
         <link rel="preload" href="/styles.generated.css" as="style" />
+        {/* The generated stylesheet is intentionally external: inlining it duplicates the full
+            CSS in the React Flight payload and adds measurable mobile main-thread work. */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link rel="stylesheet" href="/styles.generated.css" />
       </head>
       <body>
