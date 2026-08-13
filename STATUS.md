@@ -38,6 +38,11 @@ Updated: 2026-08-13
   medians. The PR merge rerun
   [`31663156305`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31663156305) keeps all
   non-Lighthouse jobs green but remains open on noisy mobile Lighthouse samples.
+- Documentation-head push run
+  [`31663733513`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31663733513) passes
+  quality/build, containers, and all 18 public E2E scenarios. Its desktop Lighthouse medians are
+  1.00, but mobile medians are 0.99 on `/sl`, `/sl/pricing`, and `/sl/how-it-works`; the strict gate
+  therefore remains open. This is recorded as runner variance, not hidden by changing the threshold.
 
 - The nonce-propagating public SSR change in `47dcb31` passed quality/build, dependency audit,
   container startup/health, all 18 public Playwright scenarios, desktop Lighthouse, and CodeQL

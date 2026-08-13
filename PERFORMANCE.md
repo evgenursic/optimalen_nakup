@@ -25,6 +25,11 @@ The PR merge rerun `31663156305` remains the release variance blocker: its non-L
 but its independently sampled mobile run does not satisfy the same strict median assertion. No
 threshold was lowered and no per-sample 100 claim is made.
 
+The subsequent documentation-head push run `31663733513` again passes quality/build, containers, and
+public Playwright. Its desktop medians remain 1.00; mobile medians are 0.99 for `/sl`,
+`/sl/pricing`, and `/sl/how-it-works`, while `/sl/sign-in` is 1.00. The explicit gate remains strict
+and open because the same source is not reproducibly green across runner contexts.
+
 ## 2026-08-13 median-gate follow-up (`0a9202e`)
 
 The repository now calculates the required Lighthouse medians directly from the 12 mobile and 12

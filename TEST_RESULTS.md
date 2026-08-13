@@ -28,6 +28,10 @@ The push artifact ZIP digest is
 `sha256:3b8d02132adf9bfa159a3fdb1eea809e45f0f738c912b3125bbd939b78471729`. This is a median gate
 result; individual noisy samples below 1.00 are not represented as a universal 100 claim.
 
+The subsequent documentation-head push run `31663733513` also passes quality/build, containers, and
+all 18 public Playwright scenarios. Its desktop Lighthouse medians are 1.00, while mobile medians
+are 0.99 on `/sl`, `/sl/pricing`, and `/sl/how-it-works`; the strict public gate remains open.
+
 ## 2026-08-13 explicit public Lighthouse median gate (`0a9202e`)
 
 | Gate                       | Result | Evidence                                                                 |

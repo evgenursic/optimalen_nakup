@@ -55,3 +55,6 @@ must not be reported as verified until their exact smoke tests pass.
 - Revert push run `31663154102` passes the exact three-run public median gate, while PR merge run
   `31663156305` still fails its independent noisy mobile sample set. The draft PR therefore remains
   open until the same source is reproducibly green in the merge context; no threshold is weakened.
+- Documentation-head push run `31663733513` confirms the variance persists: mobile medians are 0.99
+  on `/sl`, `/sl/pricing`, and `/sl/how-it-works`, despite green quality/build, containers, and
+  Playwright. The exact-1.00 gate remains unchanged.
