@@ -1,5 +1,28 @@
 # Test results
 
+## 2026-08-13 local verification after nonce-CSP change
+
+`corepack pnpm verify` passed on the current working tree: formatting, lint, strict TypeScript,
+workspace/root tests, and all nine production builds completed successfully. The Windows machine
+uses Node `24.19.0` while the repository support range is Node 22, so pnpm emitted the expected
+engine warning; the authoritative CI run uses Node `22.18.0` and also passed.
+
+## 2026-08-13 nonce-CSP CI evidence (`47dcb31`)
+
+| Command or gate                          | Result | Evidence                                                                |
+| ---------------------------------------- | ------ | ----------------------------------------------------------------------- |
+| GitHub quality/production build          | Pass   | Run `31656269642`; formatting, lint, strict types, tests, audit, build. |
+| Public Playwright E2E                    | Pass   | Run `31656269642`; all 18 desktop/mobile scenarios passed.              |
+| Container build/startup/health           | Pass   | Run `31656269642`; Compose and observability checks passed.             |
+| CodeQL                                   | Pass   | Run `31656269578` for the same source.                                  |
+| Public Lighthouse desktop                | Pass   | Three runs per route; all category assertions passed.                   |
+| Public Lighthouse mobile Performance 100 | Open   | Medians 98/98/98/98; other categories and budgets passed.               |
+
+The request-scoped CSP nonce is now propagated from the proxy to public inline style and runtime
+scripts. This removes the fragile build-specific hash list that failed on clean CI builds without
+loosening script policy. Artifact `9164652577` has ZIP digest
+`sha256:5d50de7f0d1747b84b33930e9b2d35285fa96cf700e1bfe3cbdbd38575c806a6`.
+
 ## 2026-08-13 rejected RSC streaming experiment (`83d4cae`)
 
 | Command or gate                          | Result | Evidence                                                                |

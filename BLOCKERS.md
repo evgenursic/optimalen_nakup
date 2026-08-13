@@ -36,6 +36,8 @@ must not be reported as verified until their exact smoke tests pass.
   post-correction validation and the approved Phase 2 page skeleton remain open. No further
   mutations are attempted until the endpoint limit resets or the plan is upgraded.
 - Clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer budgets.
-  The latest completed docs-head run `31642878579` reports mobile Performance medians of 99, 99, 97,
-  and 98 across the four public routes; the strict exact-100 gate remains open and the 24-report
-  artifact is retained as `9159800457`.
+  The latest completed run `31656269642` reports mobile Performance medians of 98, 98, 98, and 98
+  across the four public routes; the strict exact-100 gate remains open and the 24-report artifact
+  is retained as `9164652577` (ZIP digest
+  `sha256:5d50de7f0d1747b84b33930e9b2d35285fa96cf700e1bfe3cbdbd38575c806a6`). Desktop Lighthouse,
+  the quality/build job, containers, Playwright, and CodeQL pass.

@@ -14,6 +14,33 @@ Updated: 2026-08-13
 The Lighthouse configs assert both category scores and transfer-size budgets. A category score
 cannot hide a budget overrun.
 
+## Latest nonce-CSP CI evidence (`47dcb31`)
+
+GitHub Actions run
+[`31656269642`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31656269642) verified the
+nonce-propagating public SSR change on Ubuntu 24.04. Quality/build, dependency audit, container
+startup/health, all 18 public Playwright scenarios, and CodeQL
+[`31656269578`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31656269578) passed. The
+change replaces the build-ID-sensitive static script hash allowlist with the request nonce, so the
+public pages keep CSP protection across clean builds; `/sl` and `/sl/how-it-works` are intentionally
+dynamic again because the nonce is request-scoped.
+
+Desktop Lighthouse passed its complete three-run assertion set. Mobile Accessibility, Best
+Practices, SEO, and transfer budgets passed. Mobile Performance remained below the exact-100 gate:
+
+| Route              | Mobile Performance runs | Median |
+| ------------------ | ----------------------- | -----: |
+| `/sl`              | 98, 98, 99              |     98 |
+| `/sl/pricing`      | 98, 97, 98              |     98 |
+| `/sl/how-it-works` | 97, 99, 98              |     98 |
+| `/sl/sign-in`      | 98, 98, 99              |     98 |
+
+Artifact
+[`9164652577`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31656269642/artifacts/9164652577)
+contains the 24 reports and has ZIP digest
+`sha256:5d50de7f0d1747b84b33930e9b2d35285fa96cf700e1bfe3cbdbd38575c806a6`. The strict mobile
+Performance 100 assertion remains enforced; no Lighthouse 100 release claim is made.
+
 ## Rejected RSC below-fold streaming experiment (`83d4cae`)
 
 GitHub Actions run

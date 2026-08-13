@@ -4,6 +4,16 @@ Updated: 2026-08-13
 
 ## Verified
 
+- The nonce-propagating public SSR change in `47dcb31` passed quality/build, dependency audit,
+  container startup/health, all 18 public Playwright scenarios, desktop Lighthouse, and CodeQL
+  (`31656269642`, CodeQL `31656269578`). Mobile Accessibility, Best Practices, SEO, and transfer
+  budgets pass; mobile Performance medians are 98/98/98/98, so the exact-100 mobile gate remains
+  open. Artifact `9164652577` is retained with digest
+  `sha256:5d50de7f0d1747b84b33930e9b2d35285fa96cf700e1bfe3cbdbd38575c806a6`.
+- Public inline scripts and styles receive the request-scoped CSP nonce from the proxy. The public
+  locale and how-it-works pages remain dynamic to preserve nonce correctness across clean builds; no
+  `unsafe-inline` script policy or build-ID hash allowlist was introduced.
+
 - Repository bootstrap committed and pushed to `main`.
 - Development branch `codex/initial-production-build` created and pushed.
 - Draft pull request [#1](https://github.com/evgenursic/optimalen_nakup/pull/1) opened and
