@@ -256,6 +256,14 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
+      - name: Enforce public Lighthouse medians
+        id: lighthouse-median
+        if: always()
+        continue-on-error: true
+        run: >-
+          pnpm lighthouse:assert-public-median lighthouse-reports/public-mobile
+          lighthouse-reports/public-desktop
+
       - name: Show server log
         if:
           always() && (steps.lighthouse-mobile.outcome != 'success' ||
@@ -274,6 +282,8 @@ jobs:
         env:
           DESKTOP_OUTCOME: ${{ steps.lighthouse-desktop.outcome }}
           MOBILE_OUTCOME: ${{ steps.lighthouse-mobile.outcome }}
+          MEDIAN_OUTCOME: ${{ steps.lighthouse-median.outcome }}
         run: |
           test "$MOBILE_OUTCOME" = success
           test "$DESKTOP_OUTCOME" = success
+          test "$MEDIAN_OUTCOME" = success

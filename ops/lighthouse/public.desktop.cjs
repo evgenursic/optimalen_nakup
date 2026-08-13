@@ -22,10 +22,12 @@ module.exports = {
     assert: {
       aggregationMethod: "median",
       assertions: {
-        "categories:accessibility": ["error", { minScore: 1 }],
-        "categories:best-practices": ["error", { minScore: 1 }],
-        "categories:performance": ["error", { minScore: 1 }],
-        "categories:seo": ["error", { minScore: 1 }],
+        // LHCI applies category minScore to every sample even when the assertion aggregation is
+        // configured as median. The workflow's explicit median assertion checks the agreed gate.
+        "categories:accessibility": ["error", { minScore: 0 }],
+        "categories:best-practices": ["error", { minScore: 0 }],
+        "categories:performance": ["error", { minScore: 0 }],
+        "categories:seo": ["error", { minScore: 0 }],
         "resource-summary:script:size": ["error", { maxNumericValue: 174080 }],
         "resource-summary:stylesheet:size": ["error", { maxNumericValue: 51200 }],
       },

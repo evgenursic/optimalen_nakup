@@ -18,6 +18,7 @@
     "lighthouse:authenticated:mobile": "lhci autorun --config=ops/lighthouse/authenticated.mobile.cjs",
     "lighthouse:public:desktop": "lhci autorun --config=ops/lighthouse/public.desktop.cjs",
     "lighthouse:public:mobile": "lhci autorun --config=ops/lighthouse/public.mobile.cjs",
+    "lighthouse:assert-public-median": "node scripts/assert-lighthouse-public-median.mjs",
     "test": "turbo run test && vitest run --config vitest.config.ts",
     "test:e2e": "pnpm --filter @optimalen-nakup/web test:e2e",
     "typecheck": "turbo run typecheck && tsc -p convex/tsconfig.json",
