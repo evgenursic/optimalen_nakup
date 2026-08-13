@@ -1,5 +1,3 @@
-import { existsSync, readFileSync } from "node:fs";
-import path from "node:path";
 import type { Metadata, Viewport } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -12,18 +10,6 @@ import { routing } from "@/i18n/routing";
 
 const runtimeRegistration =
   '(()=>{const e=document.currentScript;const r=()=>{"serviceWorker"in navigator&&navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{})};"loading"===document.readyState?addEventListener("load",r,{once:!0}):r();e?.dataset.telemetry==="enabled"&&setTimeout(()=>{const t=document.createElement("script");t.src="/web-vitals.js";t.async=!0;document.head.append(t)},3e4)})()';
-
-function readGeneratedStyles() {
-  const candidates = [
-    path.join(process.cwd(), "public", "styles.generated.css"),
-    path.join(process.cwd(), "apps", "web", "public", "styles.generated.css"),
-  ];
-  const sourcePath = candidates.find((candidate) => existsSync(candidate));
-  if (!sourcePath) {
-    throw new Error("Generated styles are missing; run the web prebuild step first.");
-  }
-  return readFileSync(sourcePath, "utf8");
-}
 
 export const viewport: Viewport = {
   colorScheme: "light",
@@ -89,11 +75,11 @@ export default async function LocaleLayout({
     process.env.WEB_VITALS_INGEST_SECRET &&
     process.env.WEB_VITALS_INGEST_SECRET.length >= 32,
   );
-  const generatedStyles = readGeneratedStyles();
   return (
     <html lang={locale}>
       <head>
-        <style nonce={nonce} dangerouslySetInnerHTML={{ __html: generatedStyles }} />
+        <link rel="preload" href="/styles.generated.css" as="style" />
+        <link rel="stylesheet" href="/styles.generated.css" />
       </head>
       <body>
         <a className="skip-link" href="#main-content">
