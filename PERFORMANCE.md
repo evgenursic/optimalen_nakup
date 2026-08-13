@@ -30,6 +30,14 @@ public Playwright. Its desktop medians remain 1.00; mobile medians are 0.99 for 
 `/sl/pricing`, and `/sl/how-it-works`, while `/sl/sign-in` is 1.00. The explicit gate remains strict
 and open because the same source is not reproducibly green across runner contexts.
 
+## Rejected deep below-fold containment (`2062ffa`)
+
+The homepage process explainer alone was given `content-visibility: auto` with an intrinsic-size
+estimate. Local production build and 18 E2E/axe scenarios passed, but CI run
+[`31664729904`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31664729904) found a
+serious mobile contrast violation: Axe observed the deferred dark section as white. The experiment
+was reverted in `f956dd6`; no performance result is accepted from an accessibility-failing build.
+
 ## 2026-08-13 median-gate follow-up (`0a9202e`)
 
 The repository now calculates the required Lighthouse medians directly from the 12 mobile and 12

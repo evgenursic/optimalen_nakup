@@ -58,3 +58,6 @@ must not be reported as verified until their exact smoke tests pass.
 - Documentation-head push run `31663733513` confirms the variance persists: mobile medians are 0.99
   on `/sl`, `/sl/pricing`, and `/sl/how-it-works`, despite green quality/build, containers, and
   Playwright. The exact-1.00 gate remains unchanged.
+- The `2062ffa` deep below-fold containment experiment was rejected by CI Axe: `content-visibility`
+  caused a serious mobile contrast false-state on the dark process section. It was reverted in
+  `f956dd6`; accessibility remains a hard gate.

@@ -32,6 +32,19 @@ The subsequent documentation-head push run `31663733513` also passes quality/bui
 all 18 public Playwright scenarios. Its desktop Lighthouse medians are 1.00, while mobile medians
 are 0.99 on `/sl`, `/sl/pricing`, and `/sl/how-it-works`; the strict public gate remains open.
 
+## 2026-08-13 rejected deep below-fold experiment (`2062ffa`)
+
+| Gate                     | Result   | Evidence                                                             |
+| ------------------------ | -------- | -------------------------------------------------------------------- |
+| Local production build   | Pass     | Web production build completed.                                      |
+| Local public Playwright  | Pass     | All 18 desktop/mobile scenarios passed locally.                      |
+| CI quality/build         | Pass     | Run `31664729904`; format, lint, types, tests, audit and build pass. |
+| CI public Playwright/axe | Fail     | Serious mobile contrast violation on `/sl` after deferred rendering. |
+| Lighthouse               | Not used | Experiment failed the accessibility gate first.                      |
+
+The experiment was reverted in `f956dd6` because the accessibility regression outweighed any
+unmeasured layout benefit.
+
 ## 2026-08-13 explicit public Lighthouse median gate (`0a9202e`)
 
 | Gate                       | Result | Evidence                                                                 |

@@ -43,6 +43,11 @@ Updated: 2026-08-13
   quality/build, containers, and all 18 public E2E scenarios. Its desktop Lighthouse medians are
   1.00, but mobile medians are 0.99 on `/sl`, `/sl/pricing`, and `/sl/how-it-works`; the strict gate
   therefore remains open. This is recorded as runner variance, not hidden by changing the threshold.
+- The targeted deep below-fold `content-visibility` experiment `2062ffa` passed local build/E2E but
+  was rejected by CI run
+  [`31664729904`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31664729904): mobile
+  Axe detected a serious contrast violation because the skipped section was reported with the wrong
+  background. It was reverted in `f956dd6`; no accessibility regression is retained.
 
 - The nonce-propagating public SSR change in `47dcb31` passed quality/build, dependency audit,
   container startup/health, all 18 public Playwright scenarios, desktop Lighthouse, and CodeQL
