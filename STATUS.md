@@ -15,6 +15,10 @@ Updated: 2026-08-13
 - Commit `9444939` adds `contain: layout paint` only to the deep process explainer. It keeps the
   subtree rendered and in the accessibility tree, unlike the rejected `content-visibility` attempt;
   local production build, format check, and all 18 public E2E/axe scenarios pass.
+- Documentation-only head `0eb9104` keeps quality/build, containers, Playwright, and CodeQL green in
+  run `31667135836`, but its independent Lighthouse rerun fails the strict mobile `/sl` median with
+  samples `0.99, 1.00, 0.99`. Artifact `9168489810` is retained with digest
+  `sha256:2b783a7def9ea1967e148632005101c515025d73d5e5bc7b53b007e81b2f0b86`.
 - Latest clean Ubuntu CI run
   [`31658076444`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31658076444) for
   `74ac4f9` passes quality/build, dependency audit, containers, all 18 public Playwright scenarios,
@@ -244,9 +248,11 @@ Updated: 2026-08-13
   No further Figma mutations are attempted until that external limit resets or the plan is upgraded.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
-- The public Lighthouse median-100 gate is green for the latest pull-request run. The authenticated
-  research-results Lighthouse path remains unverified because it requires a deployed Clerk/Convex
-  environment, a dedicated test user, and a completed research job.
+- The accepted source commit's pull-request Lighthouse median-100 gate is green in run
+  `31665236023`, but the later documentation-head rerun `31667135836` is red on mobile `/sl` due to
+  runner variance. The authenticated research-results Lighthouse path also remains unverified
+  because it requires a deployed Clerk/Convex environment, a dedicated test user, and a completed
+  research job.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action

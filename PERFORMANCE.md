@@ -21,6 +21,15 @@ The 24-report artifact is `9167827180` with ZIP digest
 include 0.99 values, so this evidence supports the configured median gate rather than a claim that
 every sample is exactly 100.
 
+## Documentation-head Lighthouse rerun (`0eb9104`)
+
+The documentation-only head reran the same public workflow as
+[`31667135836`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31667135836).
+Quality/build, containers, Playwright, and CodeQL passed, but the strict median assertion failed for
+mobile `/sl`: samples were `0.99, 1.00, 0.99`. The 24-report artifact is `9168489810` with ZIP
+digest `sha256:2b783a7def9ea1967e148632005101c515025d73d5e5bc7b53b007e81b2f0b86`. This is recorded
+as runner variance; the threshold was not weakened and no universal Lighthouse-100 claim is made.
+
 ## Rejected runtime registration externalization (`eb71be3`)
 
 The runtime service-worker/telemetry registration was moved from an inline nonce-bearing script to

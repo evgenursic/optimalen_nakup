@@ -17,6 +17,15 @@ The change isolates only the deep process explainer with `contain: layout paint`
 or hide content from the accessibility tree. Individual mobile Lighthouse samples remain noisy,
 including 0.99 values, and are not reported as universal 100 scores.
 
+## 2026-08-13 documentation-head CI rerun (`0eb9104`)
+
+| Gate                                                 | Result | Evidence                                                                          |
+| ---------------------------------------------------- | ------ | --------------------------------------------------------------------------------- |
+| Quality/build, containers, public Playwright, CodeQL | Pass   | Run `31667135836`; documentation-only head.                                       |
+| Public Lighthouse median gate                        | Open   | Mobile `/sl` samples `0.99, 1.00, 0.99`; assertion failed. Artifact `9168489810`. |
+
+The independent rerun confirms normal runner variance and keeps the exact median policy unchanged.
+
 ## 2026-08-13 rejected runtime registration experiment (`eb71be3`)
 
 | Gate                              | Result | Evidence                                                                   |

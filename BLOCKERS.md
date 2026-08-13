@@ -45,19 +45,20 @@ must not be reported as verified until their exact smoke tests pass.
   deployed Clerk/Convex environment, a dedicated test user, and a completed research job.
 - Source availability was rechecked read-only on 2026-08-13, but legal approval and explicit source
   activation are still required before any live adapter run.
-- The latest pull-request run `31665236023` passes the strict public Lighthouse median-100 gate for
-  both profiles and all four public routes. The remaining Lighthouse blocker is the authenticated
-  research-results route, which still requires deployed Clerk/Convex credentials, a dedicated test
-  user, and a completed research job.
-- Earlier push/merge Lighthouse runs (`31660347514`, `31663156305`, and `31663733513`) showed runner
-  variance on mobile. They are historical evidence; the latest pull-request run `31665236023` is
-  green on the same strict median policy after `9444939`.
+- Source commit `9444939` passed the strict public Lighthouse median-100 gate in run `31665236023`,
+  but the later documentation-head rerun `31667135836` failed mobile `/sl` with samples
+  `0.99, 1.00, 0.99`. The exact threshold remains unchanged; this is an active
+  reproducibility/runner-variance blocker alongside the authenticated research-results route, which
+  still requires deployed Clerk/Convex credentials, a dedicated test user, and a completed research
+  job.
+- Earlier push/merge Lighthouse runs (`31660347514`, `31663156305`, and `31663733513`) also showed
+  runner variance on mobile; the strict threshold remains unchanged.
 - The rejected `eb71be3` runtime-script externalization experiment did not improve that gate: clean
   Ubuntu push run `31662511432` measured 0.99 medians on `/sl` and `/sl/sign-in`. It was reverted in
   `476ade4`; the strict gate remains unchanged.
-- The draft PR remains open because authenticated results, backup/restore, legal/source activation,
-  and production credentials are still incomplete; the public median gate itself is no longer the
-  current blocker.
+- The draft PR remains open because the public median gate is not reproducibly green across the
+  latest head, and authenticated results, backup/restore, legal/source activation, and production
+  credentials are still incomplete.
 - The `2062ffa` deep below-fold containment experiment was rejected by CI Axe: `content-visibility`
   caused a serious mobile contrast false-state on the dark process section. It was reverted in
   `f956dd6`; accessibility remains a hard gate.
