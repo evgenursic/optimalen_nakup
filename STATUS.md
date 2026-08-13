@@ -4,6 +4,17 @@ Updated: 2026-08-13
 
 ## Verified
 
+- Latest pull-request CI run
+  [`31665236023`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31665236023) for
+  `9444939` passes quality/build, dependency audit, containers, all 18 public Playwright scenarios,
+  CodeQL (`31665236009`), and the strict three-run public Lighthouse median gate. Both mobile and
+  desktop medians are 1.00 for Performance, Accessibility, Best Practices, and SEO on all four
+  public routes; individual mobile samples still show normal 0.99 variance. The retained Lighthouse
+  artifact is `9167827180` with digest
+  `sha256:e086916f7e19a75b78de7295630f4611e95982829dc328d3d0fca86ce758fe03`.
+- Commit `9444939` adds `contain: layout paint` only to the deep process explainer. It keeps the
+  subtree rendered and in the accessibility tree, unlike the rejected `content-visibility` attempt;
+  local production build, format check, and all 18 public E2E/axe scenarios pass.
 - Latest clean Ubuntu CI run
   [`31658076444`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31658076444) for
   `74ac4f9` passes quality/build, dependency audit, containers, all 18 public Playwright scenarios,
@@ -233,8 +244,9 @@ Updated: 2026-08-13
   No further Figma mutations are attempted until that external limit resets or the plan is upgraded.
 - Real backup/restore rehearsal, authenticated production E2E, and the authenticated Lighthouse
   result.
-- Mobile Lighthouse Performance 100 remains open; the latest clean Ubuntu medians are 98, 97, 99,
-  and 97 across the four public routes while every other category and transfer budget passes.
+- The public Lighthouse median-100 gate is green for the latest pull-request run. The authenticated
+  research-results Lighthouse path remains unverified because it requires a deployed Clerk/Convex
+  environment, a dedicated test user, and a completed research job.
 - Legal/owner approval and then a bounded live smoke test for each conditional source adapter.
 
 ## Next action

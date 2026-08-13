@@ -1,5 +1,22 @@
 # Test results
 
+## 2026-08-13 accepted deep public-layout isolation (`9444939`)
+
+| Gate                                  | Result | Evidence                                                                                       |
+| ------------------------------------- | ------ | ---------------------------------------------------------------------------------------------- |
+| Local web production build            | Pass   | `corepack pnpm --filter @optimalen-nakup/web build`.                                           |
+| Local format and diff checks          | Pass   | `corepack pnpm format:check`; `git diff --check`.                                              |
+| Local public Playwright/axe           | Pass   | All 18 desktop/mobile scenarios.                                                               |
+| CI quality/build and dependency audit | Pass   | Run `31665236023`.                                                                             |
+| CI containers                         | Pass   | Compose build/startup/health completed in run `31665236023`.                                   |
+| CI public Playwright                  | Pass   | All 18 scenarios in run `31665236023`.                                                         |
+| CodeQL                                | Pass   | Run `31665236009`.                                                                             |
+| Public Lighthouse median gate         | Pass   | Three-run mobile and desktop medians are 1.00 in all categories/routes; artifact `9167827180`. |
+
+The change isolates only the deep process explainer with `contain: layout paint`; it does not defer
+or hide content from the accessibility tree. Individual mobile Lighthouse samples remain noisy,
+including 0.99 values, and are not reported as universal 100 scores.
+
 ## 2026-08-13 rejected runtime registration experiment (`eb71be3`)
 
 | Gate                              | Result | Evidence                                                                   |

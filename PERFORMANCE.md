@@ -1,5 +1,26 @@
 # Performance
 
+## 2026-08-13 accepted deep public-layout isolation (`9444939`)
+
+The homepage process explainer alone now uses `contain: layout paint`. This preserves the complete
+rendered subtree and accessibility tree while isolating deep layout/paint work from the first
+viewport. The change passed local production build, formatting, and all 18 public Playwright/axe
+scenarios.
+
+| Gate                                            | Result | Evidence                                                    |
+| ----------------------------------------------- | ------ | ----------------------------------------------------------- |
+| Quality/build, lint, strict types, tests, audit | Pass   | Pull-request run `31665236023`.                             |
+| Container build/startup/health                  | Pass   | Pull-request run `31665236023`.                             |
+| Public Playwright/axe                           | Pass   | All 18 desktop/mobile scenarios in run `31665236023`.       |
+| CodeQL                                          | Pass   | Run `31665236009`.                                          |
+| Public Lighthouse desktop                       | Pass   | Three-run median 1.00 in every category on all four routes. |
+| Public Lighthouse mobile                        | Pass   | Three-run median 1.00 in every category on all four routes. |
+
+The 24-report artifact is `9167827180` with ZIP digest
+`sha256:e086916f7e19a75b78de7295630f4611e95982829dc328d3d0fca86ce758fe03`. Individual mobile samples
+include 0.99 values, so this evidence supports the configured median gate rather than a claim that
+every sample is exactly 100.
+
 ## Rejected runtime registration externalization (`eb71be3`)
 
 The runtime service-worker/telemetry registration was moved from an inline nonce-bearing script to
