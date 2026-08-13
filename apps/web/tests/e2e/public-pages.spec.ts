@@ -43,6 +43,10 @@ test("nonce CSP permits the closed-beta form to hydrate", async ({ page }) => {
 });
 
 test("PWA worker registers and caches only public static assets", async ({ page, request }) => {
+  const runtimeResponse = await request.get("/runtime-registration.js");
+  expect(runtimeResponse.status()).toBe(200);
+  expect(await runtimeResponse.text()).toContain("serviceWorker");
+
   const workerResponse = await request.get("/sw.js");
   expect(workerResponse.status()).toBe(200);
   const workerSource = await workerResponse.text();
@@ -50,6 +54,7 @@ test("PWA worker registers and caches only public static assets", async ({ page,
   expect(workerSource).not.toContain("navigate");
 
   await page.goto("/sl");
+  await expect(page.locator('script[src="/runtime-registration.js"]')).toHaveAttribute("defer", "");
   const scope = await page.evaluate(async () => (await navigator.serviceWorker.ready).scope);
   expect(new URL(scope).pathname).toBe("/");
 
