@@ -3,6 +3,7 @@ import path from "node:path";
 import type { Metadata, Viewport } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { SiteFooter } from "@/components/site-footer";
@@ -82,6 +83,7 @@ export default async function LocaleLayout({
   }
 
   setRequestLocale(locale);
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   const telemetryConfigured = Boolean(
     process.env.NEXT_PUBLIC_CONVEX_URL &&
     process.env.WEB_VITALS_INGEST_SECRET &&
@@ -91,7 +93,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <head>
-        <style dangerouslySetInnerHTML={{ __html: generatedStyles }} />
+        <style nonce={nonce} dangerouslySetInnerHTML={{ __html: generatedStyles }} />
       </head>
       <body>
         <a className="skip-link" href="#main-content">
@@ -101,6 +103,7 @@ export default async function LocaleLayout({
         {children}
         <SiteFooter locale={locale} />
         <script
+          nonce={nonce}
           data-telemetry={telemetryConfigured ? "enabled" : "disabled"}
           dangerouslySetInnerHTML={{ __html: runtimeRegistration }}
         />
