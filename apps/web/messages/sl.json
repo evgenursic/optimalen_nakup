@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "title": "Optimalen Nakup — preverjene ponudbe brez skritega vpliva",
+    "description": "Evidence-first raziskovalni agent za pregledne, preverljive in nepristranske nakupne odločitve."
+  },
+  "nav": {
+    "howItWorks": "Kako deluje",
+    "pricing": "Cenik",
+    "signIn": "Prijava",
+    "start": "Začni raziskavo",
+    "skip": "Preskoči na vsebino"
+  },
+  "hero": {
+    "eyebrow": "Dokazi pred priporočili",
+    "title": "Manj ugibanja. Boljši nakup.",
+    "description": "Optimalen Nakup preišče dovoljene vire, preveri pomembne podrobnosti in pokaže, zakaj je ponudba vredna vaše pozornosti — ter česa ni bilo mogoče potrditi.",
+    "primary": "Opiši, kaj iščeš",
+    "secondary": "Poglej postopek",
+    "coverage": "Pokritost je vedno prikazana številčno",
+    "neutral": "Brez plačanega organskega razvrščanja",
+    "evidence": "Dokaz za vsako pomembno trditev"
+  },
+  "proof": {
+    "title": "Priporočilo, ki ga lahko preverite",
+    "subtitle": "Vsak rezultat loči potrjene podatke od sklepanja, manjkajočih informacij in konfliktov.",
+    "score": "Ocena ujemanja",
+    "verified": "Preverjeno",
+    "inferred": "Sklepano",
+    "missing": "Ni podatka",
+    "risk": "Glavno tveganje",
+    "riskText": "Zgodovina škod ni navedena v javni ponudbi.",
+    "reason": "Zakaj je izbrano",
+    "reasonText": "Izpolnjuje vse trde zahteve in ima nadpovprečno dokazno pokritost."
+  },
+  "categories": {
+    "title": "Začetne raziskovalne vertikale",
+    "vehicles": "Vozila",
+    "vehiclesText": "Cena, kilometri, oprema, prodajalec, zgodovina in tveganja.",
+    "computers": "Računalniki",
+    "computersText": "Natančen SKU, procesor, grafika, zaslon, garancija in skupna dostavljena cena.",
+    "whiteGoods": "Bela tehnika",
+    "whiteGoodsText": "Dimenzije, energija, hrup, dostava, montaža in odvoz stare naprave."
+  },
+  "process": {
+    "title": "Od želje do dokazljivega izbora",
+    "one": "Povejte, kaj potrebujete",
+    "oneText": "Naravni jezik pretvorimo v zahteve, preference in izključitve.",
+    "two": "Potrdite razumevanje",
+    "twoText": "Pred raziskavo lahko popravite vsak filter in utež.",
+    "three": "Spremljajte preverjanje",
+    "threeText": "V živo vidite vire, pregledane strani, zavrnitve in opozorila.",
+    "four": "Primerjajte brez slepega zaupanja",
+    "fourText": "Odprite dokaz, razčlenitev ocene in neposredno izvorno povezavo."
+  },
+  "pricing": {
+    "title": "Jasni načrti za različno globino raziskave",
+    "description": "Javne cene še niso potrjene. Pridružite se zaprti beti in pomagajte oblikovati pošten model glede na dejanske prihranke časa.",
+    "starter": "Starter",
+    "starterText": "Občasne individualne raziskave in osnovna primerjava.",
+    "pro": "Pro",
+    "proText": "Več virov, globlja verifikacija, monitoring in izvozi.",
+    "business": "Business",
+    "businessText": "Skupni delovni prostori, sodelovanje in višje omejitve.",
+    "cta": "Pridruži se čakalni listi",
+    "configuredLater": "Cena bo objavljena po validaciji ekonomike.",
+    "waitlistTitle": "Pridružite se zaprti beti",
+    "email": "E-poštni naslov",
+    "submit": "Prijavi me",
+    "privacy": "Naslov bomo uporabili samo za obvestila o zaprti beti. Odjavite se lahko kadar koli.",
+    "success": "Hvala — vaše mesto na čakalni listi je zabeleženo.",
+    "duplicate": "Ta naslov je že na čakalni listi.",
+    "error": "Prijave trenutno ni bilo mogoče shraniti. Poskusite znova pozneje."
+  },
+  "auth": {
+    "title": "Vstop v Optimalen Nakup",
+    "description": "Prijava varuje vaše raziskave, shranjena iskanja in delovne prostore.",
+    "notConfigured": "Razvojno okolje še nima Clerk poverilnic. Vnesite jih v varno okoljsko shrambo za aktivacijo prijave."
+  },
+  "footer": {
+    "tagline": "Nepristranska raziskava nakupa z vidnimi dokazi.",
+    "privacy": "Zasebnost",
+    "terms": "Pogoji",
+    "sources": "Politika virov",
+    "legal": "Pravne predloge mora pred objavo pregledati usposobljen pravnik."
+  }
+}

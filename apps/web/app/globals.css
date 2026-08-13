@@ -1,0 +1,413 @@
+@import "tailwindcss";
+
+/* Keep Tailwind's generated theme limited to the semantic palette used by the
+ * application. This preserves every rendered utility while avoiding a full
+ * unused color scale in the critical stylesheet. */
+@theme {
+  --color-*: initial;
+  --color-white: #fff;
+  --color-amber-50: #fffbeb;
+  --color-amber-200: #fee685;
+  --color-amber-700: #b75000;
+  --color-amber-800: #953d00;
+  --color-amber-900: #7b3306;
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-200: #a4f4cf;
+  --color-emerald-700: #007956;
+  --color-emerald-900: #004e3b;
+  --color-red-50: #fef2f2;
+  --color-red-200: #ffcaca;
+  --color-red-700: #bf000f;
+  --color-red-800: #9f0712;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-300: #cad5e2;
+  --color-slate-500: #62748e;
+  --color-slate-600: #45556c;
+  --color-slate-700: #314158;
+  --color-slate-800: #1d293d;
+  --color-slate-900: #0f172b;
+  --color-slate-950: #020618;
+  --color-teal-50: #f0fdfa;
+  --color-teal-600: #009588;
+  --color-teal-700: #00776e;
+  --color-teal-800: #005f5a;
+  --color-teal-900: #0b4f4a;
+}
+
+:root {
+  --color-navy-950: #071522;
+  --color-navy-900: #0b1f33;
+  --color-navy-800: #13334f;
+  --color-navy-700: #1c496c;
+  --color-teal-800: #115e59;
+  --color-teal-700: #0f766e;
+  --color-teal-600: #0d9488;
+  --color-teal-100: #ccfbf1;
+  --color-teal-50: #f0fdfa;
+  --color-slate-950: #0f172a;
+  --color-slate-700: #334155;
+  --color-slate-600: #475569;
+  --color-slate-300: #cbd5e1;
+  --color-slate-200: #e2e8f0;
+  --color-slate-100: #f1f5f9;
+  --color-slate-50: #f8fafc;
+  --color-success: #166534;
+  --color-warning: #92400e;
+  --color-danger: #b91c1c;
+  --color-focus: #0284c7;
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.08);
+  --shadow-md: 0 8px 24px rgb(15 23 42 / 0.1);
+  --shadow-lg: 0 18px 48px rgb(15 23 42 / 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-slate-50);
+  color: var(--color-slate-950);
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  translate: 0 -200%;
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--color-navy-900);
+  padding: 0.75rem 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+.skip-link:focus {
+  translate: 0;
+}
+
+.container {
+  width: min(100% - 2rem, 76rem);
+  margin-inline: auto;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  padding: 0.65rem 1rem;
+  font-weight: 700;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button-primary {
+  background: var(--color-teal-700);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.button-primary:hover {
+  background: var(--color-teal-800);
+}
+
+.button-secondary {
+  border-color: var(--color-slate-300);
+  background: white;
+  color: var(--color-navy-900);
+}
+
+.button-secondary:hover {
+  border-color: var(--color-navy-700);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-teal-800);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  width: 1.75rem;
+  height: 2px;
+  background: var(--color-teal-600);
+  content: "";
+}
+
+.hero-glow {
+  background: radial-gradient(circle at center, var(--color-teal-100) 0%, transparent 70%);
+}
+
+.card {
+  border: 1px solid var(--color-slate-200);
+  border-radius: 1rem;
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Isolate only the deep process explainer so its layout cannot invalidate the
+ * first viewport. Unlike content-visibility, this keeps the full subtree
+ * rendered and available to the accessibility tree. */
+.deep-below-fold {
+  contain: layout paint;
+}
+
+.section-heading {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--color-navy-900);
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  letter-spacing: -0.045em;
+  line-height: 1.03;
+}
+
+.app-frame {
+  display: grid;
+  min-height: 72vh;
+  grid-template-columns: 16rem minmax(0, 1fr);
+  background: white;
+}
+
+.app-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  border-right: 1px solid var(--color-slate-200);
+  background: var(--color-slate-50);
+  padding: 1.5rem;
+}
+
+.app-content {
+  min-width: 0;
+  background: white;
+}
+
+.app-nav-link {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.7rem;
+  border-radius: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  color: var(--color-slate-700);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.app-nav-link:hover,
+.app-nav-link-active {
+  background: var(--color-teal-50);
+  color: var(--color-teal-800);
+}
+
+.app-input,
+.app-select,
+.app-textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 1px solid var(--color-slate-300);
+  border-radius: 0.65rem;
+  background: white;
+  color: var(--color-navy-900);
+  padding: 0.7rem 0.8rem;
+}
+
+.app-textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.app-input:focus,
+.app-select:focus,
+.app-textarea:focus {
+  border-color: var(--color-focus);
+  outline: 3px solid color-mix(in srgb, var(--color-focus) 24%, transparent);
+  outline-offset: 1px;
+}
+
+.status-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--color-slate-100);
+  color: var(--color-slate-700);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.status-badge[data-tone="success"] {
+  background: #ecfdf5;
+  color: var(--color-success);
+}
+
+.status-badge[data-tone="warning"] {
+  background: #fffbeb;
+  color: var(--color-warning);
+}
+
+.status-badge[data-tone="danger"] {
+  background: #fef2f2;
+  color: var(--color-danger);
+}
+
+.metric-card {
+  border: 1px solid var(--color-slate-200);
+  border-radius: 0.9rem;
+  background: white;
+  padding: 1.15rem;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.results-table th,
+.results-table td {
+  border-bottom: 1px solid var(--color-slate-200);
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.results-table th {
+  color: var(--color-slate-600);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.evidence-dialog {
+  width: min(44rem, calc(100% - 2rem));
+  max-height: calc(100vh - 2rem);
+  border: 0;
+  border-radius: 1rem;
+  padding: 0;
+  box-shadow: var(--shadow-lg);
+}
+
+.evidence-dialog::backdrop {
+  background: rgb(7 21 34 / 0.55);
+}
+
+@media (max-width: 56rem) {
+  .app-frame {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-slate-200);
+  }
+
+  .app-sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-sidebar > :last-child {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  body {
+    background: white;
+    color: #111827;
+    font-size: 10pt;
+  }
+
+  body > header,
+  body > footer,
+  .app-sidebar,
+  .print\:hidden,
+  .evidence-dialog {
+    display: none !important;
+  }
+
+  .app-frame,
+  .app-content {
+    display: block;
+    min-height: auto;
+  }
+
+  .print-results-table {
+    display: block !important;
+    overflow: visible;
+  }
+
+  .card,
+  .metric-card {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

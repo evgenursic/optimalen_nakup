@@ -1,0 +1,107 @@
+name: Deploy immutable release
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: Full 40-character commit SHA whose GHCR images should be deployed
+        required: true
+        type: string
+      environment:
+        description: GitHub environment containing the target VPS secrets
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Validate release and target inputs
+        env:
+          COMMIT_SHA: ${{ inputs.commit_sha }}
+          DEPLOY_ROOT: ${{ secrets.DEPLOY_ROOT }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_PORT: ${{ secrets.SSH_PORT }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+        run: |
+          [[ "$COMMIT_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$DEPLOY_ROOT" =~ ^/[A-Za-z0-9._/-]+$ ]]
+          [[ "$REMOTE_HOST" =~ ^[A-Za-z0-9._:-]+$ ]]
+          [[ "$REMOTE_PORT" =~ ^[0-9]{1,5}$ ]]
+          [[ "$REMOTE_USER" =~ ^[A-Za-z0-9._-]+$ ]]
+
+      - name: Check out exact release
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.commit_sha }}
+
+      - name: Configure SSH
+        env:
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/id_ed25519"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/id_ed25519" "$HOME/.ssh/known_hosts"
+
+      - name: Resolve immutable GHCR digests
+        env:
+          COMMIT_SHA: ${{ inputs.commit_sha }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+          IMAGE_ROOT: ghcr.io/${{ github.repository }}
+        run: |
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GHCR_USER" --password-stdin
+          mkdir -p release-metadata
+          for target in web worker backup; do
+            docker pull "${IMAGE_ROOT}/${target}:${COMMIT_SHA}"
+            docker inspect --format='{{index .RepoDigests 0}}' "${IMAGE_ROOT}/${target}:${COMMIT_SHA}" > "release-metadata/${target}.txt"
+          done
+
+      - name: Build deployment bundle
+        run: tar -czf release-bundle.tgz docker-compose.yml ops
+
+      - name: Upload release bundle
+        env:
+          COMMIT_SHA: ${{ inputs.commit_sha }}
+          DEPLOY_ROOT: ${{ secrets.DEPLOY_ROOT }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_PORT: ${{ secrets.SSH_PORT }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+        run: |
+          target="${REMOTE_USER}@${REMOTE_HOST}"
+          release_dir="${DEPLOY_ROOT}/releases/${COMMIT_SHA}"
+          ssh -p "$REMOTE_PORT" "$target" "install -d -m 750 '$release_dir'"
+          scp -P "$REMOTE_PORT" release-bundle.tgz "${target}:${release_dir}/release-bundle.tgz"
+          ssh -p "$REMOTE_PORT" "$target" "tar -xzf '$release_dir/release-bundle.tgz' -C '$release_dir' && chmod 750 '$release_dir/ops/scripts/'*.sh"
+
+      - name: Activate release with automatic rollback
+        env:
+          COMMIT_SHA: ${{ inputs.commit_sha }}
+          DEPLOY_ROOT: ${{ secrets.DEPLOY_ROOT }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_PORT: ${{ secrets.SSH_PORT }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+        run: |
+          target="${REMOTE_USER}@${REMOTE_HOST}"
+          web_image="$(cat release-metadata/web.txt)"
+          worker_image="$(cat release-metadata/worker.txt)"
+          backup_image="$(cat release-metadata/backup.txt)"
+          ssh -p "$REMOTE_PORT" "$target" \
+            "DEPLOY_ROOT='$DEPLOY_ROOT' '$DEPLOY_ROOT/releases/$COMMIT_SHA/ops/scripts/deploy.sh' '$COMMIT_SHA' '$web_image' '$worker_image' '$backup_image'"

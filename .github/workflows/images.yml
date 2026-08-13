@@ -1,0 +1,66 @@
+name: Publish container images
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: images-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish ${{ matrix.target }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [web, worker, backup]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Log in to GHCR
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+        run:
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GHCR_USER" --password-stdin
+
+      - name: Build immutable image
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}/${{ matrix.target }}
+        run: |
+          docker build \
+            --file ops/docker/Dockerfile \
+            --target "${{ matrix.target }}" \
+            --build-arg APP_VERSION="${GITHUB_SHA}" \
+            --build-arg NEXT_PUBLIC_APP_URL="${{ vars.NEXT_PUBLIC_APP_URL }}" \
+            --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="${{ vars.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}" \
+            --build-arg NEXT_PUBLIC_CONVEX_URL="${{ vars.NEXT_PUBLIC_CONVEX_URL }}" \
+            --build-arg NEXT_PUBLIC_DEFAULT_LOCALE="${{ vars.NEXT_PUBLIC_DEFAULT_LOCALE }}" \
+            --tag "${IMAGE}:${GITHUB_SHA}" \
+            .
+
+      - name: Push image and record registry digest
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}/${{ matrix.target }}
+        run: |
+          docker push "${IMAGE}:${GITHUB_SHA}"
+          mkdir -p image-digests
+          docker inspect --format='{{index .RepoDigests 0}}' "${IMAGE}:${GITHUB_SHA}" > "image-digests/${{ matrix.target }}.txt"
+
+      - name: Upload immutable image reference
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: image-${{ matrix.target }}-${{ github.sha }}
+          path: image-digests/${{ matrix.target }}.txt
+          if-no-files-found: error
+          retention-days: 30

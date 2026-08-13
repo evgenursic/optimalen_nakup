@@ -1,0 +1,12 @@
+[Unit]
+Description=Optimalen Nakup encrypted Convex backup
+Requires=docker.service
+After=docker.service network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/optimalen-nakup/current
+ExecStart=/usr/bin/docker compose --env-file /opt/optimalen-nakup/shared/.env --env-file /opt/optimalen-nakup/current/.images.env --profile backup run --rm backup
+User=root
+Group=root
+UMask=0077

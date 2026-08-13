@@ -4,13 +4,18 @@ node_modules/
 
 # Builds and caches
 .next/
+apps/web/public/styles.generated.css
 dist/
 coverage/
 .turbo/
 .cache/
+.tmp-trace-nav-*/
+*.tsbuildinfo
 playwright-report/
 test-results/
 lighthouse-reports/
+.auth/
+.lighthouseci/
 
 # Convex
 .convex/

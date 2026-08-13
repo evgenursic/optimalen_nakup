@@ -1,0 +1,10 @@
+.next
+coverage
+dist
+lighthouse-reports
+node_modules
+apps/web/public/styles.generated.css
+playwright-report
+pnpm-lock.yaml
+test-results
+convex/_generated

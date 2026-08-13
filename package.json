@@ -1,0 +1,46 @@
+{
+  "name": "optimalen-nakup",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.17.0",
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "convex:codegen": "convex codegen",
+    "convex:dev": "convex dev",
+    "dev": "turbo run dev --parallel",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "turbo run lint && eslint \"convex/**/*.ts\" --max-warnings=0",
+    "lighthouse:authenticated:desktop": "lhci autorun --config=ops/lighthouse/authenticated.desktop.cjs",
+    "lighthouse:authenticated:mobile": "lhci autorun --config=ops/lighthouse/authenticated.mobile.cjs",
+    "lighthouse:public:desktop": "lhci autorun --config=ops/lighthouse/public.desktop.cjs",
+    "lighthouse:public:mobile": "lhci autorun --config=ops/lighthouse/public.mobile.cjs",
+    "lighthouse:assert-public-median": "node scripts/assert-lighthouse-public-median.mjs",
+    "test": "turbo run test && vitest run --config vitest.config.ts",
+    "test:e2e": "pnpm --filter @optimalen-nakup/web test:e2e",
+    "typecheck": "turbo run typecheck && tsc -p convex/tsconfig.json",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "@optimalen-nakup/providers": "workspace:*",
+    "convex": "1.42.3"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@clerk/testing": "2.2.13",
+    "@edge-runtime/vm": "5.0.0",
+    "@eslint/js": "9.39.5",
+    "@lhci/cli": "0.15.1",
+    "@types/node": "22.20.1",
+    "convex-test": "0.0.54",
+    "eslint": "9.39.5",
+    "prettier": "3.9.6",
+    "turbo": "2.10.7",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.65.0",
+    "vitest": "4.1.10"
+  }
+}

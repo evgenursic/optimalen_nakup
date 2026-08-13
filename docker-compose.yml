@@ -1,0 +1,220 @@
+name: optimalen-nakup
+
+x-service-security: &service-security
+  init: true
+  restart: unless-stopped
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
+services:
+  web:
+    <<: *service-security
+    image: ${WEB_IMAGE:-optimalen-nakup-web:local}
+    build:
+      context: .
+      dockerfile: ops/docker/Dockerfile
+      target: web
+      args:
+        APP_VERSION: ${APP_VERSION:-development}
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:-}
+        NEXT_PUBLIC_CONVEX_URL: ${NEXT_PUBLIC_CONVEX_URL:-}
+        NEXT_PUBLIC_DEFAULT_LOCALE: ${NEXT_PUBLIC_DEFAULT_LOCALE:-sl}
+    env_file:
+      - ${DEPLOY_ENV_FILE:-.env}
+    environment:
+      HOSTNAME: 0.0.0.0
+      NODE_ENV: production
+      PORT: 3000
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 20s
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+      - /app/apps/web/.next/cache:size=64m,uid=1001,gid=1001,mode=0750
+    networks:
+      - application
+      - egress
+
+  worker:
+    <<: *service-security
+    image: ${WORKER_IMAGE:-optimalen-nakup-worker:local}
+    build:
+      context: .
+      dockerfile: ops/docker/Dockerfile
+      target: worker
+      args:
+        APP_VERSION: ${APP_VERSION:-development}
+    env_file:
+      - ${DEPLOY_ENV_FILE:-.env}
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3001/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 8
+      start_period: 25s
+    read_only: true
+    shm_size: 1gb
+    tmpfs:
+      - /tmp:size=512m,exec,mode=1777
+    networks:
+      - application
+      - egress
+
+  caddy:
+    <<: *service-security
+    image: caddy:2.10.0-alpine@sha256:ae4458638da8e1a91aafffb231c5f8778e964bca650c8a8cb23a7e8ac557aa3c
+    cap_add:
+      - NET_BIND_SERVICE
+    depends_on:
+      web:
+        condition: service_healthy
+    environment:
+      ACME_EMAIL: ${ACME_EMAIL:-}
+      APP_DOMAIN: ${APP_DOMAIN:-http://localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./ops/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_config:/config
+      - caddy_data:/data
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:2019/metrics"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    networks:
+      - application
+      - edge
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.131.1@sha256:c06aa6d7833e9a2b81c6c394d67e40ae9864edec8dca8a8e8552df1316c96d9b
+    profiles: ["observability"]
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./ops/observability/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    depends_on:
+      - loki
+    networks:
+      - application
+
+  prometheus:
+    image: prom/prometheus:v3.5.0@sha256:63805ebb8d2b3920190daf1cb14a60871b16fd38bed42b857a3182bc621f4996
+    profiles: ["observability"]
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+      - --web.enable-lifecycle
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./ops/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:${PROMETHEUS_PORT:-9090}:9090"
+    networks:
+      - application
+
+  loki:
+    image: grafana/loki:3.5.2@sha256:d0a95e651bb7d0a5a6468035c5b49c52f4678d90d598f853c06716bca102686b
+    profiles: ["observability"]
+    command: ["-config.file=/etc/loki/config.yaml"]
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./ops/observability/loki.yaml:/etc/loki/config.yaml:ro
+      - loki_data:/loki
+    networks:
+      - application
+
+  grafana:
+    image: grafana/grafana:12.1.0@sha256:6ac590e7cabc2fbe8d7b8fc1ce9c9f0582177b334e0df9c927ebd9670469440f
+    profiles: ["observability"]
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./ops/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:${GRAFANA_PORT:-3002}:3000"
+    depends_on:
+      - loki
+      - prometheus
+    networks:
+      - application
+
+  backup:
+    image: ${BACKUP_IMAGE:-optimalen-nakup-backup:local}
+    profiles: ["backup"]
+    build:
+      context: .
+      dockerfile: ops/docker/Dockerfile
+      target: backup
+      args:
+        APP_VERSION: ${APP_VERSION:-development}
+    env_file:
+      - ${DEPLOY_ENV_FILE:-.env}
+    environment:
+      BACKUP_OUTPUT_DIR: /backups
+    volumes:
+      - backup_work:/backups
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - application
+      - egress
+
+networks:
+  application:
+    internal: true
+  egress:
+  edge:
+
+volumes:
+  backup_work:
+  caddy_config:
+  caddy_data:
+  grafana_data:
+  loki_data:
+  prometheus_data:
