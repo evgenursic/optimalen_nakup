@@ -189,6 +189,13 @@ select {
   box-shadow: var(--shadow-sm);
 }
 
+/* Isolate only the deep process explainer so its layout cannot invalidate the
+ * first viewport. Unlike content-visibility, this keeps the full subtree
+ * rendered and available to the accessibility tree. */
+.deep-below-fold {
+  contain: layout paint;
+}
+
 .section-heading {
   max-width: 44rem;
   margin: 0;
