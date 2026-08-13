@@ -26,10 +26,10 @@ const manifest: SourceManifest = {
   robotsUrl: new URL("https://odkrijuzitek.bmw.si/robots.txt"),
   termsUrl: null,
   policyStatus: "conditional",
-  policyReviewedAt: "2026-08-12T22:00:00.000Z",
-  policyReviewExpiresAt: "2026-09-11T22:00:00.000Z",
+  policyReviewedAt: "2026-08-13T01:57:00.000Z",
+  policyReviewExpiresAt: "2026-09-12T01:57:00.000Z",
   policyNotes:
-    "2026-08-12 technical review: robots.txt redirects to the Slovenian policy file and advertises /rabljeno/sitemap.xml while blocking /rabljeno/api. No terms URL is published in the manifest; production activation still requires owner/legal approval.",
+    "2026-08-13 technical review: robots.txt returned HTTP 200, redirected to the Slovenian policy file and advertises /rabljeno/sitemap.xml while blocking /rabljeno/api. No terms URL is published in the manifest; production activation still requires owner/legal approval.",
   allowedPathPrefixes: [
     "/robots.txt",
     "/robots_sl.txt",

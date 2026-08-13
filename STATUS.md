@@ -13,11 +13,15 @@ Updated: 2026-08-13
   SEO on all four public routes in both mobile and desktop profiles, with transfer budgets passing.
   Artifact `9165300267` is retained with digest
   `sha256:8e3464a57d6ab4ac2e0faa13a0c89742a44381e51b24c93cddc5078bb60f345b`.
-- Public critical CSS is now loaded once from the generated hashed-style asset instead of being
+- Public critical CSS is now loaded once from the generated public stylesheet instead of being
   duplicated in the HTML and React Flight payload. The change preserves the request-scoped nonce for
   inline runtime scripts, passes the 18 public E2E/axe checks, and materially lowers mobile
   main-thread work. Individual Lighthouse samples remain subject to normal variance; the release
   gate is the configured three-run median.
+- A 2026-08-13 read-only source-policy availability check returned HTTP 200 for BMW robots, Enaa
+  robots and `/cms/63`, and Big Bang robots and `/pogoji-poslovanja/`. Adapter manifests were
+  refreshed with the technical review timestamp and remain `conditional`; no live crawling or legal
+  activation was performed.
 
 - The nonce-propagating public SSR change in `47dcb31` passed quality/build, dependency audit,
   container startup/health, all 18 public Playwright scenarios, desktop Lighthouse, and CodeQL

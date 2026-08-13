@@ -26,10 +26,10 @@ const manifest: SourceManifest = {
   robotsUrl: new URL("https://www.enaa.com/robots.txt"),
   termsUrl: new URL("https://www.enaa.com/cms/63"),
   policyStatus: "conditional",
-  policyReviewedAt: "2026-08-12T22:00:00.000Z",
-  policyReviewExpiresAt: "2026-09-11T22:00:00.000Z",
+  policyReviewedAt: "2026-08-13T01:57:00.000Z",
+  policyReviewExpiresAt: "2026-09-12T01:57:00.000Z",
   policyNotes:
-    "2026-08-12 technical review: robots.txt advertises /sitemap and blocks /search, /api and account/cart paths; terms are published at /cms/63. Production activation still requires owner/legal approval.",
+    "2026-08-13 technical review: robots.txt returned HTTP 200, advertises /sitemap and blocks /search, /api and account/cart paths; terms are published at /cms/63 and returned HTTP 200. Production activation still requires owner/legal approval.",
   allowedPathPrefixes: ["/robots.txt", "/sitemap", "/"],
   forbiddenPathPrefixes: ["/search", "/api", "/ajax", "/basket", "/user", "/profil", "/addItem"],
   minimumDelayMs: 2_500,

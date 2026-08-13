@@ -15,9 +15,10 @@ The 2026-07-26 technical review recorded these initial candidates:
 - `bigbang-si`: `https://www.bigbang.si/sitemap.xml` and public product pages; `/api`, admin, data,
   account, upload, and comparison paths are forbidden.
 
-## 2026-08-12 technical recheck
+## 2026-08-13 technical recheck
 
-The read-only recheck confirmed the public policy endpoints and did not activate any source:
+The read-only recheck confirmed the public policy endpoints (all HTTP 200) and did not activate any
+source:
 
 - BMW `robots.txt` returned HTTP 200, redirected to the Slovenian policy file, and advertised
   `/rabljeno/sitemap.xml` while disallowing `/rabljeno/api`. The manifest remains conditional
@@ -32,14 +33,14 @@ The read-only recheck confirmed the public policy endpoints and did not activate
   the former `/splosni-pogoji-poslovanja/` path was not reachable and is no longer used.
 
 This is technical availability and path evidence only, not a legal permission or a live smoke-test
-approval. The source manifests remain `conditional`; the review timestamp is 2026-08-12 and the next
-technical review expiry is 2026-09-11.
+approval. The source manifests remain `conditional`; the review timestamp is 2026-08-13 and the next
+technical review expiry is 2026-09-12.
 
 Robots and terms are rechecked before live activation and periodically afterward. Ambiguous or
 conflicting permission blocks the adapter instead of triggering evasion.
 
 All three manifests remain `conditional` by default and automatically require review again after
-2026-09-11. Robots is a technical preference signal, not legal permission. Production activation
+2026-09-12. Robots is a technical preference signal, not legal permission. Production activation
 requires explicit owner/legal approval through `WORKER_APPROVED_SOURCE_IDS`; a CAPTCHA, HTTP 403 or
 429 opens the source circuit and stops further requests. Default source concurrency is one with a
 2.5-second minimum interval.

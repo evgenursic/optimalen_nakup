@@ -43,3 +43,5 @@ must not be reported as verified until their exact smoke tests pass.
   an assertion that every noisy sample is exactly 100.
 - The authenticated research-results Lighthouse path is still unverified because it requires a
   deployed Clerk/Convex environment, a dedicated test user, and a completed research job.
+- Source availability was rechecked read-only on 2026-08-13, but legal approval and explicit source
+  activation are still required before any live adapter run.

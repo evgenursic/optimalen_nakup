@@ -1,5 +1,20 @@
 # Test results
 
+## 2026-08-13 source-policy availability recheck
+
+| Endpoint                                     | Result   | Evidence                                                     |
+| -------------------------------------------- | -------- | ------------------------------------------------------------ |
+| BMW `robots.txt`                             | Pass     | HTTP 200; redirected to `robots_sl.txt`; sitemap advertised. |
+| Enaa `robots.txt`                            | Pass     | HTTP 200; `/sitemap` advertised; restricted paths unchanged. |
+| Enaa current terms `/cms/63`                 | Pass     | HTTP 200.                                                    |
+| Big Bang `robots.txt`                        | Pass     | HTTP 200; `/sitemap.xml` advertised.                         |
+| Big Bang current terms `/pogoji-poslovanja/` | Pass     | HTTP 200.                                                    |
+| Adapter activation                           | Not done | All manifests remain `conditional`; legal approval required. |
+
+The checks were read-only and performed on 2026-08-13. They update the technical review timestamps
+to 2026-08-13 with expiry on 2026-09-12; they do not authorize live crawling or replace a
+terms/legal review.
+
 ## 2026-08-13 verified public Lighthouse 100 CI (`74ac4f9`)
 
 | Command or gate                 | Result | Evidence                                                                   |
