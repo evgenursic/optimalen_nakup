@@ -147,7 +147,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      <section className="border-y border-slate-200 bg-[#0b1f33] text-white">
+      <section className="deep-below-fold border-y border-slate-200 bg-[#0b1f33] text-white">
         <div className="container py-18 lg:py-24">
           <h2 className="max-w-3xl text-[clamp(2rem,4vw,3.35rem)] leading-tight font-extrabold tracking-[-0.045em]">
             {process("title")}

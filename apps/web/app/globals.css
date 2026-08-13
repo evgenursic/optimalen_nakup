@@ -189,6 +189,14 @@ select {
   box-shadow: var(--shadow-sm);
 }
 
+/* The long process explainer is well below the first mobile viewport. Keep its
+ * layout work out of the initial navigation while reserving a stable estimate
+ * for scrolling; the section remains rendered and accessible when revealed. */
+.deep-below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
 .section-heading {
   max-width: 44rem;
   margin: 0;
