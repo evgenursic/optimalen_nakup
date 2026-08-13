@@ -35,9 +35,11 @@ must not be reported as verified until their exact smoke tests pass.
 - The post-correction Figma readback hit the Starter-plan MCP limit (`INVALID_ARGUMENT`), so
   post-correction validation and the approved Phase 2 page skeleton remain open. No further
   mutations are attempted until the endpoint limit resets or the plan is upgraded.
-- Clean Ubuntu Lighthouse series pass Accessibility, Best Practices, SEO, and both transfer budgets.
-  The latest completed run `31656269642` reports mobile Performance medians of 98, 98, 98, and 98
-  across the four public routes; the strict exact-100 gate remains open and the 24-report artifact
-  is retained as `9164652577` (ZIP digest
-  `sha256:5d50de7f0d1747b84b33930e9b2d35285fa96cf700e1bfe3cbdbd38575c806a6`). Desktop Lighthouse,
-  the quality/build job, containers, Playwright, and CodeQL pass.
+- Clean Ubuntu Lighthouse run `31658076444` now passes the configured three-run median-100 gate for
+  Performance, Accessibility, Best Practices, and SEO on all four public routes in both profiles;
+  both transfer budgets pass. Artifact `9165300267` (ZIP digest
+  `sha256:8e3464a57d6ab4ac2e0faa13a0c89742a44381e51b24c93cddc5078bb60f345b`) is retained. A few
+  individual samples are lower than 100, so the evidence supports the documented median gate and not
+  an assertion that every noisy sample is exactly 100.
+- The authenticated research-results Lighthouse path is still unverified because it requires a
+  deployed Clerk/Convex environment, a dedicated test user, and a completed research job.

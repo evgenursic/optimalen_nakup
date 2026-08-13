@@ -14,6 +14,29 @@ Updated: 2026-08-13
 The Lighthouse configs assert both category scores and transfer-size budgets. A category score
 cannot hide a budget overrun.
 
+## Latest verified public Lighthouse 100 gate (`74ac4f9`)
+
+GitHub Actions run
+[`31658076444`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31658076444) is the first
+clean Ubuntu 24.04 run after externalizing the generated public stylesheet. Quality/build,
+dependency audit, container startup/health, all 18 public Playwright scenarios, and CodeQL
+[`31658076472`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31658076472) passed.
+
+The three-run Lighthouse assertions passed for both profiles. The median category scores are 100 for
+Performance, Accessibility, Best Practices, and SEO on `/sl`, `/sl/pricing`, `/sl/how-it-works`, and
+`/sl/sign-in`; both transfer-size budgets also passed. The raw artifact retains every run: one
+mobile `/sl/pricing` run scored 99 and one `/sl/sign-in` run scored 87, while the required three-run
+medians were 100. This run therefore supports a verified median-100 gate, not a claim that every
+noisy individual sample is 100.
+
+The stylesheet is now one compressed external request instead of duplicated inline CSS in the HTML
+and React Flight payload. The mobile reports show approximately 7.3 KiB stylesheet transfer and
+128.6 KiB script transfer on `/sl`, with LCP around 1.8–1.9 s in the representative samples.
+Artifact
+[`9165300267`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31658076444/artifacts/9165300267)
+contains all 24 reports and has ZIP digest
+`sha256:8e3464a57d6ab4ac2e0faa13a0c89742a44381e51b24c93cddc5078bb60f345b`.
+
 ## Latest nonce-CSP CI evidence (`47dcb31`)
 
 GitHub Actions run

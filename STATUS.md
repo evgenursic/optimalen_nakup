@@ -4,6 +4,21 @@ Updated: 2026-08-13
 
 ## Verified
 
+- Latest clean Ubuntu CI run
+  [`31658076444`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31658076444) for
+  `74ac4f9` passes quality/build, dependency audit, containers, all 18 public Playwright scenarios,
+  and the Lighthouse gate; CodeQL
+  [`31658076472`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31658076472) passes as
+  well. Public Lighthouse median scores are 100 for Performance, Accessibility, Best Practices, and
+  SEO on all four public routes in both mobile and desktop profiles, with transfer budgets passing.
+  Artifact `9165300267` is retained with digest
+  `sha256:8e3464a57d6ab4ac2e0faa13a0c89742a44381e51b24c93cddc5078bb60f345b`.
+- Public critical CSS is now loaded once from the generated hashed-style asset instead of being
+  duplicated in the HTML and React Flight payload. The change preserves the request-scoped nonce for
+  inline runtime scripts, passes the 18 public E2E/axe checks, and materially lowers mobile
+  main-thread work. Individual Lighthouse samples remain subject to normal variance; the release
+  gate is the configured three-run median.
+
 - The nonce-propagating public SSR change in `47dcb31` passed quality/build, dependency audit,
   container startup/health, all 18 public Playwright scenarios, desktop Lighthouse, and CodeQL
   (`31656269642`, CodeQL `31656269578`). Mobile Accessibility, Best Practices, SEO, and transfer

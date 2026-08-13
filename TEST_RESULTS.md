@@ -1,5 +1,22 @@
 # Test results
 
+## 2026-08-13 verified public Lighthouse 100 CI (`74ac4f9`)
+
+| Command or gate                 | Result | Evidence                                                                   |
+| ------------------------------- | ------ | -------------------------------------------------------------------------- |
+| GitHub quality/production build | Pass   | Run `31658076444`; formatting, lint, strict types, tests, audit, build.    |
+| Public Playwright E2E           | Pass   | Run `31658076444`; all 18 desktop/mobile scenarios passed.                 |
+| Container build/startup/health  | Pass   | Run `31658076444`; Compose and observability checks passed.                |
+| CodeQL                          | Pass   | Run `31658076472` for the same source.                                     |
+| Public Lighthouse desktop       | Pass   | Three-run category assertions passed for all four public routes.           |
+| Public Lighthouse mobile        | Pass   | Three-run category assertions passed; median Performance is 100 per route. |
+| Public transfer budgets         | Pass   | Script and stylesheet budgets passed in both Lighthouse profiles.          |
+
+The artifact contains all 24 production-build reports. Its raw samples include one mobile pricing
+score of 99 and one sign-in score of 87; the configured median aggregation is 100 for every public
+route and category. ZIP digest:
+`sha256:8e3464a57d6ab4ac2e0faa13a0c89742a44381e51b24c93cddc5078bb60f345b`.
+
 ## 2026-08-13 local verification after nonce-CSP change
 
 `corepack pnpm verify` passed on the current working tree: formatting, lint, strict TypeScript,
