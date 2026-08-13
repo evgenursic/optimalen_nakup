@@ -22,6 +22,11 @@ Updated: 2026-08-13
   robots and `/cms/63`, and Big Bang robots and `/pogoji-poslovanja/`. Adapter manifests were
   refreshed with the technical review timestamp and remain `conditional`; no live crawling or legal
   activation was performed.
+- Commit `0a9202e` adds an explicit three-sample median Lighthouse assertion. The push workflow
+  passed quality/build, Playwright, containers and all public medians at 100 (run `31660347514`,
+  artifact `9166090565`). The PR merge workflow's same-source Lighthouse rerun still reports mobile
+  `how-it-works` at 0.99 in all three samples (run `31660349768`), so the merge gate remains open
+  for reproducibility; no threshold was weakened.
 
 - The nonce-propagating public SSR change in `47dcb31` passed quality/build, dependency audit,
   container startup/health, all 18 public Playwright scenarios, desktop Lighthouse, and CodeQL

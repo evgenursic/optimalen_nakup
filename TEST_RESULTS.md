@@ -1,5 +1,24 @@
 # Test results
 
+## 2026-08-13 explicit public Lighthouse median gate (`0a9202e`)
+
+| Gate                       | Result | Evidence                                                                 |
+| -------------------------- | ------ | ------------------------------------------------------------------------ |
+| Push CI quality/build      | Pass   | Run `31660347514`; format, lint, types, tests, audit and build passed.   |
+| Push CI Playwright         | Pass   | Run `31660347514`; all 18 public desktop/mobile scenarios passed.        |
+| Push CI containers         | Pass   | Run `31660347514`; Compose and observability health checks passed.       |
+| Push CI public Lighthouse  | Pass   | Artifact `9166090565`; explicit medians are 100 for all routes/profiles. |
+| PR merge public Lighthouse | Open   | Run `31660349768`; merge-environment mobile `how-it-works` median 0.99.  |
+| CodeQL                     | Pass   | Run `31660349746` for the same commit.                                   |
+
+The gate now uses a repository-owned script to calculate the median of exactly three JSON reports
+per route and category. LHCI still enforces transfer budgets; its per-sample category threshold is
+set to zero only because LHCI otherwise ignores the configured median for category assertions. The
+explicit script remains strict at median 1.00. The push and PR merge runners produced different
+mobile measurements for the same source, so the merge result remains an honest open variance blocker
+rather than being hidden by a looser threshold. Artifact digest:
+`sha256:730bffc1bab9b59a5a477a0a577527e28a77d63b55893c1d266be35188de6aa4`.
+
 ## 2026-08-13 source-policy availability recheck
 
 | Endpoint                                     | Result   | Evidence                                                     |

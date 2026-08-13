@@ -1,5 +1,15 @@
 # Performance
 
+## 2026-08-13 median-gate follow-up (`0a9202e`)
+
+The repository now calculates the required Lighthouse medians directly from the 12 mobile and 12
+desktop JSON reports. Push CI run `31660347514` passed with median 1.00 for Performance,
+Accessibility, Best Practices and SEO on all four public routes; artifact `9166090565` has digest
+`sha256:730bffc1bab9b59a5a477a0a577527e28a77d63b55893c1d266be35188de6aa4`. A PR merge rerun
+(`31660349768`) kept quality, Playwright and containers green but measured mobile `/sl/how-it-works`
+Performance as 0.99/0.99/0.99. The gate therefore stays open and the variance is recorded rather
+than masked by a lower threshold.
+
 Updated: 2026-08-13
 
 ## Budgets

@@ -45,3 +45,7 @@ must not be reported as verified until their exact smoke tests pass.
   deployed Clerk/Convex environment, a dedicated test user, and a completed research job.
 - Source availability was rechecked read-only on 2026-08-13, but legal approval and explicit source
   activation are still required before any live adapter run.
+- The explicit Lighthouse median script passes the push workflow for `0a9202e`, but the PR merge
+  workflow remains open because mobile `/sl/how-it-works` measured 0.99 in all three samples. The
+  source is unchanged; the push/merge runner variance needs a reproducible 1.00 result or a measured
+  performance improvement before the draft PR can become ready.
