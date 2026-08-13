@@ -49,3 +49,9 @@ must not be reported as verified until their exact smoke tests pass.
   workflow remains open because mobile `/sl/how-it-works` measured 0.99 in all three samples. The
   source is unchanged; the push/merge runner variance needs a reproducible 1.00 result or a measured
   performance improvement before the draft PR can become ready.
+- The rejected `eb71be3` runtime-script externalization experiment did not improve that gate: clean
+  Ubuntu push run `31662511432` measured 0.99 medians on `/sl` and `/sl/sign-in`. It was reverted in
+  `476ade4`; the strict gate remains unchanged.
+- Revert push run `31663154102` passes the exact three-run public median gate, while PR merge run
+  `31663156305` still fails its independent noisy mobile sample set. The draft PR therefore remains
+  open until the same source is reproducibly green in the merge context; no threshold is weakened.

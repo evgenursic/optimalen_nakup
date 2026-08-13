@@ -1,5 +1,30 @@
 # Performance
 
+## Rejected runtime registration externalization (`eb71be3`)
+
+The runtime service-worker/telemetry registration was moved from an inline nonce-bearing script to
+an external deferred asset as a bounded performance experiment. Local production build and all 18
+public Playwright/axe scenarios passed, but the clean Ubuntu push run
+[`31662511432`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31662511432) produced
+mobile Performance medians of 0.99 for `/sl`, 1.00 for `/sl/pricing`, 1.00 for `/sl/how-it-works`,
+and 0.99 for `/sl/sign-in`; desktop medians remained 1.00. The PR rerun also failed the strict
+median gate. Because the change did not improve the measured release target, it was reverted in
+`476ade4` and is not part of the release candidate. The run's 24-report artifact is `9166861677`
+with ZIP SHA-256 `sha256:e7d3764a4961011072587d5c76e3340237acb11f17932ac51f439ba1795562b1`.
+
+## Restored stable runtime path (`476ade4`)
+
+Push CI run [`31663154102`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31663154102)
+passes the explicit three-run median gate. Mobile Performance medians are 1.00 on all four public
+routes; individual samples include 0.99 values, which is expected runner variance under the median
+policy. Desktop medians and all other categories are 1.00. The retained 24-report artifact is
+`9167091004` with ZIP SHA-256
+`sha256:3b8d02132adf9bfa159a3fdb1eea809e45f0f738c912b3125bbd939b78471729`.
+
+The PR merge rerun `31663156305` remains the release variance blocker: its non-Lighthouse jobs pass,
+but its independently sampled mobile run does not satisfy the same strict median assertion. No
+threshold was lowered and no per-sample 100 claim is made.
+
 ## 2026-08-13 median-gate follow-up (`0a9202e`)
 
 The repository now calculates the required Lighthouse medians directly from the 12 mobile and 12

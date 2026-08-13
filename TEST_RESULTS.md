@@ -1,5 +1,33 @@
 # Test results
 
+## 2026-08-13 rejected runtime registration experiment (`eb71be3`)
+
+| Gate                              | Result | Evidence                                                                   |
+| --------------------------------- | ------ | -------------------------------------------------------------------------- |
+| Local production build            | Pass   | `corepack pnpm --filter @optimalen-nakup/web build`.                       |
+| Local public Playwright/axe       | Pass   | All 18 desktop/mobile scenarios passed with the external asset.            |
+| Local full verify                 | Pass   | `corepack pnpm verify` passed after stopping stale local server processes. |
+| Ubuntu push Lighthouse median     | Fail   | Run `31662511432`; mobile medians include 0.99 on `/sl` and `/sl/sign-in`. |
+| Ubuntu container/E2E/CodeQL gates | Pass   | Container and E2E jobs passed; CodeQL `31662513349` passed.                |
+
+The experiment was reverted in `476ade4` because it did not improve the authoritative Lighthouse
+target. Artifact `9166861677` is retained with ZIP digest
+`sha256:e7d3764a4961011072587d5c76e3340237acb11f17932ac51f439ba1795562b1`.
+
+## 2026-08-13 restored stable runtime path (`476ade4`)
+
+| Gate                              | Result | Evidence                                                                    |
+| --------------------------------- | ------ | --------------------------------------------------------------------------- |
+| Push CI quality/build             | Pass   | Run `31663154102`; strict format, lint, types, tests, audit and build pass. |
+| Push CI containers                | Pass   | Run `31663154102`; Compose startup and health checks pass.                  |
+| Push CI public Playwright         | Pass   | Run `31663154102`; all 18 desktop/mobile scenarios pass.                    |
+| Push CI public Lighthouse medians | Pass   | Artifact `9167091004`; all public route/profile medians are 1.00.           |
+| PR merge public Lighthouse        | Open   | Run `31663156305`; non-Lighthouse jobs pass, mobile variance remains.       |
+
+The push artifact ZIP digest is
+`sha256:3b8d02132adf9bfa159a3fdb1eea809e45f0f738c912b3125bbd939b78471729`. This is a median gate
+result; individual noisy samples below 1.00 are not represented as a universal 100 claim.
+
 ## 2026-08-13 explicit public Lighthouse median gate (`0a9202e`)
 
 | Gate                       | Result | Evidence                                                                 |

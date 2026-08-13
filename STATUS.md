@@ -27,6 +27,17 @@ Updated: 2026-08-13
   artifact `9166090565`). The PR merge workflow's same-source Lighthouse rerun still reports mobile
   `how-it-works` at 0.99 in all three samples (run `31660349768`), so the merge gate remains open
   for reproducibility; no threshold was weakened.
+- The short-lived runtime-script externalization experiment `eb71be3` passed local build/E2E, but
+  clean Ubuntu run
+  [`31662511432`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31662511432) measured
+  mobile medians of 0.99 on `/sl` and `/sl/sign-in`; the explicit median gate correctly failed. The
+  experiment was reverted in `476ade4`; no performance regression is retained.
+- Revert commit `476ade4` restores the last stable runtime path. Push CI
+  [`31663154102`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31663154102) passes
+  quality/build, containers, all 18 public E2E scenarios, and the explicit public Lighthouse
+  medians. The PR merge rerun
+  [`31663156305`](https://github.com/evgenursic/optimalen_nakup/actions/runs/31663156305) keeps all
+  non-Lighthouse jobs green but remains open on noisy mobile Lighthouse samples.
 
 - The nonce-propagating public SSR change in `47dcb31` passed quality/build, dependency audit,
   container startup/health, all 18 public Playwright scenarios, desktop Lighthouse, and CodeQL
