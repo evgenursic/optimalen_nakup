@@ -8,6 +8,9 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { routing } from "@/i18n/routing";
 
+const runtimeRegistration =
+  '(()=>{const e=document.currentScript;const r=()=>{"serviceWorker"in navigator&&navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{})};"loading"===document.readyState?addEventListener("load",r,{once:!0}):r();e?.dataset.telemetry==="enabled"&&setTimeout(()=>{const t=document.createElement("script");t.src="/web-vitals.js";t.async=!0;document.head.append(t)},3e4)})()';
+
 export const viewport: Viewport = {
   colorScheme: "light",
   themeColor: "#f8fafc",
@@ -90,9 +93,8 @@ export default async function LocaleLayout({
         <SiteFooter locale={locale} />
         <script
           nonce={nonce}
-          src="/runtime-registration.js"
           data-telemetry={telemetryConfigured ? "enabled" : "disabled"}
-          defer
+          dangerouslySetInnerHTML={{ __html: runtimeRegistration }}
         />
       </body>
     </html>
